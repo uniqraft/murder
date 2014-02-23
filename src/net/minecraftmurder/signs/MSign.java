@@ -1,11 +1,15 @@
 package net.minecraftmurder.signs;
 
+import java.util.logging.Level;
+
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Tools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public abstract class MSign {	
@@ -25,6 +29,28 @@ public abstract class MSign {
 	
 	public abstract void onInteract (MPlayer mPlayer);
 	public abstract void update ();
+	
+	/**
+	 * Should be called when the sign's text has been updated.
+	 * This will update the sign 1 tick later.
+	 */
+	void updateText () {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				getSign().update(true);
+			}
+		}, 1);
+	}
+	
+	public Sign getSign () {
+		Block block = location.getBlock();
+		if (block.getState() instanceof Sign) {
+			return (Sign) block.getState();
+		}
+		Bukkit.getLogger().log(Level.WARNING, "Sign at " + location.toString() + " couldn't be found.");
+		return null;
+	}
 	
 	boolean checkIfValid () {
 		if (!(location.getWorld().getBlockAt(location).getState() instanceof Sign)) {

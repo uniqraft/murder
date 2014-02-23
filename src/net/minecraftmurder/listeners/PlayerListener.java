@@ -162,7 +162,7 @@ public class PlayerListener implements Listener {
 				if (mP.getPlayerClass() == MPlayerClass.INNOCENT || mP.getPlayerClass() == MPlayerClass.GUNNER)
 					mP.getPlayer().teleport(mPlayer.getMatch().getArena().getRandomSpawn("player").getLocation());
 			}
-			Tools.sendMessageAll(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer " + ChatContext.COLOR_LOWLIGHT + "used the teleportation device.");
+			Tools.sendMessageAll(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.");
 			// Play sound at each player's new location one tick later
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@Override

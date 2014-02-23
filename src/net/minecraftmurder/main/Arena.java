@@ -54,6 +54,7 @@ public class Arena {
 		if (!new File(worldPath).exists()) {
 			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + worldPath + " does not exist, but " + path + " implies it does.");
 		} else if (Bukkit.getWorld(worldName) == null) {
+			// Load the world
 			Bukkit.createWorld(new WorldCreator(worldName));
 		}
 	}

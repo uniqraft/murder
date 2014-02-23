@@ -1,11 +1,12 @@
 package net.minecraftmurder.commands;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
+import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,6 +41,7 @@ public class WarnCommand implements CommandExecutor {
 		}
 		sender.sendMessage(ChatContext.PREFIX_PLUGIN + "Player warned.");
 		MPlayer.addWarnLevel(args[0], level);
+		Bukkit.getLogger().log(Level.INFO, sender.getName() + " warned " + args[0] + " with a level " + level + ".");
 		return true;
 	}
 
