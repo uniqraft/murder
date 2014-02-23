@@ -1,0 +1,48 @@
+name: Murder
+main: net.minecraftmurder.main.Murder
+version: 2.0
+
+commands:
+   arena:
+      description: Commands controlling the arenas.
+      usage: /<command> <action> [name] [info-type] [info]
+   murder:
+      description: Commands controlling the plugin.
+      usage: /<command> <action>
+   spawn:
+      description: Commands controlling spawns.
+      usage: /<command> <action> <name> [info] [radius]
+   coins:
+      description: Commands controlling spawns.
+      usage: /<command> <action> <player> <count>
+   warn:
+      description: Commands controlling warns.
+      usage: /<command> <player> [level]
+
+permissions:
+    murder.*:
+        description: Gives access to all staff commands
+        children:
+            murder.core: true
+            murder.arenas: true
+            murder.spawns: true
+            murder.coins: true
+            murder.mod: true
+    murder.core:
+        description: Allows you to control the main plugin
+        default: op
+    murder.arena:
+        description: Allows you to control arenas.
+        default: op
+    murder.spawn:
+        description: Allows you to control spawns.
+        default: op
+    murder.coins.manage:
+        description: Allows you to control coins.
+        default: op
+    murder.coins:
+        description: Allows you to check your coin count.
+        default: true
+    murder.mod:
+        description: Allows a user to moderate.
+        default: false
