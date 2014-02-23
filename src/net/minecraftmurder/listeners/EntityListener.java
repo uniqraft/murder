@@ -3,8 +3,10 @@ package net.minecraftmurder.listeners;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -79,7 +81,7 @@ public class EntityListener implements Listener {
 				}
 				
 				// Kill player
-				mDamaged.setKiller(arrow.getShooter().getCustomName());
+				mDamaged.setKiller(((LivingEntity) arrow.getShooter()).getCustomName());
 				damaged.setHealth(1);
 				
 				// Was I shot by a player?

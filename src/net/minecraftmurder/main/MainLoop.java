@@ -31,6 +31,7 @@ public class MainLoop implements Runnable {
 			for (PlayMatch playMatch: plugin.getMatchManager().getPlayMatches()) {
 				playMatch.update();
 			}
+			
 			plugin.getMatchManager().getLobbyMatch().update();
 		}
 		

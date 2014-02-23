@@ -48,6 +48,7 @@ public class MPlayer {
 		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + name + ".yml");
 		coins = config.getInt("coins", 0);
 	}
+	
 	public void save () {
 		// TODO Remove, maybe?
 		/*YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + name + ".yml");

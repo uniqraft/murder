@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.LobbyMatch;
-import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Tools;
@@ -54,6 +52,7 @@ public class MatchManager {
 			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "Index " + index + " is higher than the max matches count, " + MAX_MATCHES + ".");
 			return false;
 		}
+		
 		if (playMatchIndex.containsKey(index)) {
 			return false;
 		} else {

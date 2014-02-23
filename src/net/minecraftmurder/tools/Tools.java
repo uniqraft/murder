@@ -14,22 +14,26 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class Tools {
+	
 	public static boolean compareBlockLocation (Location loc1, Location loc2) {
 		return (loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ());
 	}
+	
 	public static String dateToString (Date date, String seperator) {
 		String s = "";
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
+		
 		// Date(year, month, date, hrs, min, sec)
-		s += calendar.get(Calendar.YEAR) + seperator;
-		s += calendar.get(Calendar.MONTH) + seperator;
-		s += calendar.get(Calendar.DATE) + seperator;
+		s += calendar.get(Calendar.YEAR) 		+ seperator;
+		s += calendar.get(Calendar.MONTH) 		+ seperator;
+		s += calendar.get(Calendar.DATE) 		+ seperator;
 		s += calendar.get(Calendar.HOUR_OF_DAY) + seperator;
-		s += calendar.get(Calendar.MINUTE) + seperator;
-		s += calendar.get(Calendar.SECOND) + "";
+		s += calendar.get(Calendar.MINUTE) 		+ seperator;
+		s += calendar.get(Calendar.SECOND) 		+ "";
 		return s;
 	}
+	
 	public static Date stringToDate (String date, String seperator) {
 		String[] split = date.split(seperator);
 		int[] splitDate = new int[split.length];
@@ -46,6 +50,7 @@ public abstract class Tools {
 		calendar.set(splitDate[0], splitDate[1], splitDate[2], splitDate[3], splitDate[4], splitDate[5]);
 		return calendar.getTime();
 	}
+	
 	public static String locationToString (Location loc) {
 		String locString = "";
 		locString += loc.getWorld().getName() + " ";
@@ -56,6 +61,7 @@ public abstract class Tools {
 		locString += loc.getPitch() + " ";
 		return locString;
 	}
+	
 	public static Location stringToLocation (String loc) {
 		try {
 			String[] split = loc.split(" ");

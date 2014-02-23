@@ -11,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class WarnCommand implements CommandExecutor {
+	
 	private Murder plugin;
 	
 	public WarnCommand (Murder plugin) {
