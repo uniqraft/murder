@@ -71,6 +71,8 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) {
+		if (!plugin.isStarted()) return;
+		
 		event.setCancelled(true);
 		
 		Player player = event.getPlayer();

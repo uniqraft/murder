@@ -54,7 +54,6 @@ public class SignManager {
 	}
 	
 	public boolean existsSigns (Location location) {
-		Tools.sendMessageAll(mSigns.size() + "");
 		for (MSign sign: mSigns) {
 			Tools.sendMessageAll(ChatContext.PREFIX_DEBUG + sign.getLocation().distance(location));
 			if (sign.getLocation().distance(location) <= .5) {
