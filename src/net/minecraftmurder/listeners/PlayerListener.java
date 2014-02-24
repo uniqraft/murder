@@ -40,6 +40,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerToggleSprint (PlayerToggleSprintEvent event) {
+		// TODO This isn't working, fiiix
 		final Player player = event.getPlayer();
 		MPlayer mPlayer = plugin.getMPlayer(player);
 		if (mPlayer.getPlayerClass() == MPlayerClass.GUNNER || mPlayer.getPlayerClass() == MPlayerClass.INNOCENT) {
@@ -47,6 +48,7 @@ public class PlayerListener implements Listener {
 			player.setSprinting(false);
 			player.setFoodLevel(0);
 			player.sendMessage(ChatContext.PREFIX_PLUGIN + "Only the murderer can sprint.");
+			event.setCancelled(true);
 			// One tick later, change food level back
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				
@@ -54,7 +56,7 @@ public class PlayerListener implements Listener {
 				public void run() {
 					player.setFoodLevel(20);
 				}
-			}, 1);
+			}, 0L);
 		}
 	}
 	

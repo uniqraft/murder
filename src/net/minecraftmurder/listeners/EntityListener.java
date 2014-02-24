@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
+// TODO Updating the API broke death handling. Fix
 public class EntityListener implements Listener {
 	
 	Murder plugin;
@@ -111,5 +112,9 @@ public class EntityListener implements Listener {
 				}
 			} 
 		}
+	}
+	
+	private void checkForDeath (Player player) {
+		
 	}
 }
