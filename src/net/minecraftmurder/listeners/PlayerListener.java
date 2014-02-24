@@ -43,8 +43,8 @@ public class PlayerListener implements Listener {
 		final Player player = event.getPlayer();
 		MPlayer mPlayer = plugin.getMPlayer(player);
 		if (mPlayer.getPlayerClass() == MPlayerClass.GUNNER || mPlayer.getPlayerClass() == MPlayerClass.INNOCENT) {
-			final int previousFood = player.getFoodLevel();
 			// Disable sprint by setting food level to 0
+			player.setSprinting(false);
 			player.setFoodLevel(0);
 			player.sendMessage(ChatContext.PREFIX_PLUGIN + "Only the murderer can sprint.");
 			// One tick later, change food level back
@@ -52,7 +52,7 @@ public class PlayerListener implements Listener {
 				
 				@Override
 				public void run() {
-					player.setFoodLevel(previousFood);
+					player.setFoodLevel(20);
 				}
 			}, 1);
 		}
@@ -101,7 +101,7 @@ public class PlayerListener implements Listener {
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
-		plugin.sendMessageToPlayersInMatch(event.getMessage(), match);
+		plugin.sendMessageToPlayersInMatch(player.getDisplayName() + ": " + event.getMessage(), match);
 		MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + player.getName() + ": " + event.getMessage());
 	}
 
