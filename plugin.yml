@@ -45,4 +45,4 @@ permissions:
         default: true
     murder.mod:
         description: Allows a user to moderate.
-        default: false
+        default: op

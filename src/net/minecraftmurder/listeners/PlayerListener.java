@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
-import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerListener implements Listener {
@@ -38,6 +39,26 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler
+	public void onPlayerToggleSprint (PlayerToggleSprintEvent event) {
+		final Player player = event.getPlayer();
+		MPlayer mPlayer = plugin.getMPlayer(player);
+		if (mPlayer.getPlayerClass() == MPlayerClass.GUNNER || mPlayer.getPlayerClass() == MPlayerClass.INNOCENT) {
+			final int previousFood = player.getFoodLevel();
+			// Disable sprint by setting food level to 0
+			player.setFoodLevel(0);
+			player.sendMessage(ChatContext.PREFIX_PLUGIN + "Only the murderer can sprint.");
+			// One tick later, change food level back
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				
+				@Override
+				public void run() {
+					player.setFoodLevel(previousFood);
+				}
+			}, 1);
+		}
+	}
+	
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if (MPlayer.isBanned(player.getName())) {
@@ -45,10 +66,10 @@ public class PlayerListener implements Listener {
 			if (date != null) {
 				String dateString = date.toString();
 				player.kickPlayer("You are banned until " + dateString);
-				Bukkit.getLogger().log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
+				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
 			} else {
 				player.kickPlayer("You are banned. Contact staff.");
-				Bukkit.getLogger().log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
+				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
 			}
 			return;
 		}
@@ -81,13 +102,12 @@ public class PlayerListener implements Listener {
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
 		plugin.sendMessageToPlayersInMatch(event.getMessage(), match);
-		Bukkit.getLogger().log(Level.FINE, "[Match " + match.hashCode() + "] " + player.getName() + ": " + event.getMessage());
+		MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + player.getName() + ": " + event.getMessage());
 	}
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		Tools.sendMessageAll(ChatContext.PREFIX_CRITICAL + "A player died!");
-		Bukkit.getLogger().log(Level.SEVERE, "A player died. Plugin will break.");
+		MLogger.log(Level.SEVERE, "A player died! " + event.getDeathMessage());
 		((Player)event.getEntity()).kickPlayer("If you see this, report it to staff!");
 	}
 
@@ -164,7 +184,7 @@ public class PlayerListener implements Listener {
 				if (mP.getPlayerClass() == MPlayerClass.INNOCENT || mP.getPlayerClass() == MPlayerClass.GUNNER)
 					mP.getPlayer().teleport(mPlayer.getMatch().getArena().getRandomSpawn("player").getLocation());
 			}
-			Tools.sendMessageAll(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.");
+			plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.", mPlayer.getMatch());
 			// Play sound at each player's new location one tick later
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@Override

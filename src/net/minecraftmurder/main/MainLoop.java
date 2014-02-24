@@ -18,7 +18,6 @@ public class MainLoop implements Runnable {
 				mPlayer.addReloadTime(-1);
 			}
 		}
-		
 		// Every ½ second
 		if (tick % 10 == 0) {
 			plugin.getSignManager().updateSigns();
@@ -34,7 +33,6 @@ public class MainLoop implements Runnable {
 			
 			plugin.getMatchManager().getLobbyMatch().update();
 		}
-		
 		tick++;
 	}
 	

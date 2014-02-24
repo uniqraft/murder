@@ -27,6 +27,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onHangingBreak (HangingBreakEvent event) {
+		// TODO Only make breakable in dev mode
 		if (plugin.isStarted()) {
 			event.setCancelled(true);
 		}
@@ -34,6 +35,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onBlockBreak (BlockBreakEvent event) {
+		// TODO Only in dev mode
 		if (plugin.isStarted() || !event.getPlayer().isOp()) {
 			event.setCancelled(true);
 		}
@@ -45,6 +47,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onBlockPlace (BlockPlaceEvent event) {
+		// TODO Only in dev mode
 		if (plugin.isStarted() || !event.getPlayer().isOp()) {
 			event.setCancelled(true);
 		}
@@ -52,6 +55,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onSignChange (SignChangeEvent event) {
+		// TODO Only in dev mode
 		Sign sign = (Sign) event.getBlock().getState();
 		if (event.getLine(0).equalsIgnoreCase("[murder]")) {
 			// Is the second line [match]

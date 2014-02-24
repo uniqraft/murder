@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+// TODO Implement an "in dev mode" variable, Linus.
 public class Murder extends JavaPlugin {
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;
@@ -33,6 +34,8 @@ public class Murder extends JavaPlugin {
 	
 	@Override
 	public void onEnable () {
+		MLogger.setMurderPlugin(this);
+		
 		arenaManager = new ArenaManager(this);
 		matchManager = new MatchManager(this);
 		playerManager = new PlayerManager(this);
@@ -80,7 +83,6 @@ public class Murder extends JavaPlugin {
 	public void start () {
 		if (isStarted())
 			return;
-		
 		started = true;
 
 		for (MPlayer mplayer: getPlayerManager().getMPlayers()) {

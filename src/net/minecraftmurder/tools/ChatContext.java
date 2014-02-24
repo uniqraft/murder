@@ -18,8 +18,8 @@ public class ChatContext {
 	
 	public static final String PREFIX_PLUGIN = ChatColor.DARK_GREEN + "[Murder] " + COLOR_LOWLIGHT;
 	public static final String PREFIX_DEBUG = PREFIX_PLUGIN + ChatColor.GOLD + "[DEBUG] " + COLOR_MAIN;
-	public static final String PREFIX_WARNING = PREFIX_PLUGIN + COLOR_WARNING;
 	public static final String PREFIX_CRITICAL = PREFIX_PLUGIN + ChatColor.DARK_RED + "[CRITICAL] ";
+	public static final String PREFIX_WARNING = PREFIX_PLUGIN + ChatColor.GOLD + "[WARNING] " + COLOR_WARNING;
 	
 	public static final String ERROR_ARGUMENTS = 
 			PREFIX_PLUGIN + COLOR_WARNING + "Invalid arguments.";

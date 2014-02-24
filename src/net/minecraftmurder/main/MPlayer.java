@@ -229,7 +229,7 @@ public class MPlayer {
 		return SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml").getInt("warn.level", 0);
 	}
 	/**
-	 * Sets whether a ban should be given to the used when they log in.
+	 * Sets whether a ban should be given to the user when they log in.
 	 * This should be set to true if the user is offline when they receive their warning, otherwise false.
 	 * @param shouldBeBanned
 	 * Whether or not the user should receive their ban date when they log in.
