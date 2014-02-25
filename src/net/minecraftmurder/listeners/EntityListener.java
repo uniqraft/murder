@@ -1,5 +1,8 @@
 package net.minecraftmurder.listeners;
 
+import java.util.logging.Level;
+
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
@@ -31,6 +34,7 @@ public class EntityListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDamage (EntityDamageEvent event) {
+		// TODO Rewrite info, this is not longer accurate
 		/*
 		 * As far as I know, EntityDamageEvent is called after EntityDamageByEntityEvent.
 		 * Therefore death logic is handled here. OnPlayerDeath will be called for the
@@ -39,12 +43,8 @@ public class EntityListener implements Listener {
 		 */
 		if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
-			// TODO Log
+			player.setHealth(20);
 			final MPlayer mPlayer = plugin.getMPlayer(player);
-			if (player.getHealth() - event.getDamage() < 1) {
-				player.setHealth(20);	
-				mPlayer.getMatch().onPlayerDeath(player);
-			}
 			// Reset killer 1 tick later.
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@Override
@@ -57,6 +57,7 @@ public class EntityListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
+		
 		// If a player was damaged
 		if (event.getEntity() instanceof Player) {
 			Player damaged = (Player) event.getEntity();
@@ -81,9 +82,8 @@ public class EntityListener implements Listener {
 					return;
 				}
 				
-				// Kill player
+				// Set the player's killer
 				mDamaged.setKiller(((LivingEntity) arrow.getShooter()).getCustomName());
-				damaged.setHealth(1);
 				
 				// Was I shot by a player?
 				if (arrow.getShooter() instanceof Player) {
@@ -107,14 +107,12 @@ public class EntityListener implements Listener {
 						damaged.teleport(damaged.getLocation().add(0, 10, 0));
 						return;
 					}
-					
-					damaged.setHealth(1);
 				}
 			} 
+			// Damage was dealt, the player dies
+			if (event.getDamage() > 0) {
+				mDamaged.onDeath();
+			}
 		}
-	}
-	
-	private void checkForDeath (Player player) {
-		
 	}
 }

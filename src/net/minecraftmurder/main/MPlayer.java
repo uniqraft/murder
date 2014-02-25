@@ -90,6 +90,10 @@ public class MPlayer {
 		MPlayerClass.setFoodLevel(this);
 	}
 	
+	public void onDeath () {
+		
+	}
+	
 	public void decreaseGunBanTime () {
 		gunBanTime--;
 	}
