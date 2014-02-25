@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-// TODO Implement an "in dev mode" variable, Linus.
 public class Murder extends JavaPlugin {
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;

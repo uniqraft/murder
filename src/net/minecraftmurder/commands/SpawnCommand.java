@@ -25,6 +25,10 @@ public class SpawnCommand implements CommandExecutor {
 			sender.sendMessage(ChatContext.ERROR_NOTPLAYERSENDER);
 			return true;
 		}
+		if (args.length < 1 || args.length > 4) {
+			sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
+			return true;
+		}
 		Player player = (Player) sender;
 		
 		if (args[0].equalsIgnoreCase("add")) {
