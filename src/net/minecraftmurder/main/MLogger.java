@@ -16,20 +16,10 @@ public final class MLogger {
 	
 	/**
 	 * Used for logging information. Will write to console and log.
-	 * @see log(Level, String)
-	 * @param message
-	 * The message to log.
-	 * @return
-	 * False if setMurderPlugin hasn't been called.
-	 */
-	public static boolean log (String message) {
-		return log (Level.INFO, message);
-	}
-	/**
-	 * Used for logging information. Will write to console and log, and if level is 
-	 * higher than INFO the message will be sent to all online moderators.
+	 * If Level is higher than INFO, or dev mode is activate and level equals to INFO,
+	 * the message will be sent to all mods.
 	 * @param level
-	 * Level for logging. Refer to JavaDocs. Anything higher than 800 will be sent to online moderators.
+	 * Level for logging. Refer to JavaDocs. Anything higher than 800 (or equal to 800, if in dev mode) will be sent to online moderators.
 	 * @param message
 	 * The message to log.
 	 * @return
@@ -40,11 +30,19 @@ public final class MLogger {
 			return false;
 		
 		Bukkit.getLogger().log(level, message);
-		// If important, tell all online mods
-		if (level.intValue() > Level.INFO.intValue()) {
+		// Send to all relevant players
+		if ((level.intValue() > Level.INFO.intValue()) || (plugin.isDevMode() && level.intValue() >= Level.INFO.intValue())) {
 			for (Player player: Bukkit.getOnlinePlayers()) {
-				if (player.hasPermission("murder.mod"))
-					player.sendMessage(level.intValue()>=Level.SEVERE.intValue()?ChatContext.PREFIX_CRITICAL:ChatContext.PREFIX_WARNING + message);
+				if (player.hasPermission("murder.mod")) {
+					String prefix = "";
+					if (level.intValue()>=Level.SEVERE.intValue())
+						prefix = ChatContext.PREFIX_CRITICAL;
+					else if (level.intValue()>=Level.WARNING.intValue())
+						prefix = ChatContext.PREFIX_WARNING;
+					else
+						prefix = ChatContext.PREFIX_DEBUG;
+					player.sendMessage(prefix + message);
+				}
 			}
 		}
 		return true;

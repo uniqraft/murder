@@ -1,12 +1,14 @@
 package net.minecraftmurder.commands;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import net.minecraftmurder.main.Arena;
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.MatchManager;
@@ -24,13 +26,17 @@ public class MurderCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
 		// murder <action>
-		if (args.length < 1 || args.length > 2) {
+		if (args.length != 1) {
 			sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 			return false;
 		}
 		
 		if (args[0].equalsIgnoreCase("start")) {
 			plugin.start();
+			return true;
+		} else if (args[0].equalsIgnoreCase("dev")) {
+			plugin.activateDevMode();
+			MLogger.log(Level.INFO, sender.getName() + " activated dev mode.");
 			return true;
 		} else if (args[0].equalsIgnoreCase("matches")) {
 			String s = "Matches: ";

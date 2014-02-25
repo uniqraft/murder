@@ -21,7 +21,7 @@ commands:
 
 permissions:
     murder.*:
-        description: Gives access to all staff commands
+        description: Gives access to all commands
         children:
             murder.core: true
             murder.arenas: true

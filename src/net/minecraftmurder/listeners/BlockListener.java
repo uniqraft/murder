@@ -27,16 +27,14 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onHangingBreak (HangingBreakEvent event) {
-		// TODO Only make breakable in dev mode
-		if (plugin.isStarted()) {
+		if (!plugin.isDevMode()) {
 			event.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
 	public void onBlockBreak (BlockBreakEvent event) {
-		// TODO Only in dev mode
-		if (plugin.isStarted() || !event.getPlayer().isOp()) {
+		if (!plugin.isDevMode()) {
 			event.setCancelled(true);
 		}
 		Location location = event.getBlock().getLocation();
@@ -47,8 +45,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onBlockPlace (BlockPlaceEvent event) {
-		// TODO Only in dev mode
-		if (plugin.isStarted() || !event.getPlayer().isOp()) {
+		if (!plugin.isDevMode()) {
 			event.setCancelled(true);
 		}
 	}

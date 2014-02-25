@@ -1,5 +1,7 @@
 package net.minecraftmurder.main;
 
+import java.util.logging.Level;
+
 import net.minecraftmurder.commands.ArenaCommand;
 import net.minecraftmurder.commands.CoinCommand;
 import net.minecraftmurder.commands.MurderCommand;
@@ -31,6 +33,7 @@ public class Murder extends JavaPlugin {
 	private SignManager signManager;
 	
 	private boolean started = false;
+	private boolean devMode = false;
 	
 	@Override
 	public void onEnable () {
@@ -81,6 +84,11 @@ public class Murder extends JavaPlugin {
 	}
 	
 	public void start () {
+		if (devMode) {
+			MLogger.log(Level.SEVERE, "Can't start Murder, plugin in dev mode.");
+			return;
+		}
+		
 		if (isStarted())
 			return;
 		started = true;
@@ -90,9 +98,18 @@ public class Murder extends JavaPlugin {
 		}
 		
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new MainLoop(this), 0, 1);
+		MLogger.log(Level.INFO, "Murder started");
+	}
+	public void activateDevMode () {
+		if (devMode) return;
+		devMode = true;
+		MLogger.log(Level.INFO, "Murder is now in dev mode.");
 	}
 	public boolean isStarted () {
 		return started;
+	}
+	public boolean isDevMode () {
+		return devMode;
 	}
 	
 	public void sendMessageToPlayersInMatch (String message, Match match) {

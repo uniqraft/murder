@@ -2,12 +2,14 @@ package net.minecraftmurder.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.signs.MSign;
 import net.minecraftmurder.signs.MSignMatch;
@@ -57,7 +59,6 @@ public class SignManager {
 		for (MSign sign: mSigns) {
 			if (location.getWorld() != sign.getLocation().getWorld())
 				continue;
-			Tools.sendMessageAll(ChatContext.PREFIX_DEBUG + sign.getLocation().distance(location));
 			if (sign.getLocation().distance(location) <= .5) {
 				return true;
 			}
@@ -81,9 +82,9 @@ public class SignManager {
 		for (MSign sign: mSigns) {
 			if (sign.getLocation().equals(location)) {
 				mSigns.remove(sign);
-				Tools.sendMessageAll(ChatContext.PREFIX_PLUGIN + "Sign removed.");
+				MLogger.log(Level.INFO, "Sign removed.");
 			} else {
-				Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "Can't remove sign entry that doesn't exist: " + location.toString());
+				MLogger.log(Level.WARNING, "Can't remove sign entry that doesn't exist: " + location.toString());
 			}
 		}
 		save();
