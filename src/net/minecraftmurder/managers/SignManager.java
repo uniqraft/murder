@@ -13,9 +13,7 @@ import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.signs.MSign;
 import net.minecraftmurder.signs.MSignMatch;
-import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.SimpleFile;
-import net.minecraftmurder.tools.Tools;
 
 public class SignManager {
 	public static final String PATH_SIGN = "plugins/Murder/signs.yml";
