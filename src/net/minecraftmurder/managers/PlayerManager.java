@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.minecraft.server.v1_7_R1.ChatSerializer;
+import net.minecraft.server.v1_7_R1.IChatBaseComponent;
+import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
 import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
@@ -14,6 +17,7 @@ import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class PlayerManager {
