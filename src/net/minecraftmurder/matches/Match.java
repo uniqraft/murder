@@ -41,4 +41,15 @@ public abstract class Match {
 		}
 		return myMPlayers;
 	}
+	
+	/**
+	 * Sends a message to all players in this match.
+	 * @param message
+	 * The message to be sent.
+	 */
+	public void sendMessage (String message) {
+		for (MPlayer mPlayer: getMPlayers()) {
+			mPlayer.getPlayer().sendMessage(message);
+		}
+	}
 }

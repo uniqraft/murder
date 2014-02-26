@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.minecraft.server.v1_7_R1.ChatSerializer;
+import net.minecraft.server.v1_7_R1.IChatBaseComponent;
+import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
 import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
@@ -15,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,20 +66,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-		if (MPlayer.isBanned(player.getName())) {
-			Date date = MPlayer.getBanDate(player.getName());
-			if (date != null) {
-				String dateString = date.toString();
-				player.kickPlayer("You are banned until " + dateString);
-				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
-			} else {
-				player.kickPlayer("You are banned. Contact staff.");
-				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
-			}
-			return;
-		}
-		
+		event.setJoinMessage(null);
 		plugin.getPlayerManager().onPlayerJoin(event.getPlayer());
 	}
 
