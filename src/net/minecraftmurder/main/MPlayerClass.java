@@ -24,13 +24,12 @@ public final class MPlayerClass {
 	public static final int SPECTATOR	= 5;
 	
 	public static void setFoodLevel (MPlayer mplayer) {
-		// TODO Clean
 		if (mplayer.getPlayerClass() == MPlayerClass.MURDERER
 				|| mplayer.getPlayerClass() == MPlayerClass.LOBBYMAN
 				|| mplayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			mplayer.getPlayer().setFoodLevel(20);
 		} else {
-			mplayer.getPlayer().setFoodLevel(20);
+			mplayer.getPlayer().setFoodLevel(2);
 		}
 	}
 	public static void setDefaultClassInventory (Inventory inventory, int playerClass) {

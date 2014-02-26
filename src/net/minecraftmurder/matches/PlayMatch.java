@@ -8,8 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import net.minecraft.server.v1_7_R1.Item;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
@@ -82,6 +85,13 @@ public class PlayMatch extends Match {
 		return location;
 	}
 	
+	public boolean isPlaying () {
+		return isPlaying;
+	}
+	public boolean isRanked () {
+		return isRanked;
+	}
+	
 	@Override
 	public void update() {
 		countdown--;
@@ -116,7 +126,12 @@ public class PlayMatch extends Match {
 			// If empty, reset count down
 			if (count < 1) {
 				countdown = COUNTDOWN_TIME;
-			} 
+			}
+			// Clear all drops
+			for (Entity e : arena.getWorld().getEntities()) {
+				if (e instanceof Item)
+					e.remove();
+			}
 			// If count down reaches 0
 			if (countdown <= 0) {
 				if (count < MIN_PLAYERS) {
