@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
+import net.minecraftmurder.main.MPlayerClass.PlayerClass;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
@@ -13,6 +14,7 @@ import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -25,7 +27,7 @@ public class MPlayer {
 	
 	private String name;
 	private Match match;
-	private int playerClass;
+	private PlayerClass playerClass;
 	
 	private String killerName;
 	
@@ -36,11 +38,14 @@ public class MPlayer {
 	
 	private Murder plugin;
 	
+	// For future reference
+	private Material knife = Material.IRON_SWORD;
+	
 	public MPlayer (String name, Murder plugin) {
 		this.name = name;
 		this.plugin = plugin;
 		
-		switchClass(MPlayerClass.LOBBYMAN);
+		switchClass(PlayerClass.LOBBYMAN);
 		load();
 	}
 	
@@ -56,14 +61,15 @@ public class MPlayer {
 		SimpleFile.saveConfig(config, PlayerManager.PATH_PLAYERS + "/" + name + ".yml");*/
 	}
 	
-	public int getPlayerClass () {
+	public PlayerClass getPlayerClass () {
 		return playerClass;
 	}
-	public void switchClass (int playerClass) {
-		this.playerClass = playerClass;
-		MPlayerClass.setDefaultClassInventory(getPlayer().getInventory(), playerClass);
+	
+	public void switchClass (PlayerClass lobbyman) {
+		this.playerClass = lobbyman;
+		MPlayerClass.setDefaultClassInventory(getPlayer().getInventory(), lobbyman);
 		// If I was turned into a spectator
-		if (playerClass == MPlayerClass.SPECTATOR) {
+		if (lobbyman == MPlayerClass.PlayerClass.SPECTATOR) {
 			// Make all players unable to see me
 			Player me = plugin.getPlayerManager().getPlayer(this);
 			me.setGameMode(GameMode.CREATIVE);
@@ -93,7 +99,8 @@ public class MPlayer {
 	public void onDeath () {
 		Player player = getPlayer();
 		
-		Packet14SpawnNamedEntity
+		// This isn't even a line? :
+		// Packet14SpawnNamedEntity
 		
 		player.setHealth(20);
 		match.onPlayerDeath(player);
@@ -113,7 +120,7 @@ public class MPlayer {
 		player.getWorld().dropItem(player.getLocation(), new ItemStack(MPlayerClass.MATERIAL_GUN));
 		player.sendMessage(ChatContext.MESSAGE_SHOTINNOCENT);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 60, 2), true);
-		switchClass(MPlayerClass.INNOCENT);
+		switchClass(PlayerClass.INNOCENT);
 		gunBanTime = Murder.GUNBAN_TIME;
 	}
 	
@@ -121,14 +128,15 @@ public class MPlayer {
 		return name;
 	}
 	
+	public Match getMatch () {
+		return match;
+	}
+	
 	public void setMatch (Match match) {
 		if (this.match != null)
 			this.match.onPlayerQuit(getPlayer()); // Tell current match that this player left
 		this.match = match;
 		this.match.onPlayerJoin(getPlayer()); // Tell new match that this player joined
-	}
-	public Match getMatch () {
-		return match;
 	}
 	
 	public Player getPlayer () {
@@ -254,5 +262,13 @@ public class MPlayer {
 	}
 	public static boolean getUpcomingBan (String player) {
 		return SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml").getBoolean("warn.upcomingban", false);
+	}
+
+	public Material getKnife() {
+		return knife;
+	}
+
+	public void setKnife(Material knife) {
+		this.knife = knife;
 	}
 }

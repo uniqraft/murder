@@ -1,12 +1,12 @@
 package net.minecraftmurder.matches;
 
-import org.bukkit.entity.Player;
-
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.MPlayerClass;
+import net.minecraftmurder.main.MPlayerClass.PlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
+
+import org.bukkit.entity.Player;
 
 public class LobbyMatch extends Match {
 	public LobbyMatch (Arena arena, Murder plugin) {
@@ -23,7 +23,7 @@ public class LobbyMatch extends Match {
 	@Override
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = plugin.getMPlayer(player);
-		mPlayer.switchClass(MPlayerClass.LOBBYMAN);
+		mPlayer.switchClass(PlayerClass.LOBBYMAN);
 		
 		if (arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");

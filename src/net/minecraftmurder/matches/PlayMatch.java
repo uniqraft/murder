@@ -14,6 +14,7 @@ import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
+import net.minecraftmurder.main.MPlayerClass.PlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.tools.ChatContext;
@@ -65,7 +66,7 @@ public class PlayMatch extends Match {
 		double distance = Double.POSITIVE_INFINITY;
 		for (MPlayer mPlayer: getMPlayers()) {
 			// Skip if not innocent or gunner
-			if (mPlayer.getPlayerClass() != MPlayerClass.INNOCENT && mPlayer.getPlayerClass() != MPlayerClass.GUNNER)
+			if (mPlayer.getPlayerClass() != PlayerClass.INNOCENT && mPlayer.getPlayerClass() != PlayerClass.GUNNER)
 				continue;
 			
 			Location playerLocation = mPlayer.getPlayer().getLocation();
@@ -96,7 +97,7 @@ public class PlayMatch extends Match {
 					mPlayer.onDeath();
 				
 				// Find murderer
-				if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
+				if (mPlayer.getPlayerClass() == PlayerClass.MURDERER) {
 					mMurderer = mPlayer;
 					break;
 				}
@@ -168,10 +169,10 @@ public class PlayMatch extends Match {
 		
 		// Equip murderer
 		MPlayer mMurderer = mPlayers.get(m);
-		mMurderer.switchClass(MPlayerClass.MURDERER);
+		mMurderer.switchClass(PlayerClass.MURDERER);
 		// Equip gunner
 		MPlayer mGunner = mPlayers.get(g);
-		mGunner.switchClass(MPlayerClass.GUNNER);
+		mGunner.switchClass(PlayerClass.GUNNER);
 		
 		murderer = mMurderer.getName();
 		
@@ -186,7 +187,7 @@ public class PlayMatch extends Match {
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You are " + ChatContext.COLOR_INNOCENT + "a Gunner" + ChatContext.COLOR_LOWLIGHT + "!");
 			} else {
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You are " + ChatContext.COLOR_INNOCENT + "an Innocent" + ChatContext.COLOR_LOWLIGHT + "!");
-				mPlayer.switchClass(MPlayerClass.INNOCENT);
+				mPlayer.switchClass(PlayerClass.INNOCENT);
 			}
 			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 		}
@@ -217,9 +218,9 @@ public class PlayMatch extends Match {
 		MPlayer mMurderer = null;
 		int innocentCount = 0;
 		for (MPlayer mPlayer: getMPlayers()) {
-			if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
+			if (mPlayer.getPlayerClass() == PlayerClass.MURDERER) {
 				mMurderer = mPlayer;
-			} else if (mPlayer.getPlayerClass() == MPlayerClass.INNOCENT || mPlayer.getPlayerClass() == MPlayerClass.GUNNER) {
+			} else if (mPlayer.getPlayerClass() == PlayerClass.INNOCENT || mPlayer.getPlayerClass() == PlayerClass.GUNNER) {
 				innocentCount++;
 			}
 		}
@@ -247,7 +248,7 @@ public class PlayMatch extends Match {
 	@Override
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = plugin.getMPlayer(player);
-		mPlayer.switchClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
+		mPlayer.switchClass(isPlaying ? PlayerClass.SPECTATOR : PlayerClass.PREGAMEMAN);
 		
 		if (arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");
@@ -266,7 +267,7 @@ public class PlayMatch extends Match {
 		String killer = mKilled.getKillerName();
 		
 		// If the murderer was killed
-		if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
+		if (mKilled.getPlayerClass() == PlayerClass.MURDERER) {
 			
 			murdererKiller = killer;
 			// If there was a killer, reward him
@@ -276,7 +277,7 @@ public class PlayMatch extends Match {
 			MPlayer.addCoins(murderer, 1, true, plugin);
 		}
 		// Change class into a spectator and check if the match is over
-		mKilled.switchClass(MPlayerClass.SPECTATOR);
+		mKilled.switchClass(PlayerClass.SPECTATOR);
 		checkForEnd();
 	}
 }

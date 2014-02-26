@@ -42,10 +42,11 @@ public class Murder extends JavaPlugin {
 	@Override
 	public void onLoad () {
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		if (protocolManager != null)
+		if (protocolManager != null) {
 			MLogger.log(Level.INFO, "ProtocolManager loaded.");
-		else
+		} else {
 			MLogger.log(Level.SEVERE, "ProtocolManager failed to load.");
+		}
 	}
 	@Override
 	public void onEnable () {

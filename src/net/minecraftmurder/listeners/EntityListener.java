@@ -104,7 +104,7 @@ public class EntityListener implements Listener {
 				}
 			} else if (event.getDamager() instanceof Player) {
 				Player damager = (Player) event.getDamager();
-				if (damager.getItemInHand().getType() == MPlayerClass.MATERIAL_KNIFE) {
+				if (damager.getItemInHand().getType() == MPlayerClass.MATERIAL_KNIVES) {
 					// Spectator was hit
 					if (mDamaged.getPlayerClass() == MPlayerClass.SPECTATOR) {
 						damaged.teleport(damaged.getLocation().add(0, 10, 0));
