@@ -12,6 +12,9 @@ import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
+import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.SimpleFile;
+import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
@@ -35,6 +38,7 @@ public class PlayerManager {
 				String dateString = date.toString();
 				player.kickPlayer("You are banned until " + dateString);
 				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
+				return;
 			} else {
 				// If there isn't a date, the file is corrupt
 				player.kickPlayer("You are banned. Contact staff.");
@@ -42,6 +46,16 @@ public class PlayerManager {
 			}
 			return;
 		}
+		
+		// Greet player
+		if (SimpleFile.exists(PATH_PLAYERS + "/" + player.getName() + ".yml")) {
+			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
+			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_MAIN + " joined the game!", player);
+		} else {
+			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome to Murder!");
+			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_LOWLIGHT + " joined the game for their first time!", player);
+		}
+			
 		
 		// Send a clickable link to the player
 		IChatBaseComponent comp = ChatSerializer
