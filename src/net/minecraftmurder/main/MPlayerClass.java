@@ -12,28 +12,33 @@ import org.bukkit.inventory.ItemStack;
 public final class MPlayerClass {
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
-	public static final Material MATERIAL_KNIFE = Material.IRON_SWORD;
+	// For future implementation of vanity items, not really necessary to implement right now.
+	public static final Material[] MATERIAL_PROJECTILES = 
+		{ Material.ARROW };
+	// Might want to load this from a file, but it's really just a list of weaponry...
+	public static final Material[] MATERIAL_KNIVES = 
+		{ 
+			Material.WOOD_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD,
+			Material.WOOD_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLD_AXE, Material.DIAMOND_AXE
+		};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
 	public static final Material MATERIAL_TELEPORTER = Material.ENDER_PEARL;
 	
-	public static final int LOBBYMAN	= 0;
-	public static final int PREGAMEMAN	= 1;
-	public static final int MURDERER	= 2;
-	public static final int GUNNER		= 3;
-	public static final int INNOCENT	= 4;
-	public static final int SPECTATOR	= 5;
+	public enum PlayerClass {
+		LOBBYMAN, PREGAMEMAN, MURDERER, GUNNER, INNOCENT, SPECTATOR
+	}
 	
 	public static void setFoodLevel (MPlayer mplayer) {
 		// TODO Clean
-		if (mplayer.getPlayerClass() == MPlayerClass.MURDERER
-				|| mplayer.getPlayerClass() == MPlayerClass.LOBBYMAN
-				|| mplayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
+		if (mplayer.getPlayerClass() == PlayerClass.MURDERER
+				|| mplayer.getPlayerClass() == PlayerClass.LOBBYMAN
+				|| mplayer.getPlayerClass() == PlayerClass.SPECTATOR) {
 			mplayer.getPlayer().setFoodLevel(20);
 		} else {
 			mplayer.getPlayer().setFoodLevel(20);
 		}
 	}
-	public static void setDefaultClassInventory (Inventory inventory, int playerClass) {
+	public static void setDefaultClassInventory (Inventory inventory, PlayerClass playerClass) {
 		inventory.clear();
 		
 		switch (playerClass) {
@@ -49,6 +54,7 @@ public final class MPlayerClass {
 			giveGun(inventory);
 			break;
 		case MURDERER:
+			// Need to figure out a way to fix this.
 			giveKnife(inventory);
 			giveCompass(inventory);
 			giveTeleporter(inventory);
@@ -84,11 +90,13 @@ public final class MPlayerClass {
 			item.setAmount(item.getAmount() + 1);
 		}
 	}
-	public static void giveKnife (Inventory inventory) {
-		ItemStack item = new ItemStack (MATERIAL_KNIFE);
+	
+	public static void giveKnife (Inventory inventory, MPlayer player) {
+		ItemStack item = new ItemStack (player.getKnife());
 		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to murderize."));
 		inventory.setItem(1, item);
 	}
+	
 	public static void giveCompass (Inventory inventory) {
 		ItemStack item = new ItemStack (MATERIAL_DETECTOR);
 		Tools.setItemStackName(item, "Detector", Arrays.asList("Points towards the closet innocent."));
