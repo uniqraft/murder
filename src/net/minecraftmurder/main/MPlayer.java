@@ -31,7 +31,7 @@ public class MPlayer {
 	
 	private String name;
 	private Match match;
-	private int playerClass;
+	private MPlayerClass playerClass;
 	
 	private String killerName;
 	
@@ -46,7 +46,7 @@ public class MPlayer {
 		this.name = name;
 		this.plugin = plugin;
 		
-		switchClass(MPlayerClass.LOBBYMAN);
+		switchPlayerClass(MPlayerClass.LOBBYMAN);
 		load();
 	}
 	
@@ -62,14 +62,15 @@ public class MPlayer {
 		SimpleFile.saveConfig(config, PlayerManager.PATH_PLAYERS + "/" + name + ".yml");*/
 	}
 	
-	public int getPlayerClass () {
+	public MPlayerClass getPlayerClass () {
 		return playerClass;
 	}
-	public void switchClass (int playerClass) {
-		this.playerClass = playerClass;
-		MPlayerClass.setDefaultClassInventory(getPlayer().getInventory(), playerClass);
+	
+	public void switchPlayerClass (MPlayerClass lobbyman) {
+		this.playerClass = lobbyman;
+		MPlayerClass.setDefaultClassInventory(getPlayer().getInventory(), lobbyman);
 		// If I was turned into a spectator
-		if (playerClass == MPlayerClass.SPECTATOR) {
+		if (lobbyman == MPlayerClass.SPECTATOR) {
 			// Make all players unable to see me
 			Player me = plugin.getPlayerManager().getPlayer(this);
 			me.setGameMode(GameMode.CREATIVE);
@@ -129,7 +130,7 @@ public class MPlayer {
 		player.getWorld().dropItem(player.getLocation(), new ItemStack(MPlayerClass.MATERIAL_GUN));
 		player.sendMessage(ChatContext.MESSAGE_SHOTINNOCENT);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 60, 2), true);
-		switchClass(MPlayerClass.INNOCENT);
+		switchPlayerClass(MPlayerClass.INNOCENT);
 		gunBanTime = Murder.GUNBAN_TIME;
 	}
 	

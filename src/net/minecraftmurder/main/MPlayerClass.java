@@ -9,19 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public final class MPlayerClass {
+public enum MPlayerClass {
+	LOBBYMAN, PREGAMEMAN, MURDERER, GUNNER, INNOCENT, SPECTATOR;
+	
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
 	public static final Material MATERIAL_KNIFE = Material.IRON_SWORD;
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
 	public static final Material MATERIAL_TELEPORTER = Material.ENDER_PEARL;
-	
-	public static final int LOBBYMAN	= 0;
-	public static final int PREGAMEMAN	= 1;
-	public static final int MURDERER	= 2;
-	public static final int GUNNER		= 3;
-	public static final int INNOCENT	= 4;
-	public static final int SPECTATOR	= 5;
 	
 	public static void setFoodLevel (MPlayer mplayer) {
 		if (mplayer.getPlayerClass() == MPlayerClass.MURDERER
@@ -32,7 +27,7 @@ public final class MPlayerClass {
 			mplayer.getPlayer().setFoodLevel(2);
 		}
 	}
-	public static void setDefaultClassInventory (Inventory inventory, int playerClass) {
+	public static void setDefaultClassInventory (Inventory inventory, MPlayerClass playerClass) {
 		inventory.clear();
 		
 		switch (playerClass) {

@@ -23,7 +23,7 @@ public class LobbyMatch extends Match {
 	@Override
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = plugin.getMPlayer(player);
-		mPlayer.switchClass(MPlayerClass.LOBBYMAN);
+		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
 		
 		if (arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");

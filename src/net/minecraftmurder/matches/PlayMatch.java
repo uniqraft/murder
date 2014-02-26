@@ -10,9 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_7_R1.Item;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
@@ -188,10 +188,10 @@ public class PlayMatch extends Match {
 		
 		// Equip murderer
 		MPlayer mMurderer = mPlayers.get(m);
-		mMurderer.switchClass(MPlayerClass.MURDERER);
+		mMurderer.switchPlayerClass(MPlayerClass.MURDERER);
 		// Equip gunner
 		MPlayer mGunner = mPlayers.get(g);
-		mGunner.switchClass(MPlayerClass.GUNNER);
+		mGunner.switchPlayerClass(MPlayerClass.GUNNER);
 		
 		murderer = mMurderer.getName();
 		
@@ -206,7 +206,7 @@ public class PlayMatch extends Match {
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You are " + ChatContext.COLOR_INNOCENT + "a Gunner" + ChatContext.COLOR_LOWLIGHT + "!");
 			} else {
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You are " + ChatContext.COLOR_INNOCENT + "an Innocent" + ChatContext.COLOR_LOWLIGHT + "!");
-				mPlayer.switchClass(MPlayerClass.INNOCENT);
+				mPlayer.switchPlayerClass(MPlayerClass.INNOCENT);
 			}
 			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 		}
@@ -267,7 +267,7 @@ public class PlayMatch extends Match {
 	@Override
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = plugin.getMPlayer(player);
-		mPlayer.switchClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
+		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 		
 		if (arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");
@@ -296,7 +296,7 @@ public class PlayMatch extends Match {
 			MPlayer.addCoins(murderer, 1, true, plugin);
 		}
 		// Change class into a spectator and check if the match is over
-		mKilled.switchClass(MPlayerClass.SPECTATOR);
+		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
 		checkForEnd();
 	}
 }
