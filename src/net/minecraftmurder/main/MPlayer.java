@@ -13,10 +13,15 @@ import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -93,7 +98,12 @@ public class MPlayer {
 	public void onDeath () {
 		Player player = getPlayer();
 		
-		/*Packet14SpawnNamedEntity*/
+		LivingEntity zombie = (LivingEntity)player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+		EntityEquipment equipment = zombie.getEquipment();
+		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+		((SkullMeta) skull.getItemMeta()).setOwner(player.getName());
+		equipment.setHelmet(skull);
+		zombie.setHealth(0);
 		
 		player.setHealth(20);
 		match.onPlayerDeath(player);

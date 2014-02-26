@@ -66,6 +66,11 @@ public class MurderCommand implements CommandExecutor {
 				sender.sendMessage(ChatContext.PREFIX_PLUGIN + mplayer.getName());
 			}
 			return true;
+		} else if (args[0].equalsIgnoreCase("kill")) {
+			MPlayer mPlayer = plugin.getMPlayer(sender.getName());
+			if (mPlayer != null)
+				mPlayer.onDeath();
+			return true;
 		}
 		return false;
 	}
