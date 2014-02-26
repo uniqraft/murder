@@ -1,12 +1,8 @@
 package net.minecraftmurder.listeners;
 
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
-import net.minecraft.server.v1_7_R1.ChatSerializer;
-import net.minecraft.server.v1_7_R1.IChatBaseComponent;
-import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
 import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
@@ -18,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -94,7 +89,7 @@ public class PlayerListener implements Listener {
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
-		plugin.sendMessageToPlayersInMatch(player.getDisplayName() + ": " + event.getMessage(), match);
+		match.sendMessage(player.getDisplayName() + ": " + event.getMessage());
 		MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + player.getName() + ": " + event.getMessage());
 	}
 
@@ -177,7 +172,7 @@ public class PlayerListener implements Listener {
 				if (mP.getPlayerClass() == MPlayerClass.INNOCENT || mP.getPlayerClass() == MPlayerClass.GUNNER)
 					mP.getPlayer().teleport(mPlayer.getMatch().getArena().getRandomSpawn("player").getLocation());
 			}
-			plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.", mPlayer.getMatch());
+			mPlayer.getMatch().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.");
 			// Play sound at each player's new location one tick later
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@Override

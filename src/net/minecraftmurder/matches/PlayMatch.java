@@ -121,7 +121,7 @@ public class PlayMatch extends Match {
 			if (countdown <= 0) {
 				if (count < MIN_PLAYERS) {
 					// If not enough players
-					plugin.sendMessageToPlayersInMatch(ChatContext.MESSAGE_NOTENOUGHPLAYERS, this);
+					sendMessage(ChatContext.MESSAGE_NOTENOUGHPLAYERS);
 					countdown = COUNTDOWN_TIME-1;
 					System.out.println("Not enough players to startch Match " + this.hashCode() + ".");
 				} else {
@@ -130,7 +130,7 @@ public class PlayMatch extends Match {
 					start();
 				}
 			} else if (countdown % 10 == 0 || (countdown >= 1 && countdown <= 3)) {
-				plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + "Match starts in " + ChatContext.COLOR_HIGHLIGHT + countdown + " seconds" + ChatContext.COLOR_LOWLIGHT + "!", this);
+				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in " + ChatContext.COLOR_HIGHLIGHT + countdown + " seconds" + ChatContext.COLOR_LOWLIGHT + "!");
 			}
 		}
 	}
@@ -151,8 +151,8 @@ public class PlayMatch extends Match {
 		System.out.println(count + " players in Match " + this.hashCode() + ".");
 		if (count < MIN_PLAYERS_RANKED) {
 			// If not enough players to play ranked
-			plugin.sendMessageToPlayersInMatch(ChatContext.MESSAGE_NOTENOUGHPLAYERSRANKED, this);
-			plugin.sendMessageToPlayersInMatch(ChatContext.MESSAGE_NOTENOUGHPLAYERSRANKED_2, this);
+			sendMessage(ChatContext.MESSAGE_NOTENOUGHPLAYERSRANKED);
+			sendMessage(ChatContext.MESSAGE_NOTENOUGHPLAYERSRANKED_2);
 			isRanked = false;
 		} else {
 			isRanked = true;
@@ -224,17 +224,17 @@ public class PlayMatch extends Match {
 			}
 		}
 		if (mMurderer == null) {
-			plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_INNOCENT + "The Innocents" + ChatContext.COLOR_HIGHLIGHT + " wins the match!", this);
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_INNOCENT + "The Innocents" + ChatContext.COLOR_HIGHLIGHT + " wins the match!");
 			// If someone killed the murderer
 			if (murdererKiller != null && !"".equalsIgnoreCase(murdererKiller)) {
-				plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", was killed by " + ChatContext.COLOR_INNOCENT + murdererKiller + ChatContext.COLOR_LOWLIGHT + "!", this);
+				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", was killed by " + ChatContext.COLOR_INNOCENT + murdererKiller + ChatContext.COLOR_LOWLIGHT + "!");
 			}
 			end();
 			return;
 		}
 		if (innocentCount <= 0) {
-			plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_HIGHLIGHT + " wins the match!", this);
-			plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + " was " + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + "!", this);
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_HIGHLIGHT + " wins the match!");
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + " was " + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + "!");
 			// Reward the murderer for winning
 			if (isRanked)
 				MPlayer.addCoins(murderer, 10, true, plugin);

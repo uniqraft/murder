@@ -4,12 +4,10 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.Murder;
-import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
