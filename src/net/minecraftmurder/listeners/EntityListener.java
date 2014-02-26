@@ -1,11 +1,9 @@
 package net.minecraftmurder.listeners;
 
-import java.util.logging.Level;
-
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
@@ -16,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 // TODO Updating the API broke death handling. Fix
 public class EntityListener implements Listener {
@@ -42,8 +42,8 @@ public class EntityListener implements Listener {
 		 * that the player never actually dies.
 		 */
 		if (event.getEntity() instanceof Player) {
+			event.setCancelled(true);
 			Player player = (Player) event.getEntity();
-			player.setHealth(20);
 			final MPlayer mPlayer = plugin.getMPlayer(player);
 			// Reset killer 1 tick later.
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -96,6 +96,9 @@ public class EntityListener implements Listener {
 						if (mShooter.getPlayerClass() == MPlayerClass.GUNNER) {
 							// Make him drop the gun
 							mShooter.gunBan();
+							shooter.sendMessage(ChatContext.PREFIX_PLUGIN + "You shot an innocent player!");
+							shooter.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 60, 1, false), true);
+							shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 3, false), true);
 						}
 					}
 				}

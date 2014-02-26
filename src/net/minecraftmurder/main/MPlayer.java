@@ -91,7 +91,12 @@ public class MPlayer {
 	}
 	
 	public void onDeath () {
+		Player player = getPlayer();
 		
+		Packet14SpawnNamedEntity
+		
+		player.setHealth(20);
+		match.onPlayerDeath(player);
 	}
 	
 	public void decreaseGunBanTime () {

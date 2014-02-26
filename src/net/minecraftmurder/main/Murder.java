@@ -21,10 +21,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 public class Murder extends JavaPlugin {
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;
 	public static final float ARROW_SPEED = 4;
+	
+	public static ProtocolManager protocolManager;
 	
 	private PlayerManager playerManager;
 	private MatchManager matchManager;
@@ -35,7 +40,16 @@ public class Murder extends JavaPlugin {
 	private boolean devMode = false;
 	
 	@Override
+	public void onLoad () {
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		if (protocolManager != null)
+			MLogger.log(Level.INFO, "ProtocolManager loaded.");
+		else
+			MLogger.log(Level.SEVERE, "ProtocolManager failed to load.");
+	}
+	@Override
 	public void onEnable () {
+		
 		MLogger.setMurderPlugin(this);
 		
 		arenaManager = new ArenaManager(this);

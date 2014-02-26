@@ -2,6 +2,7 @@ package net.minecraftmurder.matches;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -10,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import net.minecraftmurder.main.Arena;
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
@@ -49,7 +51,7 @@ public class PlayMatch extends Match {
 		// Select new arena
 		Arena newArena = plugin.getArenaManager().getRandomAvailableArena(); 
 		if (newArena == null) {
-			Tools.sendMessageAll(ChatContext.PREFIX_CRITICAL + "PlayMatch could not change arena.");
+			MLogger.log(Level.SEVERE, "PlayMatch could not change arena.");
 			return;
 		}
 		
@@ -62,10 +64,15 @@ public class PlayMatch extends Match {
 		Location location = null;
 		double distance = Double.POSITIVE_INFINITY;
 		for (MPlayer mPlayer: getMPlayers()) {
+			// Skip if not innocent or gunner
 			if (mPlayer.getPlayerClass() != MPlayerClass.INNOCENT && mPlayer.getPlayerClass() != MPlayerClass.GUNNER)
 				continue;
 			
 			Location playerLocation = mPlayer.getPlayer().getLocation();
+			// Skip if not same world
+			if (from.getWorld() != playerLocation.getWorld())
+				continue;
+			
 			double d = from.distance(playerLocation);
 			if (d < distance) {
 				location = playerLocation;
@@ -80,15 +87,27 @@ public class PlayMatch extends Match {
 		countdown--;
 		if (isPlaying) {
 			MPlayer mMurderer = null;
+			// Loop through all players in this match
 			for (MPlayer mPlayer: getMPlayers()) {
+				Player player = mPlayer.getPlayer();
+				
+				// If outside the world, kill the player
+				if (player.getLocation().getBlockY() < 0)
+					mPlayer.onDeath();
+				
+				// Find murderer
 				if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
 					mMurderer = mPlayer;
 					break;
 				}
 			}
+			// If there is a murderer
 			if (mMurderer != null) {
+				// Point compass at nearest innocent
 				Player player = mMurderer.getPlayer();
-				player.setCompassTarget(getNearestInnocentLocation(player.getLocation()));
+				Location to = getNearestInnocentLocation(player.getLocation());
+				if (to != null)
+					player.setCompassTarget(to);
 			}
 		} else {
 			// If the match hasn't started

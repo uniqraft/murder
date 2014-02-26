@@ -1,6 +1,7 @@
 name: Murder
 main: net.minecraftmurder.main.Murder
 version: 2.0
+depend: [ProtocolLib]
 
 commands:
    arena:
