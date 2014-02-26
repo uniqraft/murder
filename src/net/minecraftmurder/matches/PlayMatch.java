@@ -128,9 +128,14 @@ public class PlayMatch extends Match {
 				countdown = COUNTDOWN_TIME;
 			}
 			// Clear all drops
-			for (Entity e : arena.getWorld().getEntities()) {
-				if (e instanceof Item)
-					e.remove();
+			if (arena != null) {
+				World world = arena.getWorld();
+				if (world != null) {
+					for (Entity e : arena.getWorld().getEntities()) {
+						if (e instanceof Item)
+							e.remove();
+					}
+				}
 			}
 			// If count down reaches 0
 			if (countdown <= 0) {

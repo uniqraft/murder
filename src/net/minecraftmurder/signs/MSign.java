@@ -2,11 +2,10 @@ package net.minecraftmurder.signs;
 
 import java.util.logging.Level;
 
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
-import net.minecraftmurder.tools.Tools;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -48,13 +47,13 @@ public abstract class MSign {
 		if (block.getState() instanceof Sign) {
 			return (Sign) block.getState();
 		}
-		Bukkit.getLogger().log(Level.WARNING, "Sign at " + location.toString() + " couldn't be found.");
+		MLogger.log(Level.WARNING, "Sign at " + location.toString() + " couldn't be found.");
 		return null;
 	}
 	
 	boolean checkIfValid () {
 		if (!(location.getWorld().getBlockAt(location).getState() instanceof Sign)) {
-			Tools.sendMessageAll(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + "No sign at the location: " + location.toString());
+			MLogger.log(Level.SEVERE, ChatContext.COLOR_WARNING + "No sign at the location: " + location.toString());
 			return false;
 		}
 		return true;

@@ -33,13 +33,13 @@ public class SignManager {
 		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN);
 		List<?> list = config.getList("signs", null);
 		if (list == null) {
-			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "No signs could be loaded!");
+			MLogger.log(Level.WARNING, "No signs could be loaded!");
 			return;
 		}
 		for (Object o: list) {
 			MSign sign = stringToSign(o.toString());
 			if (sign == null) {
-				Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "Invalid sign.");
+				MLogger.log(Level.SEVERE, "Invalid sign.");
 				continue;
 			} 
 			addMSign(sign);
@@ -67,7 +67,6 @@ public class SignManager {
 	}
 	public MSign getMSign (Location location) {
 		for (MSign sign: mSigns) {
-			Tools.sendMessageAll(ChatContext.PREFIX_DEBUG + sign.getLocation().distance(location));
 			if (sign.getLocation().distance(location) <= .5) {
 				return sign;
 			}

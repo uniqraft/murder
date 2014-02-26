@@ -57,7 +57,9 @@ public class Arena {
 		} else if (Bukkit.getWorld(worldName) == null) {
 			// Load the world
 			Bukkit.createWorld(new WorldCreator(worldName));
-			MLogger.log(Level.INFO, path + " loaded world " + worldName);
+			MLogger.log(Level.INFO, path + " loaded world: " + worldName);
+		} else {
+			MLogger.log(Level.INFO, path + " detected it's already loaded world: " + worldName);
 		}
 	}
 	public boolean save () {
