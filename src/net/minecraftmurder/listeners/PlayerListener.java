@@ -1,6 +1,5 @@
 package net.minecraftmurder.listeners;
 
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -9,6 +8,7 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
+import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.Bukkit;
@@ -27,7 +27,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerListener implements Listener {
@@ -39,43 +38,8 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerToggleSprint (PlayerToggleSprintEvent event) {
-		// TODO This isn't working, fiiix
-		final Player player = event.getPlayer();
-		MPlayer mPlayer = plugin.getMPlayer(player);
-		if (mPlayer.getPlayerClass() == MPlayerClass.GUNNER || mPlayer.getPlayerClass() == MPlayerClass.INNOCENT) {
-			// Disable sprint by setting food level to 0
-			player.setSprinting(false);
-			player.setFoodLevel(0);
-			player.sendMessage(ChatContext.PREFIX_PLUGIN + "Only the murderer can sprint.");
-			event.setCancelled(true);
-			// One tick later, change food level back
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-				
-				@Override
-				public void run() {
-					player.setFoodLevel(20);
-				}
-			}, 0L);
-		}
-	}
-	
-	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-		if (MPlayer.isBanned(player.getName())) {
-			Date date = MPlayer.getBanDate(player.getName());
-			if (date != null) {
-				String dateString = date.toString();
-				player.kickPlayer("You are banned until " + dateString);
-				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
-			} else {
-				player.kickPlayer("You are banned. Contact staff.");
-				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
-			}
-			return;
-		}
-		
+		event.setJoinMessage(null);
 		plugin.getPlayerManager().onPlayerJoin(event.getPlayer());
 	}
 
@@ -103,7 +67,7 @@ public class PlayerListener implements Listener {
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
-		plugin.sendMessageToPlayersInMatch(player.getDisplayName() + ": " + event.getMessage(), match);
+		match.sendMessage(player.getDisplayName() + ": " + event.getMessage());
 		MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + player.getName() + ": " + event.getMessage());
 	}
 
@@ -121,12 +85,23 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 		
 		Player player = event.getPlayer();
-		MPlayer mplayer = plugin.getPlayerManager().getMPlayer(player);
+		MPlayer mPlayer = plugin.getPlayerManager().getMPlayer(player);
+		Match match = mPlayer.getMatch();
+		if (match == null) return;
+		if (match instanceof PlayMatch) {
+			PlayMatch playMatch = (PlayMatch) match;
+			// If match hasn't started destroy item
+			if (!playMatch.isPlaying()) {
+				event.getItem().remove();
+				return;
+			}
+		}
+		
 		Material material = event.getItem().getItemStack().getType();
-		if (mplayer.getPlayerClass() == MPlayerClass.MURDERER
+		if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER
 				&& material.equals(MPlayerClass.MATERIAL_GUN))
 			return;
-		if (mplayer.getPlayerClass() == MPlayerClass.GUNNER)
+		if (mPlayer.getPlayerClass() == MPlayerClass.GUNNER)
 			return;
 
 		// Remove drop and play sound
@@ -186,7 +161,7 @@ public class PlayerListener implements Listener {
 				if (mP.getPlayerClass() == MPlayerClass.INNOCENT || mP.getPlayerClass() == MPlayerClass.GUNNER)
 					mP.getPlayer().teleport(mPlayer.getMatch().getArena().getRandomSpawn("player").getLocation());
 			}
-			plugin.sendMessageToPlayersInMatch(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.", mPlayer.getMatch());
+			mPlayer.getMatch().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.");
 			// Play sound at each player's new location one tick later
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@Override

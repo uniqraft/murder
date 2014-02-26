@@ -15,8 +15,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 
-// TODO Make sure operators can't break blocks.
-
 public class BlockListener implements Listener {
 	
 	private Murder plugin;

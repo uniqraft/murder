@@ -29,13 +29,19 @@ public final class MPlayerClass {
 	}
 	
 	public static void setFoodLevel (MPlayer mplayer) {
+<<<<<<< HEAD
 		// TODO Clean
 		if (mplayer.getPlayerClass() == PlayerClass.MURDERER
 				|| mplayer.getPlayerClass() == PlayerClass.LOBBYMAN
 				|| mplayer.getPlayerClass() == PlayerClass.SPECTATOR) {
+=======
+		if (mplayer.getPlayerClass() == MPlayerClass.MURDERER
+				|| mplayer.getPlayerClass() == MPlayerClass.LOBBYMAN
+				|| mplayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
+>>>>>>> 67f265d479d44823c020d3c65638a2649bf01049
 			mplayer.getPlayer().setFoodLevel(20);
 		} else {
-			mplayer.getPlayer().setFoodLevel(20);
+			mplayer.getPlayer().setFoodLevel(2);
 		}
 	}
 	public static void setDefaultClassInventory (Inventory inventory, PlayerClass playerClass) {

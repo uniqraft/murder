@@ -126,6 +126,7 @@ public class Murder extends JavaPlugin {
 		return devMode;
 	}
 	
+	@Deprecated
 	public void sendMessageToPlayersInMatch (String message, Match match) {
 		for (MPlayer mPlayer: getPlayerManager().getMPlayers()) {
 			if (mPlayer.getMatch() == match) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.SimpleFile;
@@ -13,6 +14,7 @@ import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -24,12 +26,11 @@ public class Arena {
 	HashMap<String, String> info;
 	private List<Spawn> spawns = new ArrayList<Spawn>();
 
-	private boolean active;
+	private boolean active = false;
 
 	public Arena(String path) {
 		this.path = path;
 		load();
-		active = false;
 	}
 	
 	public void load () {
@@ -52,10 +53,13 @@ public class Arena {
 		String worldName = info.get("world");
 		String worldPath = worldName + "/level.dat";
 		if (!new File(worldPath).exists()) {
-			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + worldPath + " does not exist, but " + path + " implies it does.");
+			MLogger.log(Level.SEVERE, worldPath + " does not exist, but " + path + " implies it does.");
 		} else if (Bukkit.getWorld(worldName) == null) {
 			// Load the world
 			Bukkit.createWorld(new WorldCreator(worldName));
+			MLogger.log(Level.INFO, path + " loaded world: " + worldName);
+		} else {
+			MLogger.log(Level.INFO, path + " detected it's already loaded world: " + worldName);
 		}
 	}
 	public boolean save () {
@@ -179,5 +183,9 @@ public class Arena {
 		if (blockCount == 0)
 			return 0;
 		return (double) spawnCount / (double) blockCount;
+	}
+	
+	public World getWorld () {
+		return Bukkit.getWorld(getInfo("world"));
 	}
 }

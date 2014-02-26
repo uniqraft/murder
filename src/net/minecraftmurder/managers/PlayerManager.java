@@ -1,14 +1,23 @@
 package net.minecraftmurder.managers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.minecraft.server.v1_7_R1.ChatSerializer;
+import net.minecraft.server.v1_7_R1.IChatBaseComponent;
+import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
+import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
+import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.SimpleFile;
+import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class PlayerManager {
@@ -22,6 +31,38 @@ public class PlayerManager {
 	}
 	
 	public void onPlayerJoin (Player player) {
+		// Kick if player is banned
+		if (MPlayer.isBanned(player.getName())) {
+			Date date = MPlayer.getBanDate(player.getName());
+			if (date != null) {
+				String dateString = date.toString();
+				player.kickPlayer("You are banned until " + dateString);
+				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
+				return;
+			} else {
+				// If there isn't a date, the file is corrupt
+				player.kickPlayer("You are banned. Contact staff.");
+				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
+			}
+			return;
+		}
+		
+		// Greet player
+		if (SimpleFile.exists(PATH_PLAYERS + "/" + player.getName() + ".yml")) {
+			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
+			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_MAIN + " joined the game!", player);
+		} else {
+			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome to Murder!");
+			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_LOWLIGHT + " joined the game for their first time!", player);
+		}
+			
+		
+		// Send a clickable link to the player
+		IChatBaseComponent comp = ChatSerializer
+				.a("{\"text\":\"§2[MURDER] \", \"extra\":[{\"text\":\"§bClick to visit our website!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cwww.minecraft-murder.net\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://www.minecraft-murder.net/\"}}]}");
+		PacketPlayOutChat packet = new PacketPlayOutChat(comp, true);
+		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+		
 		// Add player
 		MPlayer mplayer = new MPlayer (player.getName(), plugin); 
 		mplayers.add(mplayer);
