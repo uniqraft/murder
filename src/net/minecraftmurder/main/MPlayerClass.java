@@ -96,7 +96,7 @@ public enum MPlayerClass {
 		Player player = mPlayer.getPlayer();
 		Inventory inventory = player.getInventory();
 		ItemStack item = new ItemStack (mPlayer.getMInventory().getSelectedSword().getMaterial());
-		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to murderize."));
+		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to swing.", "Right-Click to throw."));
 		inventory.setItem(1, item);
 	}
 	public static void giveCompass (Inventory inventory) {

@@ -12,6 +12,7 @@ import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
@@ -67,8 +68,20 @@ public class PlayerListener implements Listener {
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
-		match.sendMessage(player.getDisplayName() + ": " + event.getMessage());
-		MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + player.getName() + ": " + event.getMessage());
+		
+		String message = player.getDisplayName() + ": " + event.getMessage();
+		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
+			String grayMessage = ChatColor.GRAY + ChatColor.stripColor(event.getMessage());
+			for (MPlayer other: match.getMPlayers()) {
+				if (other.getPlayerClass() == MPlayerClass.SPECTATOR) {
+					other.getPlayer().sendMessage(grayMessage);
+				}
+			}
+			MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] *DEAD* " + message);
+		} else {
+			match.sendMessage(player.getDisplayName() + ": " + event.getMessage());
+			MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + message);
+		}
 	}
 
 	@EventHandler
@@ -132,6 +145,7 @@ public class PlayerListener implements Listener {
 		MPlayer mPlayer = plugin.getMPlayer(player);
 		ItemStack itemInHand = player.getItemInHand();
 		
+		// Spectators can't interact
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			event.setCancelled(true);
 			return;
