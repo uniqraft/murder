@@ -47,20 +47,21 @@ public class MPlayer {
 		this.plugin = plugin;
 		
 		inventory = new MInventory(name);
-		switchPlayerClass(MPlayerClass.LOBBYMAN);
+		// TODO Removing this, shouldn't be needed...
+		//switchPlayerClass(MPlayerClass.LOBBYMAN);
 	}
 	
 	public MPlayerClass getPlayerClass () {
 		return playerClass;
 	}
 	
-	public void switchPlayerClass (MPlayerClass playerClass) {
+	public void switchPlayerClass (MPlayerClass playerClass) {		
 		this.playerClass = playerClass;
 		MPlayerClass.setDefaultClassInventory(this, playerClass);
+		Player me = getPlayer();
 		// If I was turned into a spectator
 		if (playerClass == MPlayerClass.SPECTATOR) {
 			// Make all players unable to see me
-			Player me = plugin.getPlayerManager().getPlayer(this);
 			me.setGameMode(GameMode.CREATIVE);
 			for (Player otherPlayer: Bukkit.getOnlinePlayers()) {
 				// If they can see me, hide me
@@ -69,7 +70,6 @@ public class MPlayer {
 			}
 		} else {
 			// Make all players able to see me
-			Player me = getPlayer();
 			me.setGameMode(GameMode.ADVENTURE);
 			for (Player otherPlayer: Bukkit.getOnlinePlayers()) {
 				// Don't run on self
@@ -81,8 +81,10 @@ public class MPlayer {
 			}
 		}
 		
-		// Update food level
 		MPlayerClass.setFoodLevel(this);
+		me.setHealth(20);
+		for (PotionEffect effect : me.getActivePotionEffects())
+	        me.removePotionEffect(effect.getType());
 	}
 	
 	public void onDeath () {

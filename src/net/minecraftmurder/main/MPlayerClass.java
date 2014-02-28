@@ -22,18 +22,19 @@ public enum MPlayerClass {
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
 	public static final Material MATERIAL_TELEPORTER = Material.ENDER_PEARL;
 	
-	public static void setFoodLevel (MPlayer mplayer) {
-		if (mplayer.getPlayerClass() == MPlayerClass.MURDERER
-				|| mplayer.getPlayerClass() == MPlayerClass.LOBBYMAN
-				|| mplayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
-			mplayer.getPlayer().setFoodLevel(20);
+	public static void setFoodLevel (MPlayer mPlayer) {
+		if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER
+				|| mPlayer.getPlayerClass() == MPlayerClass.LOBBYMAN
+				|| mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
+			mPlayer.getPlayer().setFoodLevel(20);
 		} else {
-			mplayer.getPlayer().setFoodLevel(2);
+			mPlayer.getPlayer().setFoodLevel(2);
 		}
 	}
 	public static void setDefaultClassInventory (MPlayer mPlayer, MPlayerClass playerClass) {
 		Player player = mPlayer.getPlayer();
 		Inventory inventory = player.getInventory();
+		inventory.clear();
 		
 		switch (playerClass) {
 		case LOBBYMAN:

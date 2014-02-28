@@ -34,7 +34,8 @@ public class LobbyMatch extends Match {
 
 	@Override
 	public void onPlayerQuit(Player player) {
-		// Teleport player here
+		MPlayer mPlayer = plugin.getMPlayer(player);
+		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
 	}
 
 	@Override
