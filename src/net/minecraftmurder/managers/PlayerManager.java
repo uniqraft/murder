@@ -30,6 +30,8 @@ public class PlayerManager {
 	}
 	
 	public void onPlayerJoin (Player player) {
+		boolean firstJoin = SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml");
+		
 		// Kick if player is banned
 		if (MPlayer.isBanned(player.getName())) {
 			Date date = MPlayer.getBanDate(player.getName());
@@ -47,7 +49,7 @@ public class PlayerManager {
 		}
 		
 		// Greet player
-		if (SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml")) {
+		if (firstJoin) {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
 			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_MAIN + " joined the game!", player);
 		} else {

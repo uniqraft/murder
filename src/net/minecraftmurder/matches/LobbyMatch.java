@@ -33,14 +33,8 @@ public class LobbyMatch extends Match {
 	}
 
 	@Override
-	public void onPlayerQuit(Player player) {
-		MPlayer mPlayer = plugin.getMPlayer(player);
-		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
-	}
+	public void onPlayerQuit(Player player) {}
 
 	@Override
-	public void onPlayerDeath(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onPlayerDeath(Player player) {}
 }

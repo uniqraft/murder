@@ -98,24 +98,28 @@ public class PlayerListener implements Listener {
 		}
 		
 		Material material = event.getItem().getItemStack().getType();
-		if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER
-				&& material.equals(MPlayerClass.MATERIAL_GUN))
-			return;
-		if (mPlayer.getPlayerClass() == MPlayerClass.GUNNER)
-			return;
-
-		// Remove drop and play sound
-		event.getItem().remove();
-		player.getLocation().getWorld()
-				.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
 		
 		if (material.equals(MPlayerClass.MATERIAL_GUN)) {
-			player.sendMessage(ChatContext.MESSAGE_PICKEDUPGUN);
-			MPlayerClass.giveGun(player.getInventory());
+			if (mPlayer.getPlayerClass() == MPlayerClass.INNOCENT && mPlayer.getGunBanTime() <= 0) {
+				player.sendMessage(ChatContext.MESSAGE_PICKEDUPGUN);
+				MPlayerClass.giveGun(player.getInventory());
+				// Remove drop and play sound
+				event.getItem().remove();
+				player.getLocation().getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
+			}
 		} else if (material.equals(MPlayerClass.MATERIAL_GUNPART)) {
-			String message = ChatContext.PREFIX_PLUGIN + "You picked up scrap. ";
-			message += ChatContext.COLOR_HIGHLIGHT + "(" + MPlayerClass.getGunPartCount(player.getInventory()) + "/" + Murder.CRAFTGUNPARTS_COUNT + ")";
-			player.sendMessage(message);
+			if (mPlayer.getPlayerClass() == MPlayerClass.INNOCENT) {
+				String message = ChatContext.PREFIX_PLUGIN + "You picked up scrap. ";
+				message += ChatContext.COLOR_HIGHLIGHT + "(" + MPlayerClass.getGunPartCount(player.getInventory()) + "/" + Murder.CRAFTGUNPARTS_COUNT + ")";
+				player.sendMessage(message);
+				// Remove drop and play sound
+				event.getItem().remove();
+				player.getLocation().getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
+			} else if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
+				// Remove drop and play sound
+				event.getItem().remove();
+				player.getLocation().getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
+			}
 		}
 	}
 

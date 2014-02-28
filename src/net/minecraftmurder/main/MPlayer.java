@@ -27,7 +27,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class MPlayer {
-	public final static int RELOAD_TIME = 25;
+	public final static int RELOAD_TIME = 35;
 	
 	private String name;
 	private Match match;
@@ -102,7 +102,11 @@ public class MPlayer {
 			}
 		}, 1L);
 		
+		MPlayerClass.setFoodLevel(this);
 		player.setHealth(20);
+		for (PotionEffect effect : player.getActivePotionEffects())
+	        player.removePotionEffect(effect.getType());
+		
 		match.onPlayerDeath(player);
 	}
 	

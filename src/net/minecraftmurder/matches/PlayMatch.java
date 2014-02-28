@@ -280,7 +280,7 @@ public class PlayMatch extends Match {
 	}
 	@Override
 	public void onPlayerDeath(Player player) {
-		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+		player.playSound(player.getLocation(), Sound.DONKEY_HIT, 1, 1);
 		
 		MPlayer mKilled = plugin.getMPlayer(player);
 		String killer = mKilled.getKillerName();
