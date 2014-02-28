@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -153,6 +154,7 @@ public class PlayerListener implements Listener {
 		
 		boolean rightClicked = (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK);
 
+		// If clicked a block
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (event.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) event.getClickedBlock().getState();
@@ -161,7 +163,19 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
-		if (itemInHand.getType() == MPlayerClass.MATERIAL_GUN && rightClicked) {
+		
+		if (MPlayerClass.isKnife(itemInHand.getType()) && rightClicked) {			
+			Arrow arrow = player.launchProjectile(Arrow.class);
+			arrow.setVelocity(player.getEyeLocation().getDirection().multiply(1.5));
+			event.setCancelled(true);
+			player.getWorld().playSound(player.getLocation(), Sound.WITHER_SHOOT, 1, 1.5f);
+			
+			Item item = player.getWorld().dropItem(player.getLocation(), itemInHand);
+			arrow.setPassenger(item);
+			
+			// Remove gun
+			player.setItemInHand(new ItemStack(Material.AIR));
+		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_GUN && rightClicked) {
 			if (mPlayer.getReloadTime() <= 0) {
 				// Fire arrow
 				Arrow arrow = player.launchProjectile(Arrow.class);
