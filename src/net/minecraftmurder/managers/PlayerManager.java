@@ -8,11 +8,12 @@ import java.util.logging.Level;
 import net.minecraft.server.v1_7_R1.ChatSerializer;
 import net.minecraft.server.v1_7_R1.IChatBaseComponent;
 import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
+import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
@@ -20,9 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class PlayerManager {
-	public static final String PATH_PLAYERS = "plugins/Murder/Players";
-	
+public class PlayerManager {	
 	private List<MPlayer> mplayers = new ArrayList<MPlayer>();
 	private Murder plugin;
 	
@@ -48,7 +47,7 @@ public class PlayerManager {
 		}
 		
 		// Greet player
-		if (SimpleFile.exists(PATH_PLAYERS + "/" + player.getName() + ".yml")) {
+		if (SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml")) {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
 			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_MAIN + " joined the game!", player);
 		} else {
@@ -78,7 +77,6 @@ public class PlayerManager {
 			Bukkit.getLogger().log(Level.INFO, "Player " + player.getName() + " doesn't have an entry in PlayerManager, but left the game. Most likely this user is banned, but tried to connect.");
 			return;
 		}
-		mPlayer.save();
 		mplayers.remove(mPlayer);
 		
 		Match match = mPlayer.getMatch();

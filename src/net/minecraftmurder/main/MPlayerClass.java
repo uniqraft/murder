@@ -1,11 +1,14 @@
 package net.minecraftmurder.main;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
-import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.inventory.MItem;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +17,8 @@ public enum MPlayerClass {
 	
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
-	public static final Material MATERIAL_KNIFE = Material.IRON_SWORD;
+	public static final MItem[] ITEM_KNIFES = {
+		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.GOLD_SWORD, MItem.IRON_SWORD, MItem.DIAMOND_SWORD};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
 	public static final Material MATERIAL_TELEPORTER = Material.ENDER_PEARL;
 	
@@ -27,8 +31,9 @@ public enum MPlayerClass {
 			mplayer.getPlayer().setFoodLevel(2);
 		}
 	}
-	public static void setDefaultClassInventory (Inventory inventory, MPlayerClass playerClass) {
-		inventory.clear();
+	public static void setDefaultClassInventory (MPlayer mPlayer, MPlayerClass playerClass) {
+		Player player = mPlayer.getPlayer();
+		Inventory inventory = player.getInventory();
 		
 		switch (playerClass) {
 		case LOBBYMAN:
@@ -43,15 +48,23 @@ public enum MPlayerClass {
 			giveGun(inventory);
 			break;
 		case MURDERER:
-			giveKnife(inventory);
+			giveKnife(mPlayer);
 			giveCompass(inventory);
 			giveTeleporter(inventory);
 			break;
 
 		default:
-			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "PlayerClass " + playerClass + " doesn't exist!");
+			MLogger.log(Level.SEVERE, "PlayerClass " + playerClass + " doesn't exist!");
 			break;
 		}
+	}
+	
+	public static boolean isKnife (Material material) {
+		for (int i = 0; i < ITEM_KNIFES.length; i++) {
+			if (ITEM_KNIFES[i].equals(material))
+				return true;
+		}
+		return false;
 	}
 	
 	public static int getGunPartCount (Inventory inventory) {
@@ -78,8 +91,10 @@ public enum MPlayerClass {
 			item.setAmount(item.getAmount() + 1);
 		}
 	}
-	public static void giveKnife (Inventory inventory) {
-		ItemStack item = new ItemStack (MATERIAL_KNIFE);
+	public static void giveKnife (MPlayer mPlayer) {
+		Player player = mPlayer.getPlayer();
+		Inventory inventory = player.getInventory();
+		ItemStack item = new ItemStack (mPlayer.getMInventory().getSelectedSword().getMaterial());
 		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to murderize."));
 		inventory.setItem(1, item);
 	}

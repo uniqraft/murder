@@ -5,9 +5,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
-import net.minecraftmurder.managers.PlayerManager;
+import net.minecraftmurder.inventory.MInventory;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
@@ -30,11 +31,11 @@ public class MPlayer {
 	
 	private String name;
 	private Match match;
+	
 	private MPlayerClass playerClass;
+	private MInventory inventory;
 	
 	private String killerName;
-	
-	private int coins;
 	
 	private int reloadTime = 0;
 	private int gunBanTime = 0;
@@ -45,31 +46,19 @@ public class MPlayer {
 		this.name = name;
 		this.plugin = plugin;
 		
+		inventory = new MInventory(name);
 		switchPlayerClass(MPlayerClass.LOBBYMAN);
-		load();
-	}
-	
-	public void load () {
-		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + name + ".yml");
-		coins = config.getInt("coins", 0);
-	}
-	
-	public void save () {
-		// TODO Remove, maybe?
-		/*YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + name + ".yml");
-		config.set("points", coins);
-		SimpleFile.saveConfig(config, PlayerManager.PATH_PLAYERS + "/" + name + ".yml");*/
 	}
 	
 	public MPlayerClass getPlayerClass () {
 		return playerClass;
 	}
 	
-	public void switchPlayerClass (MPlayerClass lobbyman) {
-		this.playerClass = lobbyman;
-		MPlayerClass.setDefaultClassInventory(getPlayer().getInventory(), lobbyman);
+	public void switchPlayerClass (MPlayerClass playerClass) {
+		this.playerClass = playerClass;
+		MPlayerClass.setDefaultClassInventory(this, playerClass);
 		// If I was turned into a spectator
-		if (lobbyman == MPlayerClass.SPECTATOR) {
+		if (playerClass == MPlayerClass.SPECTATOR) {
 			// Make all players unable to see me
 			Player me = plugin.getPlayerManager().getPlayer(this);
 			me.setGameMode(GameMode.CREATIVE);
@@ -185,19 +174,18 @@ public class MPlayer {
 		return setCoins(player, getCoins(player) + count, false, plugin);
 	}
 	public static boolean setCoins (String player, int count, boolean tell, Murder plugin) {
-		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		config.set("coins", count);
 		// If player is online, update him
-		MPlayer mplayer = plugin.getPlayerManager().getMPlayer(player);
-		if (mplayer != null) {
+		MPlayer mPlayer = plugin.getPlayerManager().getMPlayer(player);
+		if (mPlayer != null) {
 			if (tell)
-				mplayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You now have " + ChatContext.COLOR_HIGHLIGHT + count + " coins" + ChatContext.COLOR_LOWLIGHT + "!");
-			mplayer.load();
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You now have " + ChatContext.COLOR_HIGHLIGHT + count + " coins" + ChatContext.COLOR_LOWLIGHT + "!");
 		}
-		return SimpleFile.saveConfig(config, PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		return SimpleFile.saveConfig(config, Paths.FOLDER_PLAYERS + player + ".yml");
 	}
 	public static int getCoins (String player) {
-		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		return config.getInt("coins", 0);
 	}
 	
@@ -210,10 +198,10 @@ public class MPlayer {
 		
 		Bukkit.getLogger().log(Level.INFO, player + "'s warn level was increased by " + level);
 		
-		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		config.set("warn.level", totalLevel);
 		config.set("warn.date", Tools.dateToString(calculateBanDate(totalLevel), "-"));
-		return SimpleFile.saveConfig(config, PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		return SimpleFile.saveConfig(config, Paths.FOLDER_PLAYERS + player + ".yml");
 	}
 	public static Date calculateBanDate (int level) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -225,7 +213,7 @@ public class MPlayer {
 		return calendar.getTime();
 	}
 	public static boolean isBanned (String player) {
-		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		boolean toBeBanned = config.getBoolean("warn.upcomingban", false);
 		if (toBeBanned) {
 			config.set("warn.date", Tools.dateToString(calculateBanDate(config.getInt("warn.level", 0)), "-"));
@@ -248,10 +236,10 @@ public class MPlayer {
 	 * Previous ban date, if any, otherwise year 0 month 0 day 0
 	 */
 	public static Date getBanDate (String player) {
-		return Tools.stringToDate(SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml").getString("warn.date", Tools.dateToString(new GregorianCalendar(0, 0, 0).getTime(), "-")), "-");
+		return Tools.stringToDate(SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml").getString("warn.date", Tools.dateToString(new GregorianCalendar(0, 0, 0).getTime(), "-")), "-");
 	}
 	public static int getWarnLevel (String player) {
-		return SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml").getInt("warn.level", 0);
+		return SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml").getInt("warn.level", 0);
 	}
 	/**
 	 * Sets whether a ban should be given to the user when they log in.
@@ -264,11 +252,15 @@ public class MPlayer {
 	 * Whether or not the info could be saved to disk.
 	 */
 	public static boolean setUpcomingBan (String player, boolean shouldBeBanned) {
-		YamlConfiguration config = SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		config.set("warn.upcomingban", shouldBeBanned);
-		return SimpleFile.saveConfig(config, PlayerManager.PATH_PLAYERS + "/" + player + ".yml");
+		return SimpleFile.saveConfig(config, Paths.FOLDER_PLAYERS + player + ".yml");
 	}
 	public static boolean getUpcomingBan (String player) {
-		return SimpleFile.loadConfig(PlayerManager.PATH_PLAYERS + "/" + player + ".yml").getBoolean("warn.upcomingban", false);
+		return SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml").getBoolean("warn.upcomingban", false);
+	}
+
+	public MInventory getMInventory() {
+		return inventory;
 	}
 }

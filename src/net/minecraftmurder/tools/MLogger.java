@@ -1,8 +1,8 @@
-package net.minecraftmurder.main;
+package net.minecraftmurder.tools;
 
 import java.util.logging.Level;
 
-import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.main.Murder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

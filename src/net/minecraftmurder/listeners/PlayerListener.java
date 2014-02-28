@@ -3,13 +3,13 @@ package net.minecraftmurder.listeners;
 import java.util.List;
 import java.util.logging.Level;
 
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

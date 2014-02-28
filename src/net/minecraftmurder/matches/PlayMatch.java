@@ -14,12 +14,12 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import net.minecraftmurder.main.Arena;
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
 public class PlayMatch extends Match {

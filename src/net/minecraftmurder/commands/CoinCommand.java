@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
-import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 
 public class CoinCommand implements CommandExecutor {
@@ -28,7 +28,7 @@ public class CoinCommand implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			int coins = 0;
-			if (SimpleFile.exists(PlayerManager.PATH_PLAYERS + "/" + player.getName() + ".yml")) {
+			if (SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml")) {
 				coins = MPlayer.getCoins(player.getName());
 			}
 			sender.sendMessage(ChatContext.PREFIX_PLUGIN + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + (coins != 1?" coins":"coins") + ChatContext.COLOR_LOWLIGHT + "!");
@@ -74,7 +74,7 @@ public class CoinCommand implements CommandExecutor {
 						sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/coins get <player>");
 						return true;
 					}
-					if (SimpleFile.exists(PlayerManager.PATH_PLAYERS + "/" + args[1] + ".yml"))
+					if (SimpleFile.exists(Paths.FOLDER_PLAYERS + args[1] + ".yml"))
 						sender.sendMessage(ChatContext.PREFIX_PLUGIN + args[1] + " has " + MPlayer.getCoins(args[1]) + " coins.");
 					else
 						sender.sendMessage(ChatContext.PREFIX_WARNING + args[1] + " doesn't exist.");

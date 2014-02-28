@@ -9,10 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.signs.MSign;
 import net.minecraftmurder.signs.MSignMatch;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.SimpleFile;
 
 public class SignManager {
@@ -28,7 +28,7 @@ public class SignManager {
 	}
 	
 	void load () {
-		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN);
+		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN, true);
 		List<?> list = config.getList("signs", null);
 		if (list == null) {
 			MLogger.log(Level.WARNING, "No signs could be loaded!");
@@ -44,7 +44,7 @@ public class SignManager {
 		}
 	}
 	void save () {
-		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN);
+		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN, true);
 		List<String> savedSigns = new ArrayList<String>();
 		for (MSign mSign: mSigns) {
 			savedSigns.add(mSign.toString());

@@ -14,8 +14,16 @@ public class SimpleFile {
 		File file = new File(path);
 		return file.exists();
 	}
-	public static YamlConfiguration loadConfig (String path) {
+	/**
+	 * Tries to load a YamlConfiguration from the specified path.
+	 * @param path Where to load the file from.
+	 * @param create If true the file will be created if it can't be found
+	 * @return If the file could be found it will be returned. If create is true but the file wasn't found an empty file will be created and returned.
+	 */
+	public static YamlConfiguration loadConfig (String path, boolean create) {
 		try {
+			if (!create && !exists(path))
+				return null;
 			File file = new File(path);
 			file.createNewFile();
 			FileConfiguration fileConfig = new YamlConfiguration();
@@ -26,6 +34,10 @@ public class SimpleFile {
 		}
 		return null;
 	}
+	public static YamlConfiguration loadConfig(String path) {
+		return loadConfig(path, true);
+	}
+	
 	public static boolean saveConfig (YamlConfiguration config, String path) {
 		try {
 			File file = new File(path);
@@ -47,7 +59,7 @@ public class SimpleFile {
 		
 		List<YamlConfiguration> configs = new ArrayList<YamlConfiguration>();
 		for (String file: files) {
-			configs.add(loadConfig(file));
+			configs.add(loadConfig(file, false));
 		}
 		
 		return configs;

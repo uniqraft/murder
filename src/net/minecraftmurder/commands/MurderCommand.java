@@ -8,12 +8,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import net.minecraftmurder.main.Arena;
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 
 public class MurderCommand implements CommandExecutor {
 	private Murder plugin;

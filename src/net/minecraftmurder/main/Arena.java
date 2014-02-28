@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
@@ -39,7 +40,7 @@ public class Arena {
 		spawns.clear();
 		
 		// Load config
-		YamlConfiguration config = SimpleFile.loadConfig(path);
+		YamlConfiguration config = SimpleFile.loadConfig(path, true);
 		// Load information
 		for (String type: INFO_TYPES) {
 			info.put(type, config.getString("info." + type, "Default Value"));

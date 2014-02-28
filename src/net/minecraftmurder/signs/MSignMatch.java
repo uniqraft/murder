@@ -6,11 +6,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
-import net.minecraftmurder.main.MLogger;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
+import net.minecraftmurder.tools.MLogger;
 
 public class MSignMatch extends MSign {
 	private int index;
