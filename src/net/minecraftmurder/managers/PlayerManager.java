@@ -30,7 +30,7 @@ public class PlayerManager {
 	}
 	
 	public void onPlayerJoin (Player player) {
-		boolean firstJoin = SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml");
+		boolean firstJoin = !SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml");
 		
 		// Kick if player is banned
 		if (MPlayer.isBanned(player.getName())) {
