@@ -7,6 +7,7 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
+import net.minecraftmurder.managers.PlayerManager;
 
 public class LobbyMatch extends Match {
 	public LobbyMatch (Arena arena, Murder plugin) {
@@ -22,7 +23,7 @@ public class LobbyMatch extends Match {
 
 	@Override
 	public void onPlayerJoin(Player player) {
-		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
 		
 		if (arena == null) return;

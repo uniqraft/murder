@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 		
 		Player player = event.getPlayer();
-		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
@@ -138,7 +138,7 @@ public class PlayerListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
-		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		ItemStack itemInHand = player.getItemInHand();
 		
 		// Spectators can't interact

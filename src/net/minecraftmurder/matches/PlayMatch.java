@@ -19,6 +19,7 @@ import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
+import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
@@ -267,7 +268,7 @@ public class PlayMatch extends Match {
 	
 	@Override
 	public void onPlayerJoin(Player player) {
-		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 		
 		if (arena == null) return;
@@ -283,7 +284,7 @@ public class PlayMatch extends Match {
 	public void onPlayerDeath(Player player) {
 		player.playSound(player.getLocation(), Sound.DONKEY_HIT, 1, 1);
 		
-		MPlayer mKilled = Murder.getInstance().getMPlayer(player);
+		MPlayer mKilled = PlayerManager.getMPlayer(player);
 		String killer = mKilled.getKillerName();
 		
 		// If the murderer was killed

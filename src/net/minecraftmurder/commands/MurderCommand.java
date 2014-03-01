@@ -62,7 +62,7 @@ public class MurderCommand implements CommandExecutor {
 			}
 			return true;
 		} else if (args[0].equalsIgnoreCase("kill")) {
-			MPlayer mPlayer = Murder.getInstance().getMPlayer(sender.getName());
+			MPlayer mPlayer = PlayerManager.getMPlayer(sender.getName());
 			if (mPlayer != null)
 				mPlayer.onDeath();
 			return true;

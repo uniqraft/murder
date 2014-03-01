@@ -14,7 +14,6 @@ import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.managers.SignManager;
-import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.TeleportFix;
 
@@ -26,12 +25,7 @@ public class Murder extends JavaPlugin {
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;
 	public static final float ARROW_SPEED = 4;
-	
-	private PlayerManager playerManager;
-	private MatchManager matchManager;
-	private ArenaManager arenaManager;
-	private SignManager signManager;
-	
+
 	private static Murder instance;
 	
 	private boolean started = false;
@@ -62,33 +56,6 @@ public class Murder extends JavaPlugin {
 		getCommand("spawn").setExecutor(new SpawnCommand());
 		getCommand("coins").setExecutor(new CoinCommand());
 		getCommand("warn").setExecutor(new WarnCommand());
-	}
-	
-	@Deprecated
-	public PlayerManager getPlayerManager () {
-		return playerManager;
-	}
-	@Deprecated
-	public MatchManager getMatchManager () {
-		return matchManager;
-	}
-	@Deprecated
-	public ArenaManager getArenaManager () {
-		return arenaManager;
-	}
-	@Deprecated
-	public SignManager getSignManager () {
-		return signManager;
-	}
-	
-	// Reference these methods here for easier usage
-	public MPlayer getMPlayer (String player) {
-		getPlayerManager();
-		return PlayerManager.getMPlayer(player);
-	}
-	public MPlayer getMPlayer (Player player) {
-		getPlayerManager();
-		return PlayerManager.getMPlayer(player);
 	}
 	
 	public void start () {
@@ -122,14 +89,5 @@ public class Murder extends JavaPlugin {
 	
 	public static Murder getInstance () {
 		return instance;
-	}
-	
-	@Deprecated
-	public void sendMessageToPlayersInMatch (String message, Match match) {
-		for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
-			if (mPlayer.getMatch() == match) {
-				mPlayer.getPlayer().sendMessage(message);
-			}
-		}
 	}
 }

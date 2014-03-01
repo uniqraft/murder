@@ -37,7 +37,7 @@ public class EntityListener implements Listener {
 		if (event.getEntity() instanceof Player) {
 			event.setCancelled(true);
 			Player player = (Player) event.getEntity();
-			final MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
+			final MPlayer mPlayer = PlayerManager.getMPlayer(player);
 			// Reset killer 1 tick later.
 			Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 				@Override
@@ -81,7 +81,7 @@ public class EntityListener implements Listener {
 			// Was I shot by a player?
 			if (arrow.getShooter() instanceof Player) {
 				Player shooter = (Player) arrow.getShooter();
-				MPlayer mShooter = Murder.getInstance().getMPlayer(shooter);
+				MPlayer mShooter = PlayerManager.getMPlayer(shooter);
 				mDamaged.setKiller(mShooter.getName());
 				// If I'm not the murderer
 				if (mDamaged.getPlayerClass() != MPlayerClass.MURDERER) {
