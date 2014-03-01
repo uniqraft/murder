@@ -32,11 +32,14 @@ public class Murder extends JavaPlugin {
 	private ArenaManager arenaManager;
 	private SignManager signManager;
 	
+	private static Murder instance;
+	
 	private boolean started = false;
 	private boolean devMode = false;
 	
 	@Override
 	public void onEnable () {
+		instance = this;
 		
 		MLogger.setMurderPlugin(this);
 		
@@ -111,6 +114,10 @@ public class Murder extends JavaPlugin {
 	}
 	public boolean isDevMode () {
 		return devMode;
+	}
+	
+	public static Murder getInstance () {
+		return instance;
 	}
 	
 	@Deprecated
