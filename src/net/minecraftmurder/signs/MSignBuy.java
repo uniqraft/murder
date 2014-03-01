@@ -6,13 +6,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.Murder;
 
 public class MSignBuy extends MSign {
-	
-	
-	public MSignBuy (Location location, Murder plugin) {
-		super(location, plugin);
+	public MSignBuy (Location location) {
+		super(location);
 		
 		update();
 	}

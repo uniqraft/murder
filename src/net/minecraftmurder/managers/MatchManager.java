@@ -10,44 +10,41 @@ import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Tools;
 
-public class MatchManager {	
+public final class MatchManager {	
 	public static final String PATH_MATCH = "plugins/Murder/matches.yml";
 	public static final int MAX_MATCHES = 32;
 	
-	private Murder plugin;
-	private HashMap<Integer, PlayMatch> playMatchIndex;
+	private static HashMap<Integer, PlayMatch> playMatchIndex;
 	
-	private LobbyMatch lobbyMatch;
-	private List<PlayMatch> playMatches;
+	private static LobbyMatch lobbyMatch;
+	private static List<PlayMatch> playMatches;
 	
-	public MatchManager (Murder plugin) {
-		this.plugin = plugin;
-		
+	public static void initialize () {
 		playMatchIndex = new HashMap<Integer, PlayMatch>();
 		playMatches = new ArrayList<PlayMatch>();
 	}
 	
-	public LobbyMatch getLobbyMatch () {
+	public static LobbyMatch getLobbyMatch () {
 		if (lobbyMatch == null)
-			return new LobbyMatch(plugin.getArenaManager().getLobbyArena(), plugin);
+			return new LobbyMatch(ArenaManager.getLobbyArena(), Murder.getInstance());
 
 		return lobbyMatch;
 	}
 	
-	public void setLobbyMatch (LobbyMatch match) {
+	public static void setLobbyMatch (LobbyMatch match) {
 		lobbyMatch = match;
 	}
-	public List<PlayMatch> getPlayMatches () {
+	public static List<PlayMatch> getPlayMatches () {
 		return playMatches;
 	}
 	
-	public PlayMatch getPlayMatch (int index) {
+	public static PlayMatch getPlayMatch (int index) {
 		if (playMatchIndex.containsKey(index)) {
 			return playMatchIndex.get(index);
 		}
 		return null;
 	}
-	public boolean createPlayMatch (int index) {
+	public static boolean createPlayMatch (int index) {
 		if (index >= MAX_MATCHES) {
 			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "Index " + index + " is higher than the max matches count, " + MAX_MATCHES + ".");
 			return false;
@@ -56,7 +53,7 @@ public class MatchManager {
 		if (playMatchIndex.containsKey(index)) {
 			return false;
 		} else {
-			PlayMatch playMatch = new PlayMatch(plugin);
+			PlayMatch playMatch = new PlayMatch();
 			playMatches.add(playMatch);
 			playMatchIndex.put(index, playMatch);
 			return true;

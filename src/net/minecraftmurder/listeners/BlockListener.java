@@ -2,6 +2,7 @@ package net.minecraftmurder.listeners;
 
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.MatchManager;
+import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.signs.MSignMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Tools;
@@ -36,8 +37,8 @@ public class BlockListener implements Listener {
 			event.setCancelled(true);
 		}
 		Location location = event.getBlock().getLocation();
-		if (plugin.getSignManager().existsSigns(location)) {
-			plugin.getSignManager().removeSign(location);
+		if (SignManager.existsSigns(location)) {
+			SignManager.removeSign(location);
 		}
 	}
 	
@@ -66,7 +67,7 @@ public class BlockListener implements Listener {
 				if (index >= MatchManager.MAX_MATCHES) {
 					Tools.sendMessageAll(ChatContext.PREFIX_WARNING + event.getLine(2) + " is higher than max matches.");
 				} else if (index >= 0) {
-					plugin.getSignManager().addMSign(new MSignMatch(sign.getLocation(), index, plugin));
+					SignManager.addMSign(new MSignMatch(sign.getLocation(), index));
 				} else {
 					Tools.sendMessageAll(ChatContext.PREFIX_WARNING + event.getLine(2) + " is not a valid number.");
 				}

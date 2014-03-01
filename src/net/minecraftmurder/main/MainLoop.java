@@ -1,5 +1,8 @@
 package net.minecraftmurder.main;
 
+import net.minecraftmurder.managers.MatchManager;
+import net.minecraftmurder.managers.PlayerManager;
+import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.matches.PlayMatch;
 
 public class MainLoop implements Runnable {
@@ -13,31 +16,31 @@ public class MainLoop implements Runnable {
 	@Override
 	public void run() {
 		// Decrease all players reload
-		for (MPlayer mPlayer: plugin.getPlayerManager().getMPlayers()) {
+		for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
 			if (mPlayer.getReloadTime() > 0) {
 				mPlayer.addReloadTime(-1);
 			}
 		}
 		// Every ½ second
 		if (tick % 10 == 0) {
-			plugin.getSignManager().updateSigns();
+			SignManager.updateSigns();
 		}
 		// Every second
 		if (tick % 20 == 0) {
 			runGunBan();
 			
 			// Update all matches
-			for (PlayMatch playMatch: plugin.getMatchManager().getPlayMatches()) {
+			for (PlayMatch playMatch: MatchManager.getPlayMatches()) {
 				playMatch.update();
 			}
 			
-			plugin.getMatchManager().getLobbyMatch().update();
+			MatchManager.getLobbyMatch().update();
 		}
 		tick++;
 	}
 	
 	void runGunBan () {
-		for (MPlayer mplayer: plugin.getPlayerManager().getMPlayers()) {
+		for (MPlayer mplayer: PlayerManager.getMPlayers()) {
 			mplayer.decreaseGunBanTime();
 		}
 	}

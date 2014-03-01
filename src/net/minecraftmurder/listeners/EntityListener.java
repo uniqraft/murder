@@ -3,6 +3,7 @@ package net.minecraftmurder.listeners;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.Bukkit;
@@ -27,7 +28,7 @@ public class EntityListener implements Listener {
 	
 	@EventHandler
 	public void onFoodLevelChangeEvent (FoodLevelChangeEvent event) {
-		MPlayerClass.setFoodLevel(plugin.getPlayerManager().getMPlayer((Player) event.getEntity()));
+		MPlayerClass.setFoodLevel(PlayerManager.getMPlayer((Player) event.getEntity()));
 		event.setCancelled(true);
 	}
 	
@@ -60,7 +61,7 @@ public class EntityListener implements Listener {
 		if (!(event.getEntity() instanceof Player)) return;
 		
 		Player damaged = (Player) event.getEntity();
-		MPlayer mDamaged = plugin.getPlayerManager().getMPlayer(damaged);
+		MPlayer mDamaged = PlayerManager.getMPlayer(damaged);
 		
 		if (mDamaged.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			event.setCancelled(true);

@@ -41,12 +41,10 @@ public class Murder extends JavaPlugin {
 	public void onEnable () {
 		instance = this;
 		
-		MLogger.setMurderPlugin(this);
-		
-		arenaManager = new ArenaManager(this);
-		matchManager = new MatchManager(this);
-		playerManager = new PlayerManager(this);
-		signManager = new SignManager(this);
+		ArenaManager.initialize();
+		MatchManager.initialize();
+		PlayerManager.initialize();
+		SignManager.initialize();
 		
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new PlayerListener(this), this);
@@ -56,7 +54,8 @@ public class Murder extends JavaPlugin {
 		
 		// Tell player manager about all already connected players
 		for (Player player: getServer().getOnlinePlayers()) {
-			getPlayerManager().onPlayerJoin(player);
+			getPlayerManager();
+			PlayerManager.onPlayerJoin(player);
 		}
 		
 		getCommand("arena").setExecutor(new ArenaCommand(this));
@@ -66,25 +65,31 @@ public class Murder extends JavaPlugin {
 		getCommand("warn").setExecutor(new WarnCommand(this));
 	}
 	
+	@Deprecated
 	public PlayerManager getPlayerManager () {
 		return playerManager;
 	}
+	@Deprecated
 	public MatchManager getMatchManager () {
 		return matchManager;
 	}
+	@Deprecated
 	public ArenaManager getArenaManager () {
 		return arenaManager;
 	}
+	@Deprecated
 	public SignManager getSignManager () {
 		return signManager;
 	}
 	
 	// Reference these methods here for easier usage
 	public MPlayer getMPlayer (String player) {
-		return getPlayerManager().getMPlayer(player);
+		getPlayerManager();
+		return PlayerManager.getMPlayer(player);
 	}
 	public MPlayer getMPlayer (Player player) {
-		return getPlayerManager().getMPlayer(player);
+		getPlayerManager();
+		return PlayerManager.getMPlayer(player);
 	}
 	
 	public void start () {
@@ -97,8 +102,8 @@ public class Murder extends JavaPlugin {
 			return;
 		started = true;
 
-		for (MPlayer mplayer: getPlayerManager().getMPlayers()) {
-			mplayer.setMatch(getMatchManager().getLobbyMatch());
+		for (MPlayer mplayer: PlayerManager.getMPlayers()) {
+			mplayer.setMatch(MatchManager.getLobbyMatch());
 		}
 		
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new MainLoop(this), 0, 1);
@@ -122,7 +127,7 @@ public class Murder extends JavaPlugin {
 	
 	@Deprecated
 	public void sendMessageToPlayersInMatch (String message, Match match) {
-		for (MPlayer mPlayer: getPlayerManager().getMPlayers()) {
+		for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
 			if (mPlayer.getMatch() == match) {
 				mPlayer.getPlayer().sendMessage(message);
 			}

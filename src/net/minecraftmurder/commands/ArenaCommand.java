@@ -2,6 +2,7 @@ package net.minecraftmurder.commands;
 
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.command.Command;
@@ -30,7 +31,7 @@ public class ArenaCommand implements CommandExecutor {
 				sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 				return false;
 			}
-			if (plugin.getArenaManager().createArena(args[1])) {
+			if (ArenaManager.createArena(args[1])) {
 				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "Arena created.");
 			} else {
 				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't create arena!");
@@ -41,7 +42,7 @@ public class ArenaCommand implements CommandExecutor {
 				sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 				return false;
 			}
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena != null) {
 				if (Arena.INFO_TYPES.contains(args[2].toLowerCase())) {
 					if (arena.setInfo(args[2], args[3], true)) {
@@ -61,7 +62,7 @@ public class ArenaCommand implements CommandExecutor {
 				sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 				return false;
 			}
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena != null) {
 				if (Arena.INFO_TYPES.contains(args[2].toLowerCase())) {
 					sender.sendMessage(ChatContext.PREFIX_PLUGIN + arena.getInfo(args[2], true));

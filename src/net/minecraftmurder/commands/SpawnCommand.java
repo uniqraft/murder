@@ -3,7 +3,9 @@ package net.minecraftmurder.commands;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
+import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.tools.ChatContext;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,7 +40,7 @@ public class SpawnCommand implements CommandExecutor {
 				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/spawn add <arena> <type>");
 				return true;
 			}
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena != null) {
 				if (Spawn.TYPES.contains(args[2])) {
 					if (arena.addSpawn(new Spawn(player.getLocation().add(0, 1, 0), args[2]), true)) {
@@ -61,8 +63,7 @@ public class SpawnCommand implements CommandExecutor {
 				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/spawn nearest <arena> <type>");
 				return true;
 			}
-			
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena != null) {
 				if (Spawn.TYPES.contains(args[2])) {
 					Spawn spawn = arena.getNearestSpawn(player.getLocation(), args[2]);
@@ -86,7 +87,7 @@ public class SpawnCommand implements CommandExecutor {
 				return true;
 			}
 			// Does arena exist?
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena == null) {
 				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't find arena " + args[1] + "!");
 				return false;
@@ -116,7 +117,7 @@ public class SpawnCommand implements CommandExecutor {
 				return true;
 			}
 			// Does arena exist?
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena == null) {
 				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't find arena " + args[1] + "!");
 				return true;
@@ -147,7 +148,7 @@ public class SpawnCommand implements CommandExecutor {
 				return true;
 			}
 			// Does arena exist?
-			Arena arena = plugin.getArenaManager().getArenaByPathname(args[1]);
+			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena == null) {
 				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't find arena " + args[1] + "!");
 				return true;

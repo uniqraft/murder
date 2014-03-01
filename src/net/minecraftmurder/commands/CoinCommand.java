@@ -51,7 +51,7 @@ public class CoinCommand implements CommandExecutor {
 					sender.sendMessage(ChatContext.COLOR_WARNING + args[2] + " is not a valid number.");
 					return true;
 				}
-				MPlayer.addCoins(args[1], count, true, plugin);
+				MPlayer.addCoins(args[1], count, true);
 				return true;
 			} else if (args[0].equalsIgnoreCase("set")) {
 				if (args.length != 3) {
@@ -66,7 +66,7 @@ public class CoinCommand implements CommandExecutor {
 					sender.sendMessage(ChatContext.COLOR_WARNING + args[2] + " is not a valid number.");
 					return true;
 				}
-				MPlayer.setCoins(args[1], count, true, plugin);
+				MPlayer.setCoins(args[1], count, true);
 				return true;
 			} else if (args[0].equalsIgnoreCase("get")) {
 					if (args.length != 2) {

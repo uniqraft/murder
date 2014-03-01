@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
 import net.minecraftmurder.inventory.MInventory;
+import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Paths;
@@ -40,11 +41,8 @@ public class MPlayer {
 	private int reloadTime = 0;
 	private int gunBanTime = 0;
 	
-	private Murder plugin;
-	
-	public MPlayer (String name, Murder plugin) {
+	public MPlayer (String name) {
 		this.name = name;
-		this.plugin = plugin;
 		
 		inventory = new MInventory(name);
 		// TODO Removing this, shouldn't be needed...
@@ -95,7 +93,7 @@ public class MPlayer {
 		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
 		((SkullMeta) skull.getItemMeta()).setOwner(player.getName());
 		equipment.setHelmet(skull);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				zombie.setHealth(0);
@@ -172,18 +170,18 @@ public class MPlayer {
 		this.killerName = killerName;
 	}
 	
-	public static boolean addCoins (String player, int count, boolean tell, Murder plugin) {
-		MPlayer mplayer = plugin.getPlayerManager().getMPlayer(player);
+	public static boolean addCoins (String player, int count, boolean tell) {
+		MPlayer mplayer = PlayerManager.getMPlayer(player);
 		if (mplayer != null && tell) {
 			mplayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + count + " coins" + ChatContext.COLOR_LOWLIGHT + "!");
 		}
-		return setCoins(player, getCoins(player) + count, false, plugin);
+		return setCoins(player, getCoins(player) + count, false);
 	}
-	public static boolean setCoins (String player, int count, boolean tell, Murder plugin) {
+	public static boolean setCoins (String player, int count, boolean tell) {
 		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		config.set("coins", count);
 		// If player is online, update him
-		MPlayer mPlayer = plugin.getPlayerManager().getMPlayer(player);
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		if (mPlayer != null) {
 			if (tell)
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You now have " + ChatContext.COLOR_HIGHLIGHT + count + " coins" + ChatContext.COLOR_LOWLIGHT + "!");

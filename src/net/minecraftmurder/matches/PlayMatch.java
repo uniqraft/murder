@@ -18,6 +18,7 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
+import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
@@ -37,8 +38,8 @@ public class PlayMatch extends Match {
 	private String murderer;
 	private String murdererKiller;
 	
-	public PlayMatch (Murder plugin) {
-		super(plugin);
+	public PlayMatch () {
+		super();
 		
 		isPlaying = false;
 		isRanked = false;
@@ -52,7 +53,7 @@ public class PlayMatch extends Match {
 			arena.setActive(false);
 		
 		// Select new arena
-		Arena newArena = plugin.getArenaManager().getRandomAvailableArena(); 
+		Arena newArena = ArenaManager.getRandomAvailableArena(); 
 		if (newArena == null) {
 			MLogger.log(Level.SEVERE, "PlayMatch could not change arena.");
 			return;
@@ -216,7 +217,7 @@ public class PlayMatch extends Match {
 		isPlaying = false;
 		countdown = COUNTDOWN_TIME + MATCHEND_TIME;
 		final PlayMatch playMatch = this;
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("Match " + playMatch.hashCode() + " is switching arena.");
@@ -257,7 +258,7 @@ public class PlayMatch extends Match {
 			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + " was " + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + "!");
 			// Reward the murderer for winning
 			if (isRanked)
-				MPlayer.addCoins(murderer, 10, true, plugin);
+				MPlayer.addCoins(murderer, 10, true);
 			
 			end();
 			return;
@@ -266,7 +267,7 @@ public class PlayMatch extends Match {
 	
 	@Override
 	public void onPlayerJoin(Player player) {
-		MPlayer mPlayer = plugin.getMPlayer(player);
+		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
 		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 		
 		if (arena == null) return;
@@ -282,7 +283,7 @@ public class PlayMatch extends Match {
 	public void onPlayerDeath(Player player) {
 		player.playSound(player.getLocation(), Sound.DONKEY_HIT, 1, 1);
 		
-		MPlayer mKilled = plugin.getMPlayer(player);
+		MPlayer mKilled = Murder.getInstance().getMPlayer(player);
 		String killer = mKilled.getKillerName();
 		
 		// If the murderer was killed
@@ -291,9 +292,9 @@ public class PlayMatch extends Match {
 			murdererKiller = killer;
 			// If there was a killer, reward him
 			if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
-				MPlayer.addCoins(killer, 5, true, plugin);
+				MPlayer.addCoins(killer, 5, true);
 		} else {
-			MPlayer.addCoins(murderer, 1, true, plugin);
+			MPlayer.addCoins(murderer, 1, true);
 		}
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);

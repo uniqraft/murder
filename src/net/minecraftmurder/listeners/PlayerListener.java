@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.managers.PlayerManager;
+import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
@@ -42,12 +44,12 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(null);
-		plugin.getPlayerManager().onPlayerJoin(event.getPlayer());
+		PlayerManager.onPlayerJoin(event.getPlayer());
 	}
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		plugin.getPlayerManager().onPlayerQuit(event.getPlayer());
+		PlayerManager.onPlayerQuit(event.getPlayer());
 	}
 
 	@EventHandler
@@ -99,7 +101,7 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 		
 		Player player = event.getPlayer();
-		MPlayer mPlayer = plugin.getPlayerManager().getMPlayer(player);
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
 		if (match instanceof PlayMatch) {
@@ -158,8 +160,8 @@ public class PlayerListener implements Listener {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (event.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) event.getClickedBlock().getState();
-				if (plugin.getSignManager().existsSigns(sign.getLocation())) {
-					plugin.getSignManager().getMSign(sign.getLocation()).onInteract(mPlayer);
+				if (SignManager.existsSigns(sign.getLocation())) {
+					SignManager.getMSign(sign.getLocation()).onInteract(mPlayer);
 				}
 			}
 		}

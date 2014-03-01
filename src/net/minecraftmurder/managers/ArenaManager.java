@@ -3,30 +3,28 @@ package net.minecraftmurder.managers;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import net.minecraftmurder.main.Arena;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
-public class ArenaManager {
-	private List<Arena> playArenas;
-	private Arena lobby;
-	private Murder plugin;
+public final class ArenaManager {
+	private static List<Arena> playArenas;
+	private static Arena lobby;
 	
 	public static final String PATH_ARENAS = "plugins/Murder/Arenas/";
 	
-	public ArenaManager (Murder plugin) {
-		this.plugin = plugin;
-		
+	public static void initialize () {
 		playArenas = new ArrayList<Arena>();
 		String[] arenaPaths = SimpleFile.getFilesInPath(PATH_ARENAS, ".yml");
 		//List<YamlConfiguration> configs = SimpleFile.getYamlConfigsInPath(PATH_ARENAS); 
 		if (arenaPaths == null)  {
-			Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "No arenas found.");
+			MLogger.log(Level.WARNING, "No arenas found.");
 		} else {
 			for (String arenaPath: arenaPaths) {
 				if (arenaPath.equalsIgnoreCase(PATH_ARENAS + "lobby.yml")) {
@@ -40,7 +38,7 @@ public class ArenaManager {
 		}
 	}
 	
-	public boolean createArena (String pathName) {
+	public static boolean createArena (String pathName) {
 		YamlConfiguration config = new YamlConfiguration();
 		String path = PATH_ARENAS + pathName + ".yml";
 		// Is this the lobby?
@@ -61,7 +59,7 @@ public class ArenaManager {
 		return SimpleFile.saveConfig(config, path);
 	}
 	
-	public Arena getArenaByPathname (String arena) {
+	public static Arena getArenaByPathname (String arena) {
 		String path = PATH_ARENAS + arena + ".yml";
 		for (Arena a: getAllArenas()) {
 			if (a.getPath().equalsIgnoreCase(path)) {
@@ -71,7 +69,7 @@ public class ArenaManager {
 		return null;
 	}
 	
-	public Arena getLobbyArena () {
+	public static Arena getLobbyArena () {
 		if (lobby == null) {
 			if (SimpleFile.exists(PATH_ARENAS + "lobby.yml")) {
 				return new Arena(PATH_ARENAS + "lobby.yml");
@@ -80,13 +78,13 @@ public class ArenaManager {
 		return lobby;
 	}
 
-	public List<Arena> getAllArenas () {
+	public static List<Arena> getAllArenas () {
 		List<Arena> allArenas = playArenas;
 		if (lobby != null)
 			allArenas.add(lobby);
 		return allArenas;
 	}
-	public List<Arena> getAvaiableArenas () {
+	public static List<Arena> getAvaiableArenas () {
 		List<Arena> available = new ArrayList<Arena>();
 		for (Arena arena: playArenas) {
 			if (!arena.isActive())
@@ -94,7 +92,7 @@ public class ArenaManager {
 		}
 		return available;
 	}
-	public Arena getRandomAvailableArena () {
+	public static Arena getRandomAvailableArena () {
 		List<Arena> available = getAvaiableArenas();
 		if (available == null || available.size() == 0)
 			return null;

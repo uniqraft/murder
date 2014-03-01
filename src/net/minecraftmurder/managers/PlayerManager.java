@@ -9,7 +9,6 @@ import net.minecraft.server.v1_7_R1.ChatSerializer;
 import net.minecraft.server.v1_7_R1.IChatBaseComponent;
 import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
@@ -21,15 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class PlayerManager {	
-	private List<MPlayer> mplayers = new ArrayList<MPlayer>();
-	private Murder plugin;
+public final class PlayerManager {	
+	private static List<MPlayer> mplayers = new ArrayList<MPlayer>();
 	
-	public PlayerManager (Murder plugin) {
-		this.plugin = plugin;
-	}
+	public static void initialize () {}
 	
-	public void onPlayerJoin (Player player) {
+	public static void onPlayerJoin (Player player) {
 		boolean firstJoin = !SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml");
 		
 		// Kick if player is banned
@@ -65,14 +61,14 @@ public class PlayerManager {
 		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 		
 		// Add player
-		MPlayer mplayer = new MPlayer (player.getName(), plugin); 
+		MPlayer mplayer = new MPlayer (player.getName()); 
 		mplayers.add(mplayer);
 		
 		// Move player to lobby
-		mplayer.setMatch(plugin.getMatchManager().getLobbyMatch());
+		mplayer.setMatch(MatchManager.getLobbyMatch());
 	}
 	
-	public void onPlayerQuit (Player player) {
+	public static void onPlayerQuit (Player player) {
 		// Save and remove
 		MPlayer mPlayer = getMPlayer(player);
 		if (mPlayer == null) {
@@ -89,10 +85,10 @@ public class PlayerManager {
 		match.onPlayerQuit(player); // Tell player's match that this player left
 	}
 	
-	public MPlayer getMPlayer (Player player) {
+	public static MPlayer getMPlayer (Player player) {
 		return getMPlayer(player.getName());
 	}
-	public MPlayer getMPlayer (String playerName) {
+	public static MPlayer getMPlayer (String playerName) {
 		for (MPlayer mp: mplayers) {
 			if (mp.getName().equals(playerName)) {
 				return mp;
@@ -100,10 +96,10 @@ public class PlayerManager {
 		}
 		return null;
 	}
-	public Player getPlayer(MPlayer mplayer) {
+	public static Player getPlayer(MPlayer mplayer) {
 		return getPlayer(mplayer.getName());
 	}
-	public Player getPlayer (String mplayerName) {
+	public static Player getPlayer (String mplayerName) {
 		for (MPlayer mp: mplayers) {
 			if (mp.getName().equals(mplayerName)) {
 				return Bukkit.getPlayer(mplayerName);
@@ -112,9 +108,7 @@ public class PlayerManager {
 		return null;
 	}
 
-	public List<MPlayer> getMPlayers() {
+	public static List<MPlayer> getMPlayers() {
 		return mplayers;
 	}
-
-	
 }

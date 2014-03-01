@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.signs.MSign;
 import net.minecraftmurder.signs.MSignMatch;
 import net.minecraftmurder.tools.MLogger;
@@ -18,16 +17,14 @@ import net.minecraftmurder.tools.SimpleFile;
 public class SignManager {
 	public static final String PATH_SIGN = "plugins/Murder/signs.yml";
 	
-	private Murder plugin;
-	private List<MSign> mSigns;
+	private static List<MSign> mSigns;
 	
-	public SignManager (Murder plugin) {
-		this.plugin = plugin;
+	public static void initialize() {
 		mSigns = new ArrayList<MSign>();
 		load();
 	}
 	
-	void load () {
+	static void load () {
 		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN, true);
 		List<?> list = config.getList("signs", null);
 		if (list == null) {
@@ -43,7 +40,7 @@ public class SignManager {
 			addMSign(sign);
 		}
 	}
-	void save () {
+	static void save () {
 		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN, true);
 		List<String> savedSigns = new ArrayList<String>();
 		for (MSign mSign: mSigns) {
@@ -53,7 +50,7 @@ public class SignManager {
 		SimpleFile.saveConfig(config, PATH_SIGN);
 	}
 	
-	public boolean existsSigns (Location location) {
+	public static boolean existsSigns (Location location) {
 		for (MSign sign: mSigns) {
 			if (location.getWorld() != sign.getLocation().getWorld())
 				continue;
@@ -63,7 +60,7 @@ public class SignManager {
 		}
 		return false;
 	}
-	public MSign getMSign (Location location) {
+	public static MSign getMSign (Location location) {
 		for (MSign sign: mSigns) {
 			if (sign.getLocation().distance(location) <= .5) {
 				return sign;
@@ -71,11 +68,11 @@ public class SignManager {
 		}
 		return null;
 	}
-	public void addMSign (MSign sign) {
+	public static void addMSign (MSign sign) {
 		mSigns.add(sign);
 		save();
 	}
-	public void removeSign (Location location) {
+	public static void removeSign (Location location) {
 		for (MSign sign: mSigns) {
 			if (sign.getLocation().equals(location)) {
 				mSigns.remove(sign);
@@ -87,13 +84,13 @@ public class SignManager {
 		save();
 	}
 	
-	public void updateSigns () {
+	public static void updateSigns () {
 		for (MSign mSign: mSigns) {
 			mSign.update();
 		}
 	}
 	
-	private MSign stringToSign (String sign) {
+	private static MSign stringToSign (String sign) {
 		String[] split = sign.split(" ");
 		
 		if (split.length != 6)
@@ -107,7 +104,7 @@ public class SignManager {
 			double y = Double.parseDouble(split[3]);
 			double z = Double.parseDouble(split[4]);
 			int index = Integer.parseInt(split[5]);
-			return new MSignMatch(new Location(world, x, y, z), index, plugin); 
+			return new MSignMatch(new Location(world, x, y, z), index); 
 		}
 		return null;
 	}

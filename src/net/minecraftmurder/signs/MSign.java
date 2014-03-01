@@ -14,11 +14,9 @@ import org.bukkit.block.Sign;
 
 public abstract class MSign {	
 	protected Location location;	
-	protected Murder plugin;
 	
-	public MSign (Location location, Murder plugin) {
+	public MSign (Location location) {
 		this.location = location;
-		this.plugin = plugin;
 
 		checkIfValid();
 	}
@@ -35,7 +33,7 @@ public abstract class MSign {
 	 * This will update the sign 1 tick later.
 	 */
 	void updateText () {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				getSign().update(true);
