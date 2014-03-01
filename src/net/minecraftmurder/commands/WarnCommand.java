@@ -3,7 +3,6 @@ package net.minecraftmurder.commands;
 import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.Bukkit;
@@ -12,13 +11,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class WarnCommand implements CommandExecutor {
-	
-	private Murder plugin;
-	
-	public WarnCommand (Murder plugin) {
-		this.plugin = plugin;
-	}
-	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {

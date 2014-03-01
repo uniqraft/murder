@@ -6,18 +6,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 
 public class CoinCommand implements CommandExecutor {
-	private Murder plugin;
-	
-	public CoinCommand (Murder plugin) {
-		this.plugin = plugin;
-	}
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {

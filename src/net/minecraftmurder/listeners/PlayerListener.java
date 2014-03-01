@@ -34,13 +34,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerListener implements Listener {
-	
-	private Murder plugin;
-
-	public PlayerListener(Murder plugin) {
-		this.plugin = plugin;
-	}
-
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(null);
@@ -54,7 +47,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		if (plugin.isStarted()) {
+		if (Murder.getInstance().isStarted()) {
 			// Only drop iron ingots
 			event.setCancelled(!(event.getItemDrop().getItemStack().getType() == MPlayerClass.MATERIAL_GUNPART));
 		}
@@ -62,12 +55,12 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) {
-		if (!plugin.isStarted()) return;
+		if (!Murder.getInstance().isStarted()) return;
 		
 		event.setCancelled(true);
 		
 		Player player = event.getPlayer();
-		MPlayer mPlayer = plugin.getMPlayer(player);
+		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
@@ -95,7 +88,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if (!plugin.isStarted())
+		if (!Murder.getInstance().isStarted())
 			return;
 		
 		event.setCancelled(true);
@@ -141,11 +134,11 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (!plugin.isStarted())
+		if (!Murder.getInstance().isStarted())
 			return;
 		
 		Player player = event.getPlayer();
-		MPlayer mPlayer = plugin.getMPlayer(player);
+		MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
 		ItemStack itemInHand = player.getItemInHand();
 		
 		// Spectators can't interact
@@ -197,7 +190,7 @@ public class PlayerListener implements Listener {
 			}
 			mPlayer.getMatch().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + " used the teleportation device.");
 			// Play sound at each player's new location one tick later
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 				@Override
 				public void run() {
 					for (MPlayer mPlayer: playersInMatch) {

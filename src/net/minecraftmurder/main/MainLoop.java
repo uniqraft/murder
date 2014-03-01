@@ -6,13 +6,8 @@ import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.matches.PlayMatch;
 
 public class MainLoop implements Runnable {
-	private Murder plugin;
 	private int tick = 0;
 	
-	public MainLoop(Murder plugin) {
-		this.plugin = plugin;
-	}
-
 	@Override
 	public void run() {
 		// Decrease all players reload

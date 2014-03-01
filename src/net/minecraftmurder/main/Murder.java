@@ -47,22 +47,21 @@ public class Murder extends JavaPlugin {
 		SignManager.initialize();
 		
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new PlayerListener(this), this);
-		pm.registerEvents(new EntityListener(this), this);
-		pm.registerEvents(new BlockListener(this), this);
-		pm.registerEvents(new TeleportFix(this), this);
+		pm.registerEvents(new PlayerListener(), this);
+		pm.registerEvents(new EntityListener(), this);
+		pm.registerEvents(new BlockListener(), this);
+		pm.registerEvents(new TeleportFix(), this);
 		
 		// Tell player manager about all already connected players
 		for (Player player: getServer().getOnlinePlayers()) {
-			getPlayerManager();
 			PlayerManager.onPlayerJoin(player);
 		}
 		
-		getCommand("arena").setExecutor(new ArenaCommand(this));
-		getCommand("murder").setExecutor(new MurderCommand(this));
-		getCommand("spawn").setExecutor(new SpawnCommand(this));
-		getCommand("coins").setExecutor(new CoinCommand(this));
-		getCommand("warn").setExecutor(new WarnCommand(this));
+		getCommand("arena").setExecutor(new ArenaCommand());
+		getCommand("murder").setExecutor(new MurderCommand());
+		getCommand("spawn").setExecutor(new SpawnCommand());
+		getCommand("coins").setExecutor(new CoinCommand());
+		getCommand("warn").setExecutor(new WarnCommand());
 	}
 	
 	@Deprecated
@@ -106,7 +105,7 @@ public class Murder extends JavaPlugin {
 			mplayer.setMatch(MatchManager.getLobbyMatch());
 		}
 		
-		getServer().getScheduler().scheduleSyncRepeatingTask(this, new MainLoop(this), 0, 1);
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new MainLoop(), 0, 1);
 		MLogger.log(Level.INFO, "Murder started");
 	}
 	public void activateDevMode () {

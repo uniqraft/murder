@@ -17,23 +17,16 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 
 public class BlockListener implements Listener {
-	
-	private Murder plugin;
-	
-	public BlockListener (Murder plugin) {
-		this.plugin = plugin;
-	}
-	
 	@EventHandler
 	public void onHangingBreak (HangingBreakEvent event) {
-		if (!plugin.isDevMode()) {
+		if (!Murder.getInstance().isDevMode()) {
 			event.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
 	public void onBlockBreak (BlockBreakEvent event) {
-		if (!plugin.isDevMode()) {
+		if (!Murder.getInstance().isDevMode()) {
 			event.setCancelled(true);
 		}
 		Location location = event.getBlock().getLocation();
@@ -44,7 +37,7 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onBlockPlace (BlockPlaceEvent event) {
-		if (!plugin.isDevMode()) {
+		if (!Murder.getInstance().isDevMode()) {
 			event.setCancelled(true);
 		}
 	}

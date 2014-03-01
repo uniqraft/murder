@@ -18,12 +18,6 @@ import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
 public class MurderCommand implements CommandExecutor {
-	private Murder plugin;
-	
-	public MurderCommand (Murder plugin) {
-		this.plugin = plugin;
-	}
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
@@ -34,10 +28,10 @@ public class MurderCommand implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("start")) {
-			plugin.start();
+			Murder.getInstance().start();
 			return true;
 		} else if (args[0].equalsIgnoreCase("dev")) {
-			plugin.activateDevMode();
+			Murder.getInstance().activateDevMode();
 			MLogger.log(Level.INFO, sender.getName() + " activated dev mode.");
 			return true;
 		} else if (args[0].equalsIgnoreCase("matches")) {
@@ -68,7 +62,7 @@ public class MurderCommand implements CommandExecutor {
 			}
 			return true;
 		} else if (args[0].equalsIgnoreCase("kill")) {
-			MPlayer mPlayer = plugin.getMPlayer(sender.getName());
+			MPlayer mPlayer = Murder.getInstance().getMPlayer(sender.getName());
 			if (mPlayer != null)
 				mPlayer.onDeath();
 			return true;

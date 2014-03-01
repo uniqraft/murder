@@ -19,13 +19,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class EntityListener implements Listener {
-	
-	Murder plugin;
-	
-	public EntityListener (Murder plugin) {
-		this.plugin = plugin;
-	}
-	
 	@EventHandler
 	public void onFoodLevelChangeEvent (FoodLevelChangeEvent event) {
 		MPlayerClass.setFoodLevel(PlayerManager.getMPlayer((Player) event.getEntity()));
@@ -44,9 +37,9 @@ public class EntityListener implements Listener {
 		if (event.getEntity() instanceof Player) {
 			event.setCancelled(true);
 			Player player = (Player) event.getEntity();
-			final MPlayer mPlayer = plugin.getMPlayer(player);
+			final MPlayer mPlayer = Murder.getInstance().getMPlayer(player);
 			// Reset killer 1 tick later.
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 				@Override
 				public void run() {
 					mPlayer.setKiller("");
@@ -88,7 +81,7 @@ public class EntityListener implements Listener {
 			// Was I shot by a player?
 			if (arrow.getShooter() instanceof Player) {
 				Player shooter = (Player) arrow.getShooter();
-				MPlayer mShooter = plugin.getMPlayer(shooter);
+				MPlayer mShooter = Murder.getInstance().getMPlayer(shooter);
 				mDamaged.setKiller(mShooter.getName());
 				// If I'm not the murderer
 				if (mDamaged.getPlayerClass() != MPlayerClass.MURDERER) {

@@ -1,7 +1,6 @@
 package net.minecraftmurder.commands;
 
 import net.minecraftmurder.main.Arena;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.tools.ChatContext;
 
@@ -10,12 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class ArenaCommand implements CommandExecutor {
-	private Murder plugin;
-	
-	public ArenaCommand (Murder plugin) {
-		this.plugin = plugin;
-	}
-	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
