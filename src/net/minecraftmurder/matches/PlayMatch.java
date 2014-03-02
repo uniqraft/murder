@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
@@ -113,6 +116,17 @@ public class PlayMatch extends Match {
 					break;
 				}
 			}
+			World world = arena.getWorld();
+			if (world != null)  {
+				for (Entity entity: world.getEntities()) {
+					if (entity.getType() == EntityType.ARROW) {
+						if (entity.getPassenger() != null) {
+							world.playEffect(entity.getLocation(), Effect.SMOKE, 0);
+						}
+					}
+				}
+			}
+			
 			// If there is a murderer
 			if (mMurderer != null) {
 				// Point compass at nearest innocent
@@ -134,7 +148,7 @@ public class PlayMatch extends Match {
 				World world = arena.getWorld();
 				if (world != null) {
 					for (Entity e : arena.getWorld().getEntities()) {
-						if (e instanceof Item)
+						if (e.getType() == EntityType.DROPPED_ITEM || e.getType() == EntityType.ARROW)
 							e.remove();
 					}
 				}

@@ -45,8 +45,6 @@ public class MPlayer {
 		this.name = name;
 		
 		inventory = new MInventory(name);
-		// TODO Removing this, shouldn't be needed...
-		//switchPlayerClass(MPlayerClass.LOBBYMAN);
 	}
 	
 	public MPlayerClass getPlayerClass () {

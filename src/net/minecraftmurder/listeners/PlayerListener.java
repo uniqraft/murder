@@ -15,6 +15,7 @@ import net.minecraftmurder.tools.MLogger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
@@ -64,19 +65,18 @@ public class PlayerListener implements Listener {
 		if (mPlayer == null) return;
 		Match match = mPlayer.getMatch();
 		if (match == null) return;
-		
-		String message = player.getDisplayName() + ": " + event.getMessage();
+
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
-			String grayMessage = ChatColor.GRAY + ChatColor.stripColor(event.getMessage());
+			String grayMessage = ChatColor.GRAY + ChatColor.stripColor(player.getName() + event.getMessage());
 			for (MPlayer other: match.getMPlayers()) {
 				if (other.getPlayerClass() == MPlayerClass.SPECTATOR) {
 					other.getPlayer().sendMessage(grayMessage);
 				}
 			}
-			MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] *DEAD* " + message);
+			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") *DEAD* " + player.getName() + ": " + event.getMessage());
 		} else {
 			match.sendMessage(player.getDisplayName() + ": " + event.getMessage());
-			MLogger.log(Level.INFO, "[Match " + match.hashCode() + "] " + message);
+			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") " + player.getName() + ": " + event.getMessage());
 		}
 	}
 
@@ -106,7 +106,8 @@ public class PlayerListener implements Listener {
 			}
 		}
 		
-		Material material = event.getItem().getItemStack().getType();
+		Item item = event.getItem();
+		Material material = item.getItemStack().getType();
 		
 		if (material.equals(MPlayerClass.MATERIAL_GUN)) {
 			if (mPlayer.getPlayerClass() == MPlayerClass.INNOCENT && mPlayer.getGunBanTime() <= 0) {
@@ -128,6 +129,15 @@ public class PlayerListener implements Listener {
 				// Remove drop and play sound
 				event.getItem().remove();
 				player.getLocation().getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
+			}
+		} else if (MPlayerClass.isKnife(material)) {
+			if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
+				if (!item.isInsideVehicle()) {
+					player.getInventory().setItem(1, item.getItemStack());
+					// Remove drop and play sound
+					event.getItem().remove();
+					player.getLocation().getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
+				}
 			}
 		}
 	}

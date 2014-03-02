@@ -13,7 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public abstract class MSign {	
-	protected Location location;	
+	protected Location location;
 	
 	public MSign (Location location) {
 		this.location = location;
@@ -27,19 +27,6 @@ public abstract class MSign {
 	
 	public abstract void onInteract (MPlayer mPlayer);
 	public abstract void update ();
-	
-	/**
-	 * Should be called when the sign's text has been updated.
-	 * This will update the sign 1 tick later.
-	 */
-	void updateText () {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				getSign().update(true);
-			}
-		}, 1);
-	}
 	
 	public Sign getSign () {
 		Block block = location.getBlock();
@@ -69,6 +56,14 @@ public abstract class MSign {
 			s += location.getY() + " ";
 			s += location.getZ() + " ";
 			s += mSignMatch.getIndex();
+		} else if (this instanceof MSignBuy) {
+			MSignBuy mSignBuy = (MSignBuy) this;
+			s += "shop ";
+			s += location.getWorld().getName() + " ";
+			s += location.getX() + " ";
+			s += location.getY() + " ";
+			s += location.getZ() + " ";
+			s += mSignBuy.getMItem().getName();
 		}
 		return s;
 	}

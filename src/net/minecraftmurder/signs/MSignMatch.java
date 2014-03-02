@@ -34,11 +34,13 @@ public class MSignMatch extends MSign {
 		if (checkIfValid()) {
 			final Sign sign = getSign();
 			Match match = MatchManager.getPlayMatch(index);
-			sign.setLine(0, "Match " + index);
-			sign.setLine(1, "(" + match.getMPlayers().size() + "/" + PlayMatch.MAX_PLAYERS + ") player");
+			sign.setLine(0, ChatColor.RED + "Match " + index);
+			sign.setLine(1, ChatColor.GREEN + "(" + match.getMPlayers().size() + "/" + PlayMatch.MAX_PLAYERS + ") player");
 			sign.setLine(2, "Click to join.");
-			sign.setLine(3, ChatColor.GREEN + "Green?");
-			updateText();
+			sign.setLine(3, "");
+			sign.update();
+		} else {
+			MLogger.log(Level.WARNING, "MSignMath with index " + index + " is not valid.");
 		}
 	}
 

@@ -9,7 +9,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import net.minecraftmurder.inventory.MItem;
 import net.minecraftmurder.signs.MSign;
+import net.minecraftmurder.signs.MSignBuy;
 import net.minecraftmurder.signs.MSignMatch;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.SimpleFile;
@@ -27,7 +29,7 @@ public class SignManager {
 	static void load () {
 		YamlConfiguration config = SimpleFile.loadConfig(PATH_SIGN, true);
 		List<?> list = config.getList("signs", null);
-		if (list == null) {
+		if (list == null || list.size() < 1) {
 			MLogger.log(Level.WARNING, "No signs could be loaded!");
 			return;
 		}
@@ -37,7 +39,7 @@ public class SignManager {
 				MLogger.log(Level.SEVERE, "Invalid sign.");
 				continue;
 			} 
-			addMSign(sign);
+			mSigns.add(sign);
 		}
 	}
 	static void save () {
@@ -93,10 +95,7 @@ public class SignManager {
 	private static MSign stringToSign (String sign) {
 		String[] split = sign.split(" ");
 		
-		if (split.length != 6)
-			return null;
-		
-		if (split[0].equalsIgnoreCase("match")) {
+		if (split.length == 6 && split[0].equalsIgnoreCase("match")) {
 			World world = Bukkit.getWorld(split[1]);
 			if (world == null)
 				return null;
@@ -105,6 +104,15 @@ public class SignManager {
 			double z = Double.parseDouble(split[4]);
 			int index = Integer.parseInt(split[5]);
 			return new MSignMatch(new Location(world, x, y, z), index); 
+		} else if (split.length == 6 && split[0].equalsIgnoreCase("shop")) {
+			World world = Bukkit.getWorld(split[1]);
+			if (world == null)
+				return null;
+			double x = Double.parseDouble(split[2]);
+			double y = Double.parseDouble(split[3]);
+			double z = Double.parseDouble(split[4]);
+			MItem mItem = MItem.getItem(split[5]);
+			return new MSignBuy(new Location(world, x, y, z), mItem);
 		}
 		return null;
 	}

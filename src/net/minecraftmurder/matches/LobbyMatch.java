@@ -5,12 +5,11 @@ import org.bukkit.entity.Player;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.PlayerManager;
 
 public class LobbyMatch extends Match {
-	public LobbyMatch (Arena arena, Murder plugin) {
+	public LobbyMatch (Arena arena) {
 		super();
 		this.arena = arena;
 		arena.setActive(true);

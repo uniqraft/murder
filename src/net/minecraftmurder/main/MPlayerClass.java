@@ -62,7 +62,7 @@ public enum MPlayerClass {
 	
 	public static boolean isKnife (Material material) {
 		for (int i = 0; i < ITEM_KNIFES.length; i++) {
-			if (ITEM_KNIFES[i].equals(material))
+			if (ITEM_KNIFES[i].getMaterial().equals(material))
 				return true;
 		}
 		return false;

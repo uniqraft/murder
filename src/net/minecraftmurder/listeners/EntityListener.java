@@ -5,9 +5,10 @@ import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,6 +25,14 @@ public class EntityListener implements Listener {
 	public void onFoodLevelChangeEvent (FoodLevelChangeEvent event) {
 		MPlayerClass.setFoodLevel(PlayerManager.getMPlayer((Player) event.getEntity()));
 		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onProjectileHit (ProjectileHitEvent event) {
+		if (event.getEntityType() != EntityType.ARROW) return;
+		Arrow arrow = (Arrow) event.getEntity();
+		if (arrow.getPassenger() != null && arrow.getPassenger().getType() == EntityType.DROPPED_ITEM)
+			arrow.remove();
 	}
 	
 	@EventHandler
@@ -61,9 +71,11 @@ public class EntityListener implements Listener {
 			return;
 		}
 		
+		Entity entityDamager = (Entity) event.getDamager();
+		
 		// If damaged was hit by an arrow
-		if (event.getDamager() instanceof Arrow) {
-			Arrow arrow = (Arrow) event.getDamager();
+		if (entityDamager.getType() == EntityType.ARROW) {
+			Arrow arrow = (Arrow) entityDamager;
 			
 			// Spectator was hit by arrow
 			if (mDamaged.getPlayerClass() == MPlayerClass.SPECTATOR) {
@@ -75,14 +87,12 @@ public class EntityListener implements Listener {
 				return;
 			}
 			
-			// Set the player's killer
-			mDamaged.setKiller(((LivingEntity) arrow.getShooter()).getCustomName());
-			
 			// Was I shot by a player?
-			if (arrow.getShooter() instanceof Player) {
+			if (arrow.getShooter() instanceof Player) {				
 				Player shooter = (Player) arrow.getShooter();
 				MPlayer mShooter = PlayerManager.getMPlayer(shooter);
 				mDamaged.setKiller(mShooter.getName());
+				mDamaged.onDeath();
 				// If I'm not the murderer
 				if (mDamaged.getPlayerClass() != MPlayerClass.MURDERER) {
 					// Was I shot by a gunner
@@ -95,7 +105,7 @@ public class EntityListener implements Listener {
 					}
 				}
 			}
-		} else if (event.getDamager() instanceof Player) {
+		} else if (entityDamager.getType() == EntityType.PLAYER) {
 			// Damaged by another player
 			Player damager = (Player) event.getDamager();
 			

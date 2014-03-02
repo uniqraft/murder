@@ -1,10 +1,15 @@
 package net.minecraftmurder.listeners;
 
+import java.util.logging.Level;
+
+import net.minecraftmurder.inventory.MItem;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.SignManager;
+import net.minecraftmurder.signs.MSignBuy;
 import net.minecraftmurder.signs.MSignMatch;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Location;
@@ -44,7 +49,8 @@ public class BlockListener implements Listener {
 	
 	@EventHandler
 	public void onSignChange (SignChangeEvent event) {
-		// TODO Only in dev mode
+		if (!Murder.getInstance().isDevMode()) return;
+		
 		Sign sign = (Sign) event.getBlock().getState();
 		if (event.getLine(0).equalsIgnoreCase("[murder]")) {
 			// Is the second line [match]
@@ -64,6 +70,13 @@ public class BlockListener implements Listener {
 				} else {
 					Tools.sendMessageAll(ChatContext.PREFIX_WARNING + event.getLine(2) + " is not a valid number.");
 				}
+			} else if (event.getLine(1).equalsIgnoreCase("[shop]")) {
+				MItem mItem = MItem.getItem(event.getLine(2));
+				if (mItem == null) {
+					MLogger.log(Level.WARNING, event.getLine(2) + " is not a valid item.");
+					return;
+				}
+				SignManager.addMSign(new MSignBuy(sign.getLocation(), mItem));
 			} else {
 				Tools.sendMessageAll(ChatContext.PREFIX_WARNING + event.getLine(1) + " is not a valid sign command.");
 			}

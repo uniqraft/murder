@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.LobbyMatch;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
@@ -26,7 +25,7 @@ public final class MatchManager {
 	
 	public static LobbyMatch getLobbyMatch () {
 		if (lobbyMatch == null)
-			return new LobbyMatch(ArenaManager.getLobbyArena(), Murder.getInstance());
+			return new LobbyMatch(ArenaManager.getLobbyArena());
 
 		return lobbyMatch;
 	}

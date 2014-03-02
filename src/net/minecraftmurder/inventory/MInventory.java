@@ -55,7 +55,7 @@ public class MInventory {
 		setOwnedMItem(mItem, owned, true);
 	}
 	public void setOwnedMItem (MItem mItem, boolean owned, boolean save) {
-		mItems.put(MItem.WOOD_SWORD, owned);
+		mItems.put(mItem, owned);
 		if (save) save();
 	}
 	
