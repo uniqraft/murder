@@ -3,11 +3,9 @@ package net.minecraftmurder.signs;
 import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

@@ -1,12 +1,9 @@
 package net.minecraftmurder.main;
 
-import java.util.logging.Level;
-
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.matches.PlayMatch;
-import net.minecraftmurder.tools.MLogger;
 
 public class MainLoop implements Runnable {
 	private int tick = 0;
