@@ -208,6 +208,8 @@ public class PlayerListener implements Listener {
 					}
 				}
 			}, 1);
+		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_INVENTORY && rightClicked) {
+			mPlayer.getMInventory().openInventorySelectionScreen();
 		}
 	}
 }

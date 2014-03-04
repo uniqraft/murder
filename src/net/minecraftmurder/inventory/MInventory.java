@@ -83,8 +83,7 @@ public class MInventory {
 		if (save) save();
 	}
 	public void openInventorySelectionScreen () {
-		Inventory inventory = Bukkit.createInventory(null, 57, "Equipment Selection");
-		mPlayer.getPlayer().openInventory(inventory);
+		Inventory inventory = Bukkit.createInventory(null, 9*3, "Equipment Selection");
 		for (int i = 0; i < MPlayerClass.ITEM_KNIFES.length; i++) {
 			MItem mItem = MPlayerClass.ITEM_KNIFES[i];
 			ItemStack item = new ItemStack(mItem.getMaterial(), 1);
@@ -94,8 +93,10 @@ public class MInventory {
 			if (ownsMItem(mItem)) {
 				Tools.setItemStackName(item, ChatColor.BLUE + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Click to equip!"));
 			} else {
-				Tools.setItemStackName(item, ChatColor.BLUE + mItem.getReadableName(), Arrays.asList(ChatColor.RED + "You don't own this item."));
+				Tools.setItemStackName(item, ChatColor.BLUE + mItem.getReadableName(), Arrays.asList(ChatColor.YELLOW + "Buy for " + ChatColor.BLUE + mItem.getCost() + ChatColor.YELLOW + " coins."));
 			}
+			inventory.setItem(2 + i, item);
 		}
+		mPlayer.getPlayer().openInventory(inventory);
 	}
 }

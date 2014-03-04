@@ -5,6 +5,7 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.PlayerManager;
+import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -15,12 +16,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryListener implements Listener {
 	
-	Murder plugin;
-	
-	public InventoryListener (Murder plugin) {
-		this.plugin = plugin;
-	}
-	
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInventoryClickEvent (InventoryClickEvent event) {
@@ -29,17 +24,22 @@ public class InventoryListener implements Listener {
 			Player player = (Player) human;
 			MPlayer mPlayer = PlayerManager.getMPlayer(player);
 			
-			if (!plugin.isDevMode()) {
+			if (!Murder.getInstance().isDevMode()) {
 				event.setCancelled(true);
 				if (mPlayer.getPlayerClass() == MPlayerClass.LOBBYMAN) {
 					ItemStack item = event.getCurrentItem();
+					MItem mItem = MItem.getItem(item.getType());
 					if (MPlayerClass.isKnife(item.getType())) {
-						mPlayer.getMInventory().setSelectedKnife(MItem.getItem(item.getType()));
+						mPlayer.getMInventory().setSelectedKnife(mItem);
+						player.sendMessage(
+								ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
+								"You equiped " + ChatContext.COLOR_HIGHLIGHT +
+								mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + ".");
+						player.closeInventory();		
 					}
 					mPlayer.getMInventory().openInventorySelectionScreen();
-				} else {
-					player.updateInventory();
 				}
+				player.updateInventory();
 			}
 		}
 	}
