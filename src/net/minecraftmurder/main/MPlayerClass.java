@@ -17,6 +17,7 @@ public enum MPlayerClass {
 	
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
+	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR; 
 	public static final MItem[] ITEM_KNIFES = {
 		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.GOLD_SWORD, MItem.IRON_SWORD, MItem.DIAMOND_SWORD};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
@@ -38,6 +39,7 @@ public enum MPlayerClass {
 		
 		switch (playerClass) {
 		case LOBBYMAN:
+			giveInventorySelect(inventory);
 			break;
 		case PREGAMEMAN:
 			break;
@@ -95,7 +97,7 @@ public enum MPlayerClass {
 	public static void giveKnife (MPlayer mPlayer) {
 		Player player = mPlayer.getPlayer();
 		Inventory inventory = player.getInventory();
-		ItemStack item = new ItemStack (mPlayer.getMInventory().getSelectedSword().getMaterial());
+		ItemStack item = new ItemStack (mPlayer.getMInventory().getSelectedKnife().getMaterial());
 		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to swing.", "Right-Click to throw."));
 		inventory.setItem(1, item);
 	}
@@ -108,5 +110,10 @@ public enum MPlayerClass {
 		ItemStack item = new ItemStack (MATERIAL_TELEPORTER);
 		Tools.setItemStackName(item, "Teleporter", Arrays.asList("Teleports all innocent to random locations.", "Maximum confusion."));
 		inventory.setItem(3, item);
+	}
+	public static void giveInventorySelect (Inventory inventory) {
+		ItemStack item = new ItemStack (MATERIAL_INVENTORY);
+		Tools.setItemStackName(item, "Inventory", Arrays.asList("Select your gear!", "Right-Click to use."));
+		inventory.setItem(8, item);
 	}
 }

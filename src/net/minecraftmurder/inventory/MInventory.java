@@ -1,30 +1,38 @@
 package net.minecraftmurder.inventory;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
+import net.minecraftmurder.main.MPlayer;
+import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
+import net.minecraftmurder.tools.Tools;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class MInventory {
 	private static final String CONFIG_PREFIX = "inventory.";
 	private static final String CONFIG_ITEMS = "inventory.items.";
 	
-	private String player;
+	private MPlayer mPlayer;
 	private HashMap<MItem, Boolean> mItems;
 	
-	private MItem selectedSword;
+	private MItem selectedKnife;
 	
-	public MInventory (String player) {
-		this.player = player;
+	public MInventory (MPlayer mPlayer) {
+		this.mPlayer = mPlayer;
 		load();
 	}
 	
 	public boolean load () {
 		mItems = new HashMap<MItem, Boolean>();
 		// Load
-		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml", true);
+		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + mPlayer.getName() + ".yml", true);
 		// Load info about what items the player owns
 		for (int i = 0; i < MItem.values().length; i++) {
 			MItem mItem = MItem.values()[i];
@@ -34,12 +42,12 @@ public class MInventory {
 		mItems.put(MItem.WOOD_SWORD, true);		// Everyone owns a wooden sword :)
 		
 		// Load selected sword
-		setSelectedSword(MItem.values()[config.getInt(CONFIG_PREFIX + "selected-sword", MItem.WOOD_SWORD.ordinal())]);
+		setSelectedKnife(MItem.values()[config.getInt(CONFIG_PREFIX + "selected-sword", MItem.WOOD_SWORD.ordinal())]);
 		return false;
 	}
 	public boolean save () {
 		// Load
-		String path = Paths.FOLDER_PLAYERS + player + ".yml";
+		String path = Paths.FOLDER_PLAYERS + mPlayer.getName() + ".yml";
 		YamlConfiguration config = SimpleFile.loadConfig(path, true);
 		// Save info about what items the player owns
 		if (mItems != null && !mItems.isEmpty()) {
@@ -64,14 +72,30 @@ public class MInventory {
 		return (mItems.get(mItem));
 	}
 
-	public MItem getSelectedSword() {
-		return selectedSword;
+	public MItem getSelectedKnife () {
+		return selectedKnife;
 	}
-	public void setSelectedSword(MItem selectedSword) {
-		setSelectedSword(selectedSword, true);
+	public void setSelectedKnife(MItem selectedKnife) {
+		setSelectedKnife(selectedKnife, true);
 	}
-	public void setSelectedSword(MItem selectedSword, boolean save) {
-		this.selectedSword = selectedSword;
+	public void setSelectedKnife(MItem selectedKnife, boolean save) {
+		this.selectedKnife = selectedKnife;
 		if (save) save();
+	}
+	public void openInventorySelectionScreen () {
+		Inventory inventory = Bukkit.createInventory(null, 57, "Equipment Selection");
+		mPlayer.getPlayer().openInventory(inventory);
+		for (int i = 0; i < MPlayerClass.ITEM_KNIFES.length; i++) {
+			MItem mItem = MPlayerClass.ITEM_KNIFES[i];
+			ItemStack item = new ItemStack(mItem.getMaterial(), 1);
+			// If selected, add glow
+			if (getSelectedKnife() == mItem)
+				Tools.addGlow(item);
+			if (ownsMItem(mItem)) {
+				Tools.setItemStackName(item, ChatColor.BLUE + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Click to equip!"));
+			} else {
+				Tools.setItemStackName(item, ChatColor.BLUE + mItem.getReadableName(), Arrays.asList(ChatColor.RED + "You don't own this item."));
+			}
+		}
 	}
 }

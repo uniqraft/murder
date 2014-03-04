@@ -6,9 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import net.minecraft.server.v1_7_R1.NBTTagCompound;
+import net.minecraft.server.v1_7_R1.NBTTagList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -130,4 +135,18 @@ public abstract class Tools {
 		}
 		return count;
 	}
+	
+	public static ItemStack addGlow(ItemStack item){ 
+		  net.minecraft.server.v1_7_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+		  NBTTagCompound tag = null;
+		  if (!nmsStack.hasTag()) {
+		      tag = new NBTTagCompound();
+		      nmsStack.setTag(tag);
+		  }
+		  if (tag == null) tag = nmsStack.getTag();
+		  NBTTagList ench = new NBTTagList();
+		  tag.set("ench", ench);
+		  nmsStack.setTag(tag);
+		  return CraftItemStack.asCraftMirror(nmsStack);
+		}
 }

@@ -44,7 +44,7 @@ public class MPlayer {
 	public MPlayer (String name) {
 		this.name = name;
 		
-		inventory = new MInventory(name);
+		inventory = new MInventory(this);
 	}
 	
 	public MPlayerClass getPlayerClass () {

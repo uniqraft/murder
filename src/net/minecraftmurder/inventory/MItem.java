@@ -49,4 +49,12 @@ public enum MItem {
 		}
 		return null;
 	}
+	public static MItem getItem (Material material) {
+		for (MItem mItem: MItem.values()) {
+			if (mItem.getMaterial().equals(material)) {
+				return mItem;
+			}
+		}
+		return null;
+	}
 }
