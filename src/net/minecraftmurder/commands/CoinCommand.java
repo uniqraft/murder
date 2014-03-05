@@ -24,7 +24,7 @@ public class CoinCommand implements CommandExecutor {
 			if (SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml")) {
 				coins = MPlayer.getCoins(player.getName());
 			}
-			sender.sendMessage(ChatContext.PREFIX_PLUGIN + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + (coins != 1?" coins":"coins") + ChatContext.COLOR_LOWLIGHT + "!");
+			sender.sendMessage(ChatContext.PREFIX_PLUGIN + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT  + (coins != 1?" coins":" coins") + "!");
 			return true;
 		} else {
 			if (!sender.hasPermission("murder.coins.manage"))  {

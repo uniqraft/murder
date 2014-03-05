@@ -33,15 +33,27 @@ public class InventoryListener implements Listener {
 					// If clicked knife
 					if (MPlayerClass.isKnife(item.getType())) {
 						// If the player owns this item
-						if (mPlayer.getMInventory().ownsMItem(mItem) || mPlayer.getMInventory().buyMItem(mItem)) {
+						boolean bought = false;
+						if (mPlayer.getMInventory().ownsMItem(mItem) || (bought = mPlayer.getMInventory().buyMItem(mItem))) {
 							mPlayer.getMInventory().setSelectedKnife(mItem);
-							player.sendMessage(
-									ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
-									"You equiped " + ChatContext.COLOR_HIGHLIGHT +
-									mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + ".");
+							if (!bought)
+								player.sendMessage(
+										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
+										"You equiped " + ChatContext.COLOR_HIGHLIGHT +
+										mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 						}
-						player.closeInventory();		
+					} else if (item.getType() == MItem.SHINY_SWORD_EFFECT.getMaterial()) {
+						boolean bought = false;
+						boolean shiny = mPlayer.getMInventory().getShinyKnife();
+						if (mPlayer.getMInventory().ownsMItem(mItem) || (bought = mPlayer.getMInventory().buyMItem(mItem))) {
+							mPlayer.getMInventory().setOwnedMItem(mItem, !shiny);
+							if (!bought)
+								player.sendMessage(
+										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
+										"Your knife is " + (!shiny?"now shiny!":"no longer shiny!"));
+						}
 					}
+					player.closeInventory();
 					mPlayer.getMInventory().openInventorySelectionScreen();
 				}
 				player.updateInventory();

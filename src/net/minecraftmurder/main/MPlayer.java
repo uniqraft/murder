@@ -169,9 +169,13 @@ public class MPlayer {
 	}
 	
 	public static boolean addCoins (String player, int count, boolean tell) {
-		MPlayer mplayer = PlayerManager.getMPlayer(player);
-		if (mplayer != null && tell) {
-			mplayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + count + " coins" + ChatContext.COLOR_LOWLIGHT + "!");
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
+		if (mPlayer != null && tell) {
+			if (count >= 0)
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + count + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
+			else
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + count + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
+			
 		}
 		return setCoins(player, getCoins(player) + count, false);
 	}
@@ -182,7 +186,7 @@ public class MPlayer {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		if (mPlayer != null) {
 			if (tell)
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You now have " + ChatContext.COLOR_HIGHLIGHT + count + " coins" + ChatContext.COLOR_LOWLIGHT + "!");
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You now have " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
 		}
 		return SimpleFile.saveConfig(config, Paths.FOLDER_PLAYERS + player + ".yml");
 	}

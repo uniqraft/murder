@@ -8,6 +8,7 @@ import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -99,6 +100,8 @@ public enum MPlayerClass {
 		Inventory inventory = player.getInventory();
 		ItemStack item = new ItemStack (mPlayer.getMInventory().getSelectedKnife().getMaterial());
 		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to swing.", "Right-Click to throw."));
+		if (mPlayer.getMInventory().getShinyKnife())
+			item.addEnchantment(Enchantment.DURABILITY, 1);
 		inventory.setItem(1, item);
 	}
 	public static void giveCompass (Inventory inventory) {

@@ -14,7 +14,7 @@ public enum MItem {
 	DIAMOND_SWORD	
 	("diamond-knife", "Diamond Knife", 10000, Material.DIAMOND_SWORD),
 	SHINY_SWORD_EFFECT
-	("shiny-knife", "Shiny Knife Effect", 7500, null);
+	("shiny-knife", "Shiny Knife Effect", 7500, Material.EYE_OF_ENDER);
 	
 	private String name;
 	private String readable;
