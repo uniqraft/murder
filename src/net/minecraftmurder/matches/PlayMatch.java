@@ -26,7 +26,7 @@ import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
 public class PlayMatch extends Match {
-	public static final int MATCH_TIME = 60;
+	public static final int MATCH_TIME = 60 * 6;
 	public static final int COUNTDOWN_TIME = 20;
 	public static final int MATCHEND_TIME = 10;
 	public static final int MIN_PLAYERS = 2;
@@ -98,21 +98,34 @@ public class PlayMatch extends Match {
 	@Override
 	public void update() {
 		countdown--;
-		if (isPlaying) {
+		if (isPlaying) {			
 			MPlayer mMurderer = null;
 			// Loop through all players in this match
 			for (MPlayer mPlayer: getMPlayers()) {
 				Player player = mPlayer.getPlayer();
 				
 				// If outside the world, kill the player
-				if (player.getLocation().getBlockY() < 0)
+				if (player.getLocation().getBlockY() < 0) {
 					mPlayer.onDeath();
+					sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + 
+							"The Murderer, " + ChatContext.COLOR_HIGHLIGHT + 
+							mPlayer.getName() + ChatContext.COLOR_LOWLIGHT +
+							" ran out of time.");
+				}
 				
 				// Find murderer
 				if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
 					mMurderer = mPlayer;
 					break;
 				}
+			}
+			if (countdown <= 0) {
+				mMurderer.onDeath();
+			}
+			if (countdown % 60 == 0) {
+				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + 
+						(int)(countdown / 60) + ChatContext.COLOR_LOWLIGHT
+						+ " minutes left of the match.");
 			}
 			World world = arena.getWorld();
 			if (world != null)  {
@@ -171,10 +184,12 @@ public class PlayMatch extends Match {
 	
 	private void start() {
 		if (isPlaying) {
-			Tools.sendMessageAll(ChatContext.PREFIX_CRITICAL + "Match tried to start, but is already started.");
+			MLogger.log(Level.WARNING, "Match tried to start but is already started.");
 			return;
 		}
 		isPlaying = true;
+		
+		countdown = MATCH_TIME;
 		
 		// Reset variables
 		murderer = "";
@@ -301,12 +316,11 @@ public class PlayMatch extends Match {
 		
 		// If the murderer was killed
 		if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
-			
 			murdererKiller = killer;
 			// If there was a killer, reward him
 			if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
 				MPlayer.addCoins(killer, 5, true);
-		} else {
+		} else if (mKilled.getKillerName().equals(murderer)) {
 			MPlayer.addCoins(murderer, 1, true);
 		}
 		// Change class into a spectator and check if the match is over

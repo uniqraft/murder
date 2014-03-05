@@ -27,6 +27,8 @@ permissions:
             murder.arenas: true
             murder.spawns: true
             murder.coins: true
+            murder.owner: true
+            murder.admin: true
             murder.mod: true
     murder.core:
         description: Allows you to control the main plugin
@@ -44,5 +46,11 @@ permissions:
         description: Allows you to check your coin count.
         default: true
     murder.mod:
-        description: Allows a user to moderate.
+        description: Moderator
+        default: op
+    murder.owner:
+        description: Owner
+        default: op
+    murder.admin:
+        description: Admin
         default: op
