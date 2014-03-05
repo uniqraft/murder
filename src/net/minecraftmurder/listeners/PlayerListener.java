@@ -71,12 +71,12 @@ public class PlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
-		if (mPlayer == null) return;
+		if (mPlayer == null) {MLogger.log(Level.WARNING, "MPlayer is null in AsyncPlayerChatEvent."); return;}
 		Match match = mPlayer.getMatch();
-		if (match == null) return;
+		if (match == null) {MLogger.log(Level.WARNING, "MPlayer's match is null."); return;}
 
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
-			String grayMessage = ChatColor.GRAY + ChatColor.stripColor(player.getName() + event.getMessage());
+			String grayMessage = ChatColor.GRAY + ChatColor.stripColor(player.getName() + ": " + event.getMessage());
 			for (MPlayer other: match.getMPlayers()) {
 				if (other.getPlayerClass() == MPlayerClass.SPECTATOR) {
 					other.getPlayer().sendMessage(grayMessage);
