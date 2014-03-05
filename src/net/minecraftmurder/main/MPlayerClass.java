@@ -101,7 +101,7 @@ public enum MPlayerClass {
 		ItemStack item = new ItemStack (mPlayer.getMInventory().getSelectedKnife().getMaterial());
 		Tools.setItemStackName(item, "Knife", Arrays.asList("Kill innocents with this.", "Left-Click to swing.", "Right-Click to throw."));
 		if (mPlayer.getMInventory().getShinyKnife())
-			item.addEnchantment(Enchantment.DURABILITY, 1);
+			item.addEnchantment(Murder.emptyEnchantment, 1);
 		inventory.setItem(1, item);
 	}
 	public static void giveCompass (Inventory inventory) {

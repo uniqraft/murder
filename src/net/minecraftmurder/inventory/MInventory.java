@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
+import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
@@ -107,7 +108,7 @@ public class MInventory {
 			ItemStack item = new ItemStack(mItem.getMaterial(), 1);
 			if (getSelectedKnife() == mItem) {
 				Tools.setItemStackName(item, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Currently equipped!"));
-				item.addEnchantment(Enchantment.DURABILITY, 1);
+				item.addEnchantment(Murder.emptyEnchantment, 1);
 			} else if (ownsMItem(mItem)) {
 				Tools.setItemStackName(item, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Click to equip!"));
 			} else {
@@ -119,7 +120,7 @@ public class MInventory {
 		MItem mItemShiny = MItem.SHINY_SWORD_EFFECT;
 		ItemStack itemShiny = new ItemStack(mItemShiny.getMaterial(), 1);
 		if (shinyKnife)
-			itemShiny.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
+			itemShiny.addUnsafeEnchantment(Murder.emptyEnchantment, 1);
 		if (ownsMItem(mItemShiny))
 			Tools.setItemStackName(itemShiny, ChatColor.AQUA + mItemShiny.getReadableName(), Arrays.asList(shinyKnife?(ChatColor.GREEN + "Click to disable!"):(ChatColor.YELLOW + "Click to enable!")));
 		else

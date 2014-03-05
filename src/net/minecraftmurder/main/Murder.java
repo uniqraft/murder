@@ -1,5 +1,6 @@
 package net.minecraftmurder.main;
 
+import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 import net.minecraftmurder.commands.ArenaCommand;
@@ -18,6 +19,8 @@ import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.TeleportFix;
 
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +29,7 @@ public class Murder extends JavaPlugin {
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;
 	public static final float ARROW_SPEED = 4;
+	public static EmptyEnchantment emptyEnchantment;
 
 	private static Murder instance;
 	
@@ -35,6 +39,20 @@ public class Murder extends JavaPlugin {
 	@Override
 	public void onEnable () {
 		instance = this;
+		
+		emptyEnchantment = new EmptyEnchantment(120);
+		try {
+		    Field f = Enchantment.class.getDeclaredField("acceptingNew");
+		    f.setAccessible(true);
+		    f.set(null, true);
+		} catch (Exception e) {
+			MLogger.log(Level.SEVERE, e.getLocalizedMessage());
+		}
+		try {
+		EnchantmentWrapper.registerEnchantment(emptyEnchantment);
+		} catch (IllegalArgumentException e){
+			MLogger.log(Level.SEVERE, e.getLocalizedMessage());
+		}
 		
 		ArenaManager.initialize();
 		MatchManager.initialize();
