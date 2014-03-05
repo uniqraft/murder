@@ -46,7 +46,7 @@ public class InventoryListener implements Listener {
 						boolean bought = false;
 						boolean shiny = mPlayer.getMInventory().getShinyKnife();
 						if (mPlayer.getMInventory().ownsMItem(mItem) || (bought = mPlayer.getMInventory().buyMItem(mItem))) {
-							mPlayer.getMInventory().setOwnedMItem(mItem, !shiny);
+							mPlayer.getMInventory().setShinyKnife(!shiny);
 							if (!bought)
 								player.sendMessage(
 										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +

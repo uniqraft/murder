@@ -119,12 +119,12 @@ public class MInventory {
 		MItem mItemShiny = MItem.SHINY_SWORD_EFFECT;
 		ItemStack itemShiny = new ItemStack(mItemShiny.getMaterial(), 1);
 		if (shinyKnife)
-			itemShiny.addEnchantment(Enchantment.DURABILITY, 1);
-		if (ownsMItem(mItemShiny)) 
+			itemShiny.addUnsafeEnchantment(Enchantment.KNOCKBACK, 1);
+		if (ownsMItem(mItemShiny))
 			Tools.setItemStackName(itemShiny, ChatColor.AQUA + mItemShiny.getReadableName(), Arrays.asList(shinyKnife?(ChatColor.GREEN + "Click to disable!"):(ChatColor.YELLOW + "Click to enable!")));
 		else
 			Tools.setItemStackName(itemShiny, ChatColor.AQUA + mItemShiny.getReadableName(), Arrays.asList(ChatColor.YELLOW + "Buy for " + ChatColor.BLUE + mItemShiny.getCost() + ChatColor.YELLOW + " coins."));
-		inventory.setItem(8, itemShiny);	
+		inventory.setItem(8, itemShiny);
 		
 		mPlayer.getPlayer().openInventory(inventory);
 	}
