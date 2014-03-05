@@ -90,19 +90,19 @@ public class EntityListener implements Listener {
 			if (arrow.getShooter() instanceof Player) {				
 				Player shooter = (Player) arrow.getShooter();
 				MPlayer mShooter = PlayerManager.getMPlayer(shooter);
-				mDamaged.setKiller(mShooter.getName());
-				mDamaged.onDeath();
 				// If I'm not the murderer
 				if (mDamaged.getPlayerClass() != MPlayerClass.MURDERER) {
 					// Was I shot by a gunner
 					if (mShooter.getPlayerClass() == MPlayerClass.GUNNER) {
 						// Make him drop the gun
 						mShooter.gunBan();
-						shooter.sendMessage(ChatContext.PREFIX_PLUGIN + "You shot an innocent player!");
 						shooter.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 60, 1, false), true);
 						shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 3, false), true);
 					}
 				}
+				// Mark player as dead
+				mDamaged.setKiller(mShooter.getName());
+				mDamaged.onDeath();
 			}
 		} else if (entityDamager.getType() == EntityType.PLAYER) {
 			// Damaged by another player
@@ -115,6 +115,7 @@ public class EntityListener implements Listener {
 					damaged.teleport(damaged.getLocation().add(0, 10, 0));
 					return;
 				}
+				// Mark player as dead
 				mDamaged.setKiller(damager);
 				mDamaged.onDeath();
 			}

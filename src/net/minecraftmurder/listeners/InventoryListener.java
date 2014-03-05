@@ -39,7 +39,7 @@ public class InventoryListener implements Listener {
 							if (!bought)
 								player.sendMessage(
 										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
-										"You equiped " + ChatContext.COLOR_HIGHLIGHT +
+										"You equipped the " + ChatContext.COLOR_HIGHLIGHT +
 										mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 						}
 					} else if (item.getType() == MItem.SHINY_SWORD_EFFECT.getMaterial()) {
