@@ -23,7 +23,6 @@ import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
-import net.minecraftmurder.tools.Tools;
 
 public class PlayMatch extends Match {
 	public static final int MATCH_TIME = 60 * 6;
