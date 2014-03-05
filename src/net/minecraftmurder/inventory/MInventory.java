@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
+import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
@@ -12,6 +13,7 @@ import net.minecraftmurder.tools.Tools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -98,5 +100,24 @@ public class MInventory {
 			inventory.setItem(2 + i, item);
 		}
 		mPlayer.getPlayer().openInventory(inventory);
+	}
+	public boolean buyMItem (MItem mItem) {
+		if (mItem == null) return false;
+		Player player = mPlayer.getPlayer();
+		
+		if (ownsMItem(mItem)) {
+			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You already own this item!");
+			return false;
+		}
+		int coins = MPlayer.getCoins(mPlayer.getName()); 
+		if (coins < mItem.getCost()) {
+			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You can't afford this item!");
+			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+			return false;
+		}
+		MPlayer.addCoins(mPlayer.getName(), -mItem.getCost(), true);
+		setOwnedMItem(mItem, true, true);
+		player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You bought " + ChatContext.COLOR_HIGHLIGHT + mItem.getName() + ChatContext.COLOR_LOWLIGHT + "!");
+		return true;
 	}
 }

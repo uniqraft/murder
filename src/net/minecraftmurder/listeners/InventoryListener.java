@@ -26,15 +26,20 @@ public class InventoryListener implements Listener {
 			
 			if (!Murder.getInstance().isDevMode()) {
 				event.setCancelled(true);
+				ItemStack item = event.getCurrentItem();
+				MItem mItem = MItem.getItem(item.getType());
+				// If player is in lobby
 				if (mPlayer.getPlayerClass() == MPlayerClass.LOBBYMAN) {
-					ItemStack item = event.getCurrentItem();
-					MItem mItem = MItem.getItem(item.getType());
+					// If clicked knife
 					if (MPlayerClass.isKnife(item.getType())) {
-						mPlayer.getMInventory().setSelectedKnife(mItem);
-						player.sendMessage(
-								ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
-								"You equiped " + ChatContext.COLOR_HIGHLIGHT +
-								mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + ".");
+						// If the player owns this item
+						if (mPlayer.getMInventory().ownsMItem(mItem) || mPlayer.getMInventory().buyMItem(mItem)) {
+							mPlayer.getMInventory().setSelectedKnife(mItem);
+							player.sendMessage(
+									ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
+									"You equiped " + ChatContext.COLOR_HIGHLIGHT +
+									mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + ".");
+						}
 						player.closeInventory();		
 					}
 					mPlayer.getMInventory().openInventorySelectionScreen();

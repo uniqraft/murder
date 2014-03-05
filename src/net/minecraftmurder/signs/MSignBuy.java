@@ -7,7 +7,6 @@ import org.bukkit.block.Sign;
 
 import net.minecraftmurder.inventory.MItem;
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.tools.ChatContext;
 
 public class MSignBuy extends MSign {
 	private MItem mItem;
@@ -44,20 +43,6 @@ public class MSignBuy extends MSign {
 
 	@Override
 	public void onInteract(MPlayer mPlayer) {
-		if (mItem == null) return;
-		
-		if (mPlayer.getMInventory().ownsMItem(mItem)) {
-			mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You already own this item!");
-			return;
-		}
-		int coins = MPlayer.getCoins(mPlayer.getName()); 
-		if (coins < mItem.getCost()) {
-			mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You can't afford this item!");
-			mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
-			return;
-		}
-		MPlayer.addCoins(mPlayer.getName(), -mItem.getCost(), true);
-		mPlayer.getMInventory().setOwnedMItem(mItem, true, true);
-		mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You bought " + ChatContext.COLOR_HIGHLIGHT + mItem.getName() + ChatContext.COLOR_LOWLIGHT + "!");
+		mPlayer.getMInventory().buyMItem(mItem);
 	}
 }
