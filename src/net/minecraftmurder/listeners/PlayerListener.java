@@ -46,6 +46,8 @@ public class PlayerListener implements Listener {
 			player.setDisplayName(ChatColor.RED + "[Admin] " + ChatColor.WHITE + player.getName());
 		else if (player.hasPermission("murder.mod"))
 			player.setDisplayName(ChatColor.DARK_BLUE + "[Mod] " + ChatColor.WHITE + player.getName());
+		else if (player.hasPermission("murder.vip"))
+			player.setDisplayName(ChatColor.AQUA + "[VIP] " + ChatColor.WHITE + player.getName());
 		
 		PlayerManager.onPlayerJoin(player);
 	}

@@ -9,6 +9,7 @@ import net.minecraft.server.v1_7_R1.ChatSerializer;
 import net.minecraft.server.v1_7_R1.IChatBaseComponent;
 import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
 import net.minecraftmurder.main.MPlayer;
+import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
@@ -44,6 +45,26 @@ public final class PlayerManager {
 			return;
 		}
 		
+		// If the server is full
+		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
+		if (onlinePlayers.length >= Murder.MAX_PLAYERS) {
+			if (player.hasPermission("murder.joinfull")) {
+				for (int i = onlinePlayers.length; i >= 0; i--) {
+					if (!onlinePlayers[i].hasPermission("murder.joinfull")) {
+						onlinePlayers[i].kickPlayer("You were kicked to make room for a VIP.");
+						break;
+					}
+					if (i == 0) {
+						player.kickPlayer("Server is full and there are no non-VIP players online to kick.");
+						return;
+					}
+				}
+			} else {
+				player.kickPlayer("Server is full. Only people who purchase VIP can join.");
+				return;
+			}
+		}
+		
 		// Greet player
 		if (firstJoin) {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
@@ -72,7 +93,7 @@ public final class PlayerManager {
 		// Save and remove
 		MPlayer mPlayer = getMPlayer(player);
 		if (mPlayer == null) {
-			Bukkit.getLogger().log(Level.INFO, "Player " + player.getName() + " doesn't have an entry in PlayerManager, but left the game. Most likely this user is banned, but tried to connect.");
+			Bukkit.getLogger().log(Level.INFO, "Player " + player.getName() + " doesn't have an entry in PlayerManager, but left the game. Most likely this user is banned but tried to connect.");
 			return;
 		}
 		mplayers.remove(mPlayer);

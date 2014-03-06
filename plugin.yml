@@ -48,9 +48,23 @@ permissions:
     murder.mod:
         description: Moderator
         default: op
+        children:
+            murder.joinfull: true
     murder.owner:
         description: Owner
         default: op
+        children:
+            murder.joinfull: true
     murder.admin:
         description: Admin
         default: op
+        children:
+            murder.joinfull: true
+    murder.vip:
+        description: VIP
+        default: false
+        children:
+            murder.joinfull: true
+    murder.joinfull
+        description: Join full matches and servers
+        default: false

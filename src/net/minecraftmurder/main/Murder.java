@@ -26,6 +26,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Murder extends JavaPlugin {
+	public static final int MAX_PLAYERS = 2;
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;
 	public static final float ARROW_SPEED = 4;
