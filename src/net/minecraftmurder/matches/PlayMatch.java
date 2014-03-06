@@ -106,10 +106,6 @@ public class PlayMatch extends Match {
 				// If outside the world, kill the player
 				if (player.getLocation().getBlockY() < 0) {
 					mPlayer.onDeath();
-					sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + 
-							"The Murderer, " + ChatContext.COLOR_HIGHLIGHT + 
-							mPlayer.getName() + ChatContext.COLOR_LOWLIGHT +
-							" ran out of time.");
 				}
 				
 				// Find murderer
@@ -119,6 +115,10 @@ public class PlayMatch extends Match {
 				}
 			}
 			if (countdown <= 0) {
+				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + 
+						"The Murderer, " + ChatContext.COLOR_HIGHLIGHT + 
+						mMurderer.getName() + ChatContext.COLOR_LOWLIGHT +
+						" ran out of time.");
 				mMurderer.onDeath();
 			}
 			if (countdown % 60 == 0) {
