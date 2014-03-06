@@ -18,6 +18,7 @@ public enum MPlayerClass {
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
 	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR; 
+	public static final Material MATERIAL_SPEEDBOOST = Material.SUGAR;
 	public static final MItem[] ITEM_KNIFES = {
 		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.GOLD_SWORD, MItem.IRON_SWORD, MItem.DIAMOND_SWORD};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
@@ -54,6 +55,7 @@ public enum MPlayerClass {
 			giveKnife(mPlayer);
 			giveCompass(inventory);
 			giveTeleporter(inventory);
+			giveSpeedbost(inventory);
 			break;
 
 		default:
@@ -112,6 +114,11 @@ public enum MPlayerClass {
 		ItemStack item = new ItemStack (MATERIAL_TELEPORTER);
 		Tools.setItemStackName(item, "Teleporter", Arrays.asList("Teleports all innocent to random locations.", "Maximum confusion."));
 		inventory.setItem(3, item);
+	}
+	public static void giveSpeedbost (Inventory inventory) {
+		ItemStack item = new ItemStack (MATERIAL_SPEEDBOOST);
+		Tools.setItemStackName(item, "Speed Boost", Arrays.asList("Gives you a boost!", "Right-Click to use."));
+		inventory.setItem(4, item);
 	}
 	public static void giveInventorySelect (Inventory inventory) {
 		ItemStack item = new ItemStack (MATERIAL_INVENTORY);

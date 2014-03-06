@@ -222,6 +222,10 @@ public class PlayerListener implements Listener {
 			}, 1);
 		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_INVENTORY && rightClicked) {
 			mPlayer.getMInventory().openInventorySelectionScreen();
+		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_SPEEDBOOST && rightClicked) {
+			event.setCancelled(true);
+			event.getPlayer().setItemInHand(null);
+			player.setVelocity(player.getVelocity().add(player.getLocation().getDirection().multiply(10)));
 		}
 	}
 }
