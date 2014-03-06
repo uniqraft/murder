@@ -3,7 +3,10 @@ package net.minecraftmurder.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraftmurder.main.MPlayer;
+import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.managers.PlayerManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -44,14 +47,14 @@ public class TeleportFix implements Listener {
     }
     
     private void updateEntities(Player tpedPlayer, List<Player> players, boolean visible) {
-        // Hide or show every player to tpedPlayer
-        // and hide or show tpedPlayer to every player.
-    	
-    	// TODO This makes players appear briefly. FIX
         for (Player player : players) {
             if (visible) {
-                tpedPlayer.showPlayer(player);
-                player.showPlayer(tpedPlayer);
+            	MPlayer mPlayer = PlayerManager.getMPlayer(player);
+            	// Only make non-spectators visible again
+            	if (mPlayer.getPlayerClass() != MPlayerClass.SPECTATOR) {
+            		tpedPlayer.showPlayer(player);
+                    player.showPlayer(tpedPlayer);	
+            	}
             } else {
             	tpedPlayer.hidePlayer(player);
                 player.hidePlayer(tpedPlayer);
