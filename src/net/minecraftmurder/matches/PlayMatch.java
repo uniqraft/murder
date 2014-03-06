@@ -1,6 +1,7 @@
 package net.minecraftmurder.matches;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -39,8 +40,12 @@ public class PlayMatch extends Match {
 	private String murderer;
 	private String murdererKiller;
 	
+	private List<MPlayer> ticketUsers;
+	
 	public PlayMatch () {
 		super();
+		
+		ticketUsers = new ArrayList<MPlayer>();
 		
 		isPlaying = false;
 		isRanked = false;
@@ -206,19 +211,29 @@ public class PlayMatch extends Match {
 			isRanked = true;
 		}
 		
+		List<MPlayer> rList = new ArrayList<MPlayer>();
+		for (MPlayer mPlayer: getMPlayers()) {
+			rList.add(mPlayer);
+			if (ticketUsers.contains(mPlayer))
+				for (int i = 0; i < 6; i++)
+					rList.add(mPlayer);
+		}
 		// Select a murderer and a gunner
 		SecureRandom random = new SecureRandom();
-		int m = random.nextInt(count);
+		int m = random.nextInt(rList.size());
 		int g;
 		do {
-			g = random.nextInt(count);
+			g = random.nextInt(rList.size());
 		} while (g == m);
 		
+		// Clear list of player who used a ticket
+		ticketUsers.clear();
+		
 		// Equip murderer
-		MPlayer mMurderer = mPlayers.get(m);
+		MPlayer mMurderer = rList.get(m);
 		mMurderer.switchPlayerClass(MPlayerClass.MURDERER);
 		// Equip gunner
-		MPlayer mGunner = mPlayers.get(g);
+		MPlayer mGunner = rList.get(g);
 		mGunner.switchPlayerClass(MPlayerClass.GUNNER);
 		
 		murderer = mMurderer.getName();
@@ -304,6 +319,14 @@ public class PlayMatch extends Match {
 	}
 	@Override
 	public void onPlayerQuit(Player player) {
+		MPlayer mPlayer = PlayerManager.getMPlayer(player);
+		List<MPlayer> toBeRemoved = new ArrayList<MPlayer>();
+		for (MPlayer mP: ticketUsers) {
+			if (mP.equals(mPlayer)) {
+				toBeRemoved.add(mP);
+			}
+		}
+		ticketUsers.removeAll(toBeRemoved);
 		checkForEnd();
 	}
 	@Override
@@ -325,5 +348,9 @@ public class PlayMatch extends Match {
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
 		checkForEnd();
+	}
+	
+	public void addTicketUser (MPlayer mPlayer) {
+		ticketUsers.add(mPlayer);
 	}
 }

@@ -7,6 +7,7 @@ import net.minecraftmurder.inventory.MItem;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,10 +16,12 @@ import org.bukkit.inventory.ItemStack;
 public enum MPlayerClass {
 	LOBBYMAN, PREGAMEMAN, MURDERER, GUNNER, INNOCENT, SPECTATOR;
 	
+	public static final int TICKET_COST = 100;
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
 	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR; 
 	public static final Material MATERIAL_SPEEDBOOST = Material.SUGAR;
+	public static final Material MATERIAL_TICKET = Material.PAPER;
 	public static final MItem[] ITEM_KNIFES = {
 		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.GOLD_SWORD, MItem.IRON_SWORD, MItem.DIAMOND_SWORD};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
@@ -43,6 +46,7 @@ public enum MPlayerClass {
 			giveInventorySelect(inventory);
 			break;
 		case PREGAMEMAN:
+			giveTicket(inventory);
 			break;
 		case INNOCENT:
 			break;
@@ -123,6 +127,11 @@ public enum MPlayerClass {
 	public static void giveInventorySelect (Inventory inventory) {
 		ItemStack item = new ItemStack (MATERIAL_INVENTORY);
 		Tools.setItemStackName(item, "Inventory", Arrays.asList("Select your gear!", "Right-Click to use."));
+		inventory.setItem(8, item);
+	}
+	public static void giveTicket (Inventory inventory) {
+		ItemStack item = new ItemStack (MATERIAL_TICKET);
+		Tools.setItemStackName(item, ChatColor.AQUA + "Murderer Ticket", Arrays.asList(ChatColor.YELLOW + "Increase your chances of becoming the murderer!", ChatColor.YELLOW + "Click to buy for " + ChatColor.GREEN + TICKET_COST + ChatColor.YELLOW + " coins!"));
 		inventory.setItem(8, item);
 	}
 }

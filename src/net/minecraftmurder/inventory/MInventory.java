@@ -45,7 +45,7 @@ public class MInventory {
 		// Override
 		mItems.put(MItem.WOOD_SWORD, true);		// Everyone owns a wooden sword :)
 		
-		// Load selected sword
+		// Load
 		setSelectedKnife(MItem.values()[config.getInt(CONFIG_PREFIX + "selected-sword", MItem.WOOD_SWORD.ordinal())]);
 		shinyKnife = config.getBoolean(CONFIG_PREFIX + "shiny-knife", false);
 		return false;
@@ -62,6 +62,7 @@ public class MInventory {
 		}
 		config.set(CONFIG_PREFIX + "selected-sword", selectedKnife.ordinal());
 		config.set(CONFIG_PREFIX + "shiny-knife", shinyKnife);
+		
 		// Save
 		return SimpleFile.saveConfig(config, path);
 	}
@@ -130,6 +131,7 @@ public class MInventory {
 	}
 	public boolean buyMItem (MItem mItem) {
 		if (mItem == null) return false;
+		
 		Player player = mPlayer.getPlayer();
 		
 		if (ownsMItem(mItem)) {
@@ -144,7 +146,7 @@ public class MInventory {
 		}
 		MPlayer.addCoins(mPlayer.getName(), -mItem.getCost(), true);
 		setOwnedMItem(mItem, true, true);
-		player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You bought " + ChatContext.COLOR_HIGHLIGHT + mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
+		player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You bought the " + ChatContext.COLOR_HIGHLIGHT + mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 		return true;
 	}
 }

@@ -226,6 +226,10 @@ public class PlayerListener implements Listener {
 			event.setCancelled(true);
 			event.getPlayer().setItemInHand(null);
 			player.setVelocity(player.getVelocity().add(player.getLocation().getDirection().multiply(10)));
+		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_TICKET && rightClicked) {
+			event.setCancelled(true);
+			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + 
+					"To buy a ticket, open your inventory and click it!");
 		}
 	}
 }

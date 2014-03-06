@@ -1,6 +1,7 @@
 name: Murder
 main: net.minecraftmurder.main.Murder
 version: 2.0
+description: Minecraft Murder
 
 commands:
    arena:
@@ -65,6 +66,6 @@ permissions:
         default: false
         children:
             murder.joinfull: true
-    murder.joinfull
+    murder.joinfull:
         description: Join full matches and servers
         default: false

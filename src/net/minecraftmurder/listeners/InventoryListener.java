@@ -5,6 +5,7 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.PlayerManager;
+import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 
 import org.bukkit.entity.HumanEntity;
@@ -55,6 +56,14 @@ public class InventoryListener implements Listener {
 					}
 					player.closeInventory();
 					mPlayer.getMInventory().openInventorySelectionScreen();
+				} else if (mPlayer.getPlayerClass() == MPlayerClass.PREGAMEMAN) {
+					if (MPlayer.getCoins(player.getName()) >= MPlayerClass.TICKET_COST) {
+						MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_COST, true);
+						player.sendMessage(
+								ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
+								"You bought a ticket! Your chance of becoming the murderer is now higher.");
+						((PlayMatch) mPlayer.getMatch()).addTicketUser(mPlayer);
+					}
 				}
 				player.updateInventory();
 			}
