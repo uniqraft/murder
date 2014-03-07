@@ -216,7 +216,7 @@ public class PlayMatch extends Match {
 		for (MPlayer mPlayer: getMPlayers()) {
 			rList.add(mPlayer);
 			if (ticketUsers.contains(mPlayer))
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < (getMPlayers().size() / 2); i++)
 					rList.add(mPlayer);
 		}
 		// Select a murderer and a gunner
@@ -239,8 +239,8 @@ public class PlayMatch extends Match {
 		
 		murderer = mMurderer.getName();
 		
-		System.out.println(mMurderer.getName() + " is the murderer in Match " + this.hashCode() + ".");
-		System.out.println(mGunner.getName() + " is the original gunner in Match " + this.hashCode() + ".");
+		MLogger.log(Level.INFO, mMurderer.getName() + " is the murderer in Match " + this.hashCode() + ".");
+		MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in Match " + this.hashCode() + ".");
 		
 		// Tell all players what role they play
 		for (MPlayer mPlayer: mPlayers) {
@@ -307,6 +307,7 @@ public class PlayMatch extends Match {
 			return;
 		}
 	}
+	
 	
 	public boolean kickLastNonVIP () {
 		for (int i = getMPlayers().size(); i >= 0; i--) {

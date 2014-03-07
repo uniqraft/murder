@@ -21,12 +21,15 @@ import org.bukkit.inventory.ItemStack;
 public class MInventory {
 	private static final String CONFIG_PREFIX = "inventory.";
 	private static final String CONFIG_ITEMS = CONFIG_PREFIX + "items.";
+	private static final String CONFIG_GEAR = CONFIG_PREFIX + "gear.";
 	
 	private MPlayer mPlayer;
 	private HashMap<MItem, Boolean> mItems;
 	
 	private MItem selectedKnife;
 	private boolean shinyKnife;
+	
+	private MItem[] selectedArmor;
 	
 	public MInventory (MPlayer mPlayer) {
 		this.mPlayer = mPlayer;
@@ -35,7 +38,7 @@ public class MInventory {
 	
 	public boolean load () {
 		mItems = new HashMap<MItem, Boolean>();
-		// Load
+
 		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + mPlayer.getName() + ".yml", true);
 		// Load info about what items the player owns
 		for (int i = 0; i < MItem.values().length; i++) {
@@ -45,9 +48,14 @@ public class MInventory {
 		// Override
 		mItems.put(MItem.WOOD_SWORD, true);		// Everyone owns a wooden sword :)
 		
-		// Load
-		setSelectedKnife(MItem.values()[config.getInt(CONFIG_PREFIX + "selected-sword", MItem.WOOD_SWORD.ordinal())]);
-		shinyKnife = config.getBoolean(CONFIG_PREFIX + "shiny-knife", false);
+		selectedKnife = MItem.values()[config.getInt(CONFIG_GEAR + "selected-sword", MItem.WOOD_SWORD.ordinal())];
+		shinyKnife = config.getBoolean(CONFIG_GEAR + "shiny-knife", false);
+		// Armor
+		selectedArmor = new MItem[4];
+		selectedArmor[MItem.ARMOR_BOOTS]		= MItem.getItem(config.getString(CONFIG_GEAR + "boots", null));
+		selectedArmor[MItem.ARMOR_PANTS] 		= MItem.getItem(config.getString(CONFIG_GEAR + "pants", null));
+		selectedArmor[MItem.ARMOR_CHESTPLATE] 	= MItem.getItem(config.getString(CONFIG_GEAR + "chestplate", null));
+		selectedArmor[MItem.ARMOR_HELMET]		= MItem.getItem(config.getString(CONFIG_GEAR + "helmet", null));
 		return false;
 	}
 	public boolean save () {
@@ -60,8 +68,12 @@ public class MInventory {
 				config.set(CONFIG_ITEMS + mItem.getName(), mItems.get(mItem));
 			}
 		}
-		config.set(CONFIG_PREFIX + "selected-sword", selectedKnife.ordinal());
-		config.set(CONFIG_PREFIX + "shiny-knife", shinyKnife);
+		config.set(CONFIG_GEAR + "selected-sword", selectedKnife.ordinal());
+		config.set(CONFIG_GEAR + "shiny-knife", shinyKnife);
+		config.set(CONFIG_GEAR + "boots", selectedArmor[MItem.ARMOR_BOOTS]);
+		config.set(CONFIG_GEAR + "pants", selectedArmor[MItem.ARMOR_PANTS]);
+		config.set(CONFIG_GEAR + "chestplate", selectedArmor[MItem.ARMOR_CHESTPLATE]);
+		config.set(CONFIG_GEAR + "helmet", selectedArmor[MItem.ARMOR_HELMET]);
 		
 		// Save
 		return SimpleFile.saveConfig(config, path);
@@ -101,11 +113,12 @@ public class MInventory {
 		if (save) save();
 	}
 	public void openInventorySelectionScreen () {
-		Inventory inventory = Bukkit.createInventory(null, 9*1, "Equipment Selection");
+		Inventory inventory = Bukkit.createInventory(null, 9*6, "Equipment Selection");
 		// == Knifes ==
 		for (int i = 0; i < MPlayerClass.ITEM_KNIFES.length; i++) {
 			MItem mItem = MPlayerClass.ITEM_KNIFES[i];
 			ItemStack item = new ItemStack(mItem.getMaterial(), 1);
+			
 			if (getSelectedKnife() == mItem) {
 				Tools.setItemStackName(item, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Currently equipped!"));
 				item.addEnchantment(Murder.emptyEnchantment, 1);
@@ -126,6 +139,23 @@ public class MInventory {
 		else
 			Tools.setItemStackName(itemShiny, ChatColor.AQUA + mItemShiny.getReadableName(), Arrays.asList(ChatColor.YELLOW + "Buy for " + ChatColor.BLUE + mItemShiny.getCost() + ChatColor.YELLOW + " coins."));
 		inventory.setItem(8, itemShiny);
+		// == Armor ==
+		for (int x = 0; x < 4; x++) {
+			for (int y = 0; y < 4; y++) {
+				MItem mItem = MItem.ARMOR[x][y];
+				ItemStack is = new ItemStack(mItem.getMaterial(), 1);
+				
+				if (mItem.equals(selectedArmor[x])) {
+					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Currently equipped!"));
+					is.addEnchantment(Murder.emptyEnchantment, 1);
+				} else if (ownsMItem(mItem)){
+					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Click to equip!"));
+				} else {
+					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.YELLOW + "Buy for " + ChatColor.BLUE + mItem.getCost() + ChatColor.YELLOW + " coins."));
+				}
+				inventory.setItem(2*9+9*y+x+2, is);
+			}
+		}
 		
 		mPlayer.getPlayer().openInventory(inventory);
 	}

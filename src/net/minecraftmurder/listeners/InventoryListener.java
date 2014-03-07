@@ -28,6 +28,12 @@ public class InventoryListener implements Listener {
 			if (!Murder.getInstance().isDevMode()) {
 				event.setCancelled(true);
 				ItemStack item = event.getCurrentItem();
+				if (item == null) {
+					player.updateInventory();
+					player.closeInventory();
+					mPlayer.getMInventory().openInventorySelectionScreen();
+					return;
+				}
 				MItem mItem = MItem.getItem(item.getType());
 				// If player is in lobby
 				if (mPlayer.getPlayerClass() == MPlayerClass.LOBBYMAN) {
