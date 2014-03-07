@@ -21,6 +21,7 @@ import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
+import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
@@ -305,6 +306,20 @@ public class PlayMatch extends Match {
 			end();
 			return;
 		}
+	}
+	
+	public boolean kickLastNonVIP () {
+		for (int i = getMPlayers().size(); i >= 0; i--) {
+			MPlayer mPlayer = getMPlayers().get(i);
+			Player player = mPlayer.getPlayer();
+			if (!player.hasPermission("murder.joinfull")) {
+				player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
+						"You were kicked from the match to make room for a VIP player.");
+				mPlayer.setMatch(MatchManager.getLobbyMatch());
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override

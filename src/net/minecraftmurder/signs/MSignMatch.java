@@ -5,11 +5,13 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
+import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
 public class MSignMatch extends MSign {
@@ -46,6 +48,26 @@ public class MSignMatch extends MSign {
 
 	@Override
 	public void onInteract(MPlayer mPlayer) {
-		mPlayer.setMatch(MatchManager.getPlayMatch(index));
+		Match match = MatchManager.getPlayMatch(index);
+		if (match instanceof PlayMatch) {
+			PlayMatch playMatch = (PlayMatch) match;
+			// If full
+			if (playMatch.getMPlayers().size() >= PlayMatch.MAX_PLAYERS) {
+				Player player = mPlayer.getPlayer();
+				// If VIP
+				if (player.hasPermission("murder.joinfull")) {
+					if (!playMatch.kickLastNonVIP()) {
+						player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
+								"Match full of VIP players, can't join.");
+						return;
+					}
+				} else {
+					player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
+							"Match full. Only VIPs can join full matches.");
+					return;
+				}
+			}
+			mPlayer.setMatch(playMatch);
+		}
 	}
 }
