@@ -48,26 +48,17 @@ public class MSignMatch extends MSign {
 
 	@Override
 	public void onInteract(MPlayer mPlayer) {
-		Match match = MatchManager.getPlayMatch(index);
-		if (match instanceof PlayMatch) {
-			PlayMatch playMatch = (PlayMatch) match;
-			// If full
-			if (playMatch.getMPlayers().size() >= PlayMatch.MAX_PLAYERS) {
-				Player player = mPlayer.getPlayer();
-				// If VIP
-				if (player.hasPermission("murder.joinfull")) {
-					if (!playMatch.kickLastNonVIP()) {
-						player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
-								"Match full of VIP players, can't join.");
-						return;
-					}
-				} else {
-					player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
-							"Match full. Only VIPs can join full matches.");
-					return;
-				}
+		PlayMatch playMatch = MatchManager.getPlayMatch(index);
+		// If full
+		if (playMatch.getMPlayers().size() >= PlayMatch.MAX_PLAYERS) {
+			Player player = mPlayer.getPlayer();
+			// If not VIP
+			if (!player.hasPermission("murder.joinfull")) {
+				player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
+						"Match full. Only VIPs can join full matches.");
+				return;
 			}
-			mPlayer.setMatch(playMatch);
 		}
+		mPlayer.setMatch(playMatch);
 	}
 }

@@ -49,7 +49,7 @@ public final class PlayerManager {
 		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
 		if (onlinePlayers.length >= Murder.MAX_PLAYERS) {
 			if (player.hasPermission("murder.joinfull")) {
-				for (int i = onlinePlayers.length; i >= 0; i--) {
+				for (int i = onlinePlayers.length-1; i >= 0; i--) {
 					if (!onlinePlayers[i].hasPermission("murder.joinfull")) {
 						onlinePlayers[i].kickPlayer("You were kicked to make room for a VIP.");
 						break;

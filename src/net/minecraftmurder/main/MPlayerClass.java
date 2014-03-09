@@ -23,7 +23,7 @@ public enum MPlayerClass {
 	public static final Material MATERIAL_SPEEDBOOST = Material.SUGAR;
 	public static final Material MATERIAL_TICKET = Material.PAPER;
 	public static final MItem[] ITEM_KNIFES = {
-		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.GOLD_SWORD, MItem.IRON_SWORD, MItem.DIAMOND_SWORD};
+		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.IRON_SWORD, MItem.GOLD_SWORD, MItem.DIAMOND_SWORD};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
 	public static final Material MATERIAL_TELEPORTER = Material.ENDER_PEARL;
 	

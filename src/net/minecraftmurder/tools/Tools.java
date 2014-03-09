@@ -116,27 +116,7 @@ public abstract class Tools {
 		itemStack.setItemMeta(meta);
 		return itemStack;
 	}
-	
-	public static int getBlockCountInSphere (Location location, double radius) {
-		int count = 0;
-		double x = location.getX();
-		double y = location.getY();
-		double z = location.getZ();
-		
-		for (int _x = (int) -radius; _x < radius; _x++) {
-			for (int _y = (int) -radius; _y < radius; _y++) {
-				for (int _z = (int) -radius; _z < radius; _z++) {
-					// TODO Make sure this works, I dunno.
-					double length = Math.sqrt(Math.pow(_x - x, 2) + Math.pow(_y - y, 2) + Math.pow(_z - z, 2));
-					if (length <= radius)
-						count++;
-				}
-			}
-		}
-		return count;
-	}
-	
-	public static ItemStack addGlow(ItemStack item){ 
+	public static ItemStack addGlow(ItemStack item) { 
 		  net.minecraft.server.v1_7_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		  NBTTagCompound tag = null;
 		  if (!nmsStack.hasTag()) {
@@ -148,5 +128,16 @@ public abstract class Tools {
 		  tag.set("ench", ench);
 		  nmsStack.setTag(tag);
 		  return CraftItemStack.asCraftMirror(nmsStack);
+	}
+	
+	public static boolean array2DContains (Object[][] array, Object object) {
+		for (int i = 0; i < array.length; i++) {
+			for (int j = 0; j < array[i].length; j++) {
+				if (array[i][j].equals(object)) {
+					return true;
+				}
+			}
 		}
+		return false;
+	}
 }

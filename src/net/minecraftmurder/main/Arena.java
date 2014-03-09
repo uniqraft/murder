@@ -171,8 +171,8 @@ public class Arena {
 	}
 	
 	public double getSpawnDensity (Location location, String type, double radius) {
-		int blockCount = Tools.getBlockCountInSphere(location, radius);
-		int spawnCount = 0;
+		double blockCount = (4d/3d)*Math.PI*Math.pow(radius, 3);
+		double spawnCount = 0;
 		for (Spawn spawn: spawns) {
 			// Ignore spawns with a different type
 			if (!spawn.getType().equalsIgnoreCase(type))
@@ -183,7 +183,7 @@ public class Arena {
 		}
 		if (blockCount == 0)
 			return 0;
-		return (double) spawnCount / (double) blockCount;
+		return spawnCount / blockCount;
 	}
 	
 	public World getWorld () {

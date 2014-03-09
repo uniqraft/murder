@@ -29,7 +29,7 @@ public class MInventory {
 	private MItem selectedKnife;
 	private boolean shinyKnife;
 	
-	private MItem[] selectedArmor;
+	private MItem[] selectedArmor;	// BOOTS, PANTS, CHESTPLATE, HELMET
 	
 	public MInventory (MPlayer mPlayer) {
 		this.mPlayer = mPlayer;
@@ -44,6 +44,7 @@ public class MInventory {
 		for (int i = 0; i < MItem.values().length; i++) {
 			MItem mItem = MItem.values()[i];
 			mItems.put(mItem, config.getBoolean(CONFIG_ITEMS + mItem.getName(), false));
+			Player player;
 		}
 		// Override
 		mItems.put(MItem.WOOD_SWORD, true);		// Everyone owns a wooden sword :)
@@ -70,10 +71,16 @@ public class MInventory {
 		}
 		config.set(CONFIG_GEAR + "selected-sword", selectedKnife.ordinal());
 		config.set(CONFIG_GEAR + "shiny-knife", shinyKnife);
-		config.set(CONFIG_GEAR + "boots", selectedArmor[MItem.ARMOR_BOOTS]);
-		config.set(CONFIG_GEAR + "pants", selectedArmor[MItem.ARMOR_PANTS]);
-		config.set(CONFIG_GEAR + "chestplate", selectedArmor[MItem.ARMOR_CHESTPLATE]);
-		config.set(CONFIG_GEAR + "helmet", selectedArmor[MItem.ARMOR_HELMET]);
+		
+		MItem mBoots 		= selectedArmor[MItem.ARMOR_BOOTS];
+		MItem mPants 		= selectedArmor[MItem.ARMOR_PANTS];
+		MItem mChestplate 	= selectedArmor[MItem.ARMOR_CHESTPLATE];
+		MItem mHelmet 		= selectedArmor[MItem.ARMOR_HELMET];
+		
+		config.set(CONFIG_GEAR + "boots", (mBoots == null) ? null : mBoots.getName());
+		config.set(CONFIG_GEAR + "pants", (mPants == null) ? null : mPants.getName());
+		config.set(CONFIG_GEAR + "chestplate", (mChestplate == null) ? null : mChestplate.getName());
+		config.set(CONFIG_GEAR + "helmet", (mHelmet == null) ? null : mHelmet.getName());
 		
 		// Save
 		return SimpleFile.saveConfig(config, path);
@@ -112,6 +119,10 @@ public class MInventory {
 		this.selectedKnife = selectedKnife;
 		if (save) save();
 	}
+	public void setSelectedArmor (int type, MItem armor) {
+		this.selectedArmor[type] = armor;
+		save();
+	}
 	public void openInventorySelectionScreen () {
 		Inventory inventory = Bukkit.createInventory(null, 9*6, "Equipment Selection");
 		// == Knifes ==
@@ -141,7 +152,7 @@ public class MInventory {
 		inventory.setItem(8, itemShiny);
 		// == Armor ==
 		for (int x = 0; x < 4; x++) {
-			for (int y = 0; y < 4; y++) {
+			for (int y = 0; y < 5; y++) {
 				MItem mItem = MItem.ARMOR[x][y];
 				ItemStack is = new ItemStack(mItem.getMaterial(), 1);
 				
@@ -153,7 +164,11 @@ public class MInventory {
 				} else {
 					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.YELLOW + "Buy for " + ChatColor.BLUE + mItem.getCost() + ChatColor.YELLOW + " coins."));
 				}
-				inventory.setItem(2*9+9*y+x+2, is);
+				// 2*9			- Line 2
+				// +(-x+3)*9	- Different lines for each armor type.
+				// +y			- Different slot for each material type
+				// +2			- Offset to the right
+				inventory.setItem(2*9+(-x+3)*9+y+2, is);
 			}
 		}
 		

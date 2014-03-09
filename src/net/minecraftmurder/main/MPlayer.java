@@ -174,7 +174,7 @@ public class MPlayer {
 			if (count >= 0)
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + count + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
 			else
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + count + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
 			
 		}
 		return setCoins(player, getCoins(player) + count, false);

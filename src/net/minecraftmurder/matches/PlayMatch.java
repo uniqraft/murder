@@ -310,7 +310,7 @@ public class PlayMatch extends Match {
 	
 	
 	public boolean kickLastNonVIP () {
-		for (int i = getMPlayers().size(); i >= 0; i--) {
+		for (int i = getMPlayers().size()-1; i >= 0; i--) {
 			MPlayer mPlayer = getMPlayers().get(i);
 			Player player = mPlayer.getPlayer();
 			if (!player.hasPermission("murder.joinfull")) {
