@@ -45,9 +45,9 @@ public abstract class Match {
 	 * The message to be sent.
 	 */
 	public void sendMessage (String message) {
-		MLogger.log(Level.WARNING, "Sending message to: ");
+		MLogger.log(Level.INFO, "Sending message to: ");
 		for (MPlayer mPlayer: getMPlayers()) {
-			MLogger.log(Level.WARNING, mPlayer.getName());
+			MLogger.log(Level.INFO, mPlayer.getName());
 			mPlayer.getPlayer().sendMessage(message);
 		}
 	}

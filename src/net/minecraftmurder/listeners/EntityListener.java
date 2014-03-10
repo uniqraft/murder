@@ -4,10 +4,12 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.managers.PlayerManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +26,15 @@ public class EntityListener implements Listener {
 		MPlayerClass.setFoodLevel(PlayerManager.getMPlayer((Player) event.getEntity()));
 		event.setCancelled(true);
 	}
+	
+	@EventHandler
+    public void itemFrameItemRemoval(EntityDamageEvent event) {
+		if (Murder.getInstance().isDevMode()) return;
+		
+        if (event.getEntity() instanceof ItemFrame) {
+        	event.setCancelled(true);
+        }
+    }
 	
 	@EventHandler
 	public void onProjectileHit (ProjectileHitEvent event) {
