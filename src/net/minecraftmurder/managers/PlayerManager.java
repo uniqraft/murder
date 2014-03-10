@@ -39,7 +39,7 @@ public final class PlayerManager {
 				return;
 			} else {
 				// If there isn't a date, the file is corrupt
-				player.kickPlayer("You are banned. Contact staff.");
+				player.kickPlayer("Player file corrupt. Contact staff.");
 				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
 			}
 			return;
@@ -61,12 +61,11 @@ public final class PlayerManager {
 		// Greet player
 		if (firstJoin) {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
-			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_MAIN + " joined the game!", player);
+			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_LOWLIGHT + " joined the game!", player);
 		} else {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome to Murder!");
 			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_LOWLIGHT + " joined the game for their first time!", player);
 		}
-			
 		
 		// Send a clickable link to the player
 		IChatBaseComponent comp = ChatSerializer
