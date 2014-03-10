@@ -54,6 +54,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		event.setQuitMessage(null);
 		PlayerManager.onPlayerQuit(event.getPlayer());
 	}
 

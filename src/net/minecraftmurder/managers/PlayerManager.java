@@ -49,18 +49,11 @@ public final class PlayerManager {
 		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
 		if (onlinePlayers.length >= Murder.MAX_PLAYERS) {
 			if (player.hasPermission("murder.joinfull")) {
-				for (int i = onlinePlayers.length-1; i >= 0; i--) {
-					if (!onlinePlayers[i].hasPermission("murder.joinfull")) {
-						onlinePlayers[i].kickPlayer("You were kicked to make room for a VIP.");
-						break;
-					}
-					if (i == 0) {
-						player.kickPlayer("Server is full and there are no non-VIP players online to kick.");
-						return;
-					}
-				}
+				if (onlinePlayers.length >= Murder.MAX_PLAYERS+Murder.VIP_SLOTS)
+				player.kickPlayer("No empty VIP slots.");
+				return;
 			} else {
-				player.kickPlayer("Server is full. Only people who purchase VIP can join.");
+				player.kickPlayer("Server is full. Only VIP players can join.");
 				return;
 			}
 		}

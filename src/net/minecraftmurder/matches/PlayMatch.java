@@ -308,21 +308,6 @@ public class PlayMatch extends Match {
 		}
 	}
 	
-	
-	public boolean kickLastNonVIP () {
-		for (int i = getMPlayers().size()-1; i >= 0; i--) {
-			MPlayer mPlayer = getMPlayers().get(i);
-			Player player = mPlayer.getPlayer();
-			if (!player.hasPermission("murder.joinfull")) {
-				player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
-						"You were kicked from the match to make room for a VIP player.");
-				mPlayer.setMatch(MatchManager.getLobbyMatch());
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	@Override
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);

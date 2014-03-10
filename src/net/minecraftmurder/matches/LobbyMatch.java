@@ -29,7 +29,6 @@ public class LobbyMatch extends Match {
 		Spawn spawn = arena.getRandomSpawn("player");
 		if (spawn == null) return;
 		player.teleport(spawn.getLocation());
-		
 	}
 
 	@Override
