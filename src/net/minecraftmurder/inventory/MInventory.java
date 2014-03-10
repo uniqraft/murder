@@ -44,7 +44,6 @@ public class MInventory {
 		for (int i = 0; i < MItem.values().length; i++) {
 			MItem mItem = MItem.values()[i];
 			mItems.put(mItem, config.getBoolean(CONFIG_ITEMS + mItem.getName(), false));
-			Player player;
 		}
 		// Override
 		mItems.put(MItem.WOOD_SWORD, true);		// Everyone owns a wooden sword :)
