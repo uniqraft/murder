@@ -24,6 +24,7 @@ public enum MPlayerClass {
 	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR; 
 	public static final Material MATERIAL_SPEEDBOOST = Material.SUGAR;
 	public static final Material MATERIAL_TICKET = Material.PAPER;
+	public static final Material MATERIA_LEAVE = Material.SLIME_BALL;
 	public static final MItem[] ITEM_KNIFES = {
 		MItem.WOOD_SWORD, MItem.STONE_SWORD, MItem.IRON_SWORD, MItem.GOLD_SWORD, MItem.DIAMOND_SWORD};
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
@@ -40,7 +41,9 @@ public enum MPlayerClass {
 	}
 	public static void setDefaultClassInventory (MPlayer mPlayer, MPlayerClass playerClass) {
 		Player player = mPlayer.getPlayer();
+		player.setFlying(false);
 		PlayerInventory inventory = player.getInventory();
+		inventory.setHeldItemSlot(0);
 		inventory.clear();
 		inventory.setBoots(null);
 		inventory.setLeggings(null);
@@ -54,11 +57,13 @@ public enum MPlayerClass {
 		case PREGAMEMAN:
 			giveTicket(inventory);
 			giveArmor(mPlayer);
+			giveLeaveItem(inventory);
 			break;
 		case INNOCENT:
 			giveArmor(mPlayer);
 			break;
 		case SPECTATOR:
+			giveLeaveItem(inventory);
 			break;
 		case GUNNER:
 			giveGun(inventory);
@@ -142,6 +147,11 @@ public enum MPlayerClass {
 	public static void giveTicket (Inventory inventory) {
 		ItemStack item = new ItemStack (MATERIAL_TICKET);
 		Tools.setItemStackName(item, ChatColor.AQUA + "Murderer Ticket", Arrays.asList(ChatColor.YELLOW + "Increase your chances of becoming the murderer!", ChatColor.YELLOW + "Click to buy for " + ChatColor.GREEN + TICKET_COST + ChatColor.YELLOW + " coins!"));
+		inventory.setItem(7, item);
+	}
+	public static void giveLeaveItem (Inventory inventory) {
+		ItemStack item = new ItemStack (MATERIA_LEAVE);
+		Tools.setItemStackName(item, ChatColor.RED + "Leave Match", Arrays.asList("Takes you back to the lobby.", "Right-Click to use."));
 		inventory.setItem(8, item);
 	}
 	public static void giveArmor (MPlayer mPlayer) {

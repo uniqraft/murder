@@ -22,12 +22,13 @@ import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public final class PlayerManager {	
-	private static List<MPlayer> mplayers = new ArrayList<MPlayer>();
+	private static List<MPlayer> mPlayers = new ArrayList<MPlayer>();
 	
 	public static void initialize () {}
 	
 	public static void onPlayerJoin (Player player) {
 		boolean firstJoin = !SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml");
+		MLogger.log(Level.INFO, player.getName() + " connected.");
 		
 		// Kick if player is banned
 		if (MPlayer.isBanned(player.getName())) {
@@ -36,7 +37,6 @@ public final class PlayerManager {
 				String dateString = date.toString();
 				player.kickPlayer("You are banned until " + dateString);
 				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
-				return;
 			} else {
 				// If there isn't a date, the file is corrupt
 				player.kickPlayer("Player file corrupt. Contact staff.");
@@ -47,13 +47,16 @@ public final class PlayerManager {
 		
 		// If the server is full
 		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
-		if (onlinePlayers.length >= Murder.MAX_PLAYERS) {
+		if (onlinePlayers.length > Murder.MAX_PLAYERS) {
 			if (player.hasPermission("murder.joinfull")) {
-				if (onlinePlayers.length >= Murder.MAX_PLAYERS+Murder.VIP_SLOTS)
-				player.kickPlayer("No empty VIP slots.");
-				return;
+				if (onlinePlayers.length > Murder.MAX_PLAYERS+Murder.VIP_SLOTS) {
+					player.kickPlayer("No empty VIP slots.");
+					MLogger.log(Level.INFO, "VIP Player " + player.getName() + " was rejected. No free VIP slots.");
+					return;
+				}
 			} else {
 				player.kickPlayer("Server is full. Only VIP players can join.");
+				MLogger.log(Level.INFO, "Player " + player.getName() + " was rejected. Server full.");
 				return;
 			}
 		}
@@ -75,7 +78,7 @@ public final class PlayerManager {
 		
 		// Add player
 		MPlayer mplayer = new MPlayer (player.getName()); 
-		mplayers.add(mplayer);
+		mPlayers.add(mplayer);
 		
 		// Move player to lobby
 		mplayer.setMatch(MatchManager.getLobbyMatch());
@@ -88,7 +91,7 @@ public final class PlayerManager {
 			Bukkit.getLogger().log(Level.INFO, "Player " + player.getName() + " doesn't have an entry in PlayerManager, but left the game. Most likely this user is banned but tried to connect.");
 			return;
 		}
-		mplayers.remove(mPlayer);
+		mPlayers.remove(mPlayer);
 		
 		Match match = mPlayer.getMatch();
 		if (match == null) {
@@ -102,7 +105,7 @@ public final class PlayerManager {
 		return getMPlayer(player.getName());
 	}
 	public static MPlayer getMPlayer (String playerName) {
-		for (MPlayer mp: mplayers) {
+		for (MPlayer mp: mPlayers) {
 			if (mp.getName().equals(playerName)) {
 				return mp;
 			}
@@ -113,7 +116,7 @@ public final class PlayerManager {
 		return getPlayer(mplayer.getName());
 	}
 	public static Player getPlayer (String mplayerName) {
-		for (MPlayer mp: mplayers) {
+		for (MPlayer mp: mPlayers) {
 			if (mp.getName().equals(mplayerName)) {
 				return Bukkit.getPlayer(mplayerName);
 			}
@@ -122,6 +125,6 @@ public final class PlayerManager {
 	}
 
 	public static List<MPlayer> getMPlayers() {
-		return mplayers;
+		return mPlayers;
 	}
 }

@@ -33,9 +33,9 @@ public enum MItem {
 	ARMOR_CHAIN_PANTS
 	("armor-chain-pants", "Chainmail Leggings", 1, Material.CHAINMAIL_LEGGINGS),
 	ARMOR_CHAIN_CHESTPLATE
-	("armor-gold-chest", "Chainmail Chestplate", 1, Material.CHAINMAIL_CHESTPLATE),
+	("armor-chain-chest", "Chainmail Chestplate", 1, Material.CHAINMAIL_CHESTPLATE),
 	ARMOR_CHAIN_HELMET
-	("armor-gold-helmet", "Chainmail Helmet", 1, Material.CHAINMAIL_HELMET),
+	("armor-chain-helmet", "Chainmail Helmet", 1, Material.CHAINMAIL_HELMET),
 	// Gold
 	ARMOR_GOLD_BOOTS
 	("armor-gold-boots", "Golden Boots", 1, Material.GOLD_BOOTS),

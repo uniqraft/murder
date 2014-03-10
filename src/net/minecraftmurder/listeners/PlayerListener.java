@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.matches.Match;
@@ -231,6 +232,9 @@ public class PlayerListener implements Listener {
 			event.setCancelled(true);
 			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + 
 					"To buy a ticket, open your inventory and click it!");
+		} else if (itemInHand.getType() == MPlayerClass.MATERIA_LEAVE && rightClicked) {
+			event.setCancelled(true);
+			mPlayer.setMatch(MatchManager.getLobbyMatch());
 		}
 	}
 }

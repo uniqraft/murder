@@ -21,7 +21,6 @@ import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
-import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
@@ -155,10 +154,13 @@ public class PlayMatch extends Match {
 			// If the match hasn't started
 			List<MPlayer> mPlayers = getMPlayers();
 			int count = mPlayers.size();
-			// If empty, reset count down
+			
+			// If empty, reset count down and cancel
 			if (count < 1) {
 				countdown = COUNTDOWN_TIME;
+				return;
 			}
+			
 			// Clear all drops
 			if (arena != null) {
 				World world = arena.getWorld();
