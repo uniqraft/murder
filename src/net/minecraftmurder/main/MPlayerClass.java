@@ -3,6 +3,7 @@ package net.minecraftmurder.main;
 import java.util.Arrays;
 import java.util.logging.Level;
 
+import net.minecraftmurder.inventory.MInventory;
 import net.minecraftmurder.inventory.MItem;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
@@ -12,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public enum MPlayerClass {
 	LOBBYMAN, PREGAMEMAN, MURDERER, GUNNER, INNOCENT, SPECTATOR;
@@ -38,8 +40,12 @@ public enum MPlayerClass {
 	}
 	public static void setDefaultClassInventory (MPlayer mPlayer, MPlayerClass playerClass) {
 		Player player = mPlayer.getPlayer();
-		Inventory inventory = player.getInventory();
+		PlayerInventory inventory = player.getInventory();
 		inventory.clear();
+		inventory.setBoots(null);
+		inventory.setLeggings(null);
+		inventory.setChestplate(null);
+		inventory.setHelmet(null);
 		
 		switch (playerClass) {
 		case LOBBYMAN:
@@ -47,16 +53,20 @@ public enum MPlayerClass {
 			break;
 		case PREGAMEMAN:
 			giveTicket(inventory);
+			giveArmor(mPlayer);
 			break;
 		case INNOCENT:
+			giveArmor(mPlayer);
 			break;
 		case SPECTATOR:
 			break;
 		case GUNNER:
 			giveGun(inventory);
+			giveArmor(mPlayer);
 			break;
 		case MURDERER:
 			giveKnife(mPlayer);
+			giveArmor(mPlayer);
 			giveCompass(inventory);
 			giveTeleporter(inventory);
 			giveSpeedbost(inventory);
@@ -133,5 +143,21 @@ public enum MPlayerClass {
 		ItemStack item = new ItemStack (MATERIAL_TICKET);
 		Tools.setItemStackName(item, ChatColor.AQUA + "Murderer Ticket", Arrays.asList(ChatColor.YELLOW + "Increase your chances of becoming the murderer!", ChatColor.YELLOW + "Click to buy for " + ChatColor.GREEN + TICKET_COST + ChatColor.YELLOW + " coins!"));
 		inventory.setItem(8, item);
+	}
+	public static void giveArmor (MPlayer mPlayer) {
+		PlayerInventory inventory = mPlayer.getPlayer().getInventory();
+		MInventory mInventory = mPlayer.getMInventory();
+		MItem boots = mInventory.getSelectedArmor(MItem.ARMOR_BOOTS);
+		MItem pants = mInventory.getSelectedArmor(MItem.ARMOR_PANTS);
+		MItem chestplate = mInventory.getSelectedArmor(MItem.ARMOR_CHESTPLATE);
+		MItem helmet = mInventory.getSelectedArmor(MItem.ARMOR_HELMET);
+		if (boots != null)
+			inventory.setBoots(new ItemStack(boots.getMaterial()));
+		if (pants != null)
+			inventory.setLeggings(new ItemStack(pants.getMaterial()));
+		if (chestplate != null)
+			inventory.setChestplate(new ItemStack(chestplate.getMaterial()));
+		if (helmet != null)
+			inventory.setHelmet(new ItemStack(helmet.getMaterial()));
 	}
 }

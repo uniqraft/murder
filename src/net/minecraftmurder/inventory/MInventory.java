@@ -123,6 +123,9 @@ public class MInventory {
 		this.selectedArmor[type] = armor;
 		save();
 	}
+	public MItem getSelectedArmor (int type) {
+		return selectedArmor[type];
+	}
 	public void openInventorySelectionScreen () {
 		Inventory inventory = Bukkit.createInventory(null, 9*6, "Equipment Selection");
 		// == Knifes ==
@@ -157,7 +160,7 @@ public class MInventory {
 				ItemStack is = new ItemStack(mItem.getMaterial(), 1);
 				
 				if (mItem.equals(selectedArmor[x])) {
-					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Currently equipped!"));
+					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Click to unequip!"));
 					is.addEnchantment(Murder.emptyEnchantment, 1);
 				} else if (ownsMItem(mItem)){
 					Tools.setItemStackName(is, ChatColor.AQUA + mItem.getReadableName(), Arrays.asList(ChatColor.GREEN + "Click to equip!"));
@@ -193,5 +196,9 @@ public class MInventory {
 		setOwnedMItem(mItem, true, true);
 		player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You bought the " + ChatContext.COLOR_HIGHLIGHT + mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 		return true;
+	}
+	
+	public boolean isEquiped (MItem mItem) {
+		return (Arrays.asList(selectedArmor).contains(mItem) || selectedKnife.equals(mItem));
 	}
 }
