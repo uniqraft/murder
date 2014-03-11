@@ -214,6 +214,7 @@ public class PlayMatch extends Match {
 			isRanked = true;
 		}
 		
+		// Increase chance for ticket users
 		List<MPlayer> rList = new ArrayList<MPlayer>();
 		for (MPlayer mPlayer: getMPlayers()) {
 			rList.add(mPlayer);
@@ -221,9 +222,13 @@ public class PlayMatch extends Match {
 				for (int i = 0; i < (getMPlayers().size() / 2); i++)
 					rList.add(mPlayer);
 		}
-		// Select a murderer and a gunner
+		
 		SecureRandom random = new SecureRandom();
+		// Select a murderer
 		int m = random.nextInt(rList.size());
+		// Remove all entries of the selected murderer
+		while (rList.remove(rList.get(m)));
+		// Select a gunner
 		int g;
 		do {
 			g = random.nextInt(rList.size());
@@ -256,20 +261,21 @@ public class PlayMatch extends Match {
 			}
 			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 		}
-		System.out.println("Match " + this.hashCode() + " started.");
+		MLogger.log(Level.INFO, "Match " + this.hashCode() + " started.");
 	}
 	private void end () {
+		MLogger.log(Level.INFO, "Match " + this.hashCode() + " ended.");
 		isPlaying = false;
 		countdown = COUNTDOWN_TIME + MATCHEND_TIME;
 		final PlayMatch playMatch = this;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Match " + playMatch.hashCode() + " is switching arena.");
+				MLogger.log(Level.INFO, "Match " + playMatch.hashCode() + " swiches arena.");
 				switchArena();
 				
+				// Reconnect each player to the match
 				for (MPlayer mPlayer: playMatch.getMPlayers()) {
-					// Act like if the player reconnected
 					playMatch.onPlayerQuit(mPlayer.getPlayer());
 					playMatch.onPlayerJoin(mPlayer.getPlayer());
 				}
@@ -323,13 +329,8 @@ public class PlayMatch extends Match {
 	@Override
 	public void onPlayerQuit(Player player) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
-		List<MPlayer> toBeRemoved = new ArrayList<MPlayer>();
-		for (MPlayer mP: ticketUsers) {
-			if (mP.equals(mPlayer)) {
-				toBeRemoved.add(mP);
-			}
-		}
-		ticketUsers.removeAll(toBeRemoved);
+		// Remove all this players entries from the list of ticket users
+		while (ticketUsers.remove(mPlayer));
 		checkForEnd();
 	}
 	@Override
