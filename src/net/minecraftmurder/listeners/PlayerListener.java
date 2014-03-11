@@ -240,7 +240,7 @@ public class PlayerListener implements Listener {
 		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_SPEEDBOOST && rightClicked) {
 			event.setCancelled(true);
 			event.getPlayer().setItemInHand(null);
-			player.setVelocity(player.getVelocity().add(player.getLocation().getDirection().multiply(10)));
+			player.setVelocity(player.getVelocity().add(player.getLocation().getDirection().multiply(2)));
 		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_TICKET && rightClicked) {
 			event.setCancelled(true);
 			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + 
