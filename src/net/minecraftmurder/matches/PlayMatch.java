@@ -249,7 +249,8 @@ public class PlayMatch extends Match {
 		murderer = mMurderer.getName();
 		
 		MLogger.log(Level.INFO, mMurderer.getName() + " is the murderer in Match " + this.hashCode() + ".");
-		MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in Match " + this.hashCode() + ".");
+		if (mGunner != null)
+			MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in Match " + this.hashCode() + ".");
 		
 		// Tell all players what role they play
 		for (MPlayer mPlayer: mPlayers) {
