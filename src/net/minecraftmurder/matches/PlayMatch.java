@@ -29,7 +29,7 @@ public class PlayMatch extends Match {
 	public static final int MATCH_TIME = 60 * 6;
 	public static final int COUNTDOWN_TIME = 20;
 	public static final int MATCHEND_TIME = 10;
-	public static final int MIN_PLAYERS = 2;
+	public static final int MIN_PLAYERS = 1;
 	public static final int MAX_PLAYERS = 12;
 	public static final int MIN_PLAYERS_RANKED = 2;
 	
@@ -214,36 +214,38 @@ public class PlayMatch extends Match {
 			isRanked = true;
 		}
 		
-		// Increase chance for ticket users
 		List<MPlayer> rList = new ArrayList<MPlayer>();
 		for (MPlayer mPlayer: getMPlayers()) {
 			rList.add(mPlayer);
-			if (ticketUsers.contains(mPlayer))
-				for (int i = 0; i < (getMPlayers().size() / 2); i++)
-					rList.add(mPlayer);
+		}
+		// Increase chance for ticket users
+		for (MPlayer ticketUser: ticketUsers) {
+			for (int i = 0; i < Math.max(1, (getMPlayers().size() / 2)); i++)
+				rList.add(ticketUser);
 		}
 		
 		SecureRandom random = new SecureRandom();
-		// Select a murderer
 		int m = random.nextInt(rList.size());
+		MPlayer mMurderer = rList.get(m);
+		MPlayer mGunner = null;
 		// Remove all entries of the selected murderer
-		while (rList.remove(rList.get(m)));
-		// Select a gunner
-		int g;
-		do {
-			g = random.nextInt(rList.size());
-		} while (g == m);
+		while (rList.remove(mMurderer));
+		
+		if (rList.size() > 0) {
+			// Select a gunner
+			int g;
+			do {
+				g = random.nextInt(rList.size());
+			} while (g == m);
+			mGunner = rList.get(g);
+			mGunner.switchPlayerClass(MPlayerClass.GUNNER);
+		}
 		
 		// Clear list of player who used a ticket
 		ticketUsers.clear();
 		
 		// Equip murderer
-		MPlayer mMurderer = rList.get(m);
 		mMurderer.switchPlayerClass(MPlayerClass.MURDERER);
-		// Equip gunner
-		MPlayer mGunner = rList.get(g);
-		mGunner.switchPlayerClass(MPlayerClass.GUNNER);
-		
 		murderer = mMurderer.getName();
 		
 		MLogger.log(Level.INFO, mMurderer.getName() + " is the murderer in Match " + this.hashCode() + ".");
