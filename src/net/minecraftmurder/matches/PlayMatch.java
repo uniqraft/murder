@@ -335,6 +335,11 @@ public class PlayMatch extends Match {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		// Remove all this players entries from the list of ticket users
 		ticketUsers.removeAll(Collections.singleton(mPlayer));
+		if (mPlayer.getName().equals(murderer)) {
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", left the game.");
+			end();
+			return;
+		}
 		checkForEnd();
 	}
 	@Override
