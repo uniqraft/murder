@@ -2,6 +2,7 @@ package net.minecraftmurder.matches;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -123,7 +124,7 @@ public class PlayMatch extends Match {
 				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + 
 						"The Murderer, " + ChatContext.COLOR_HIGHLIGHT + 
 						mMurderer.getName() + ChatContext.COLOR_LOWLIGHT +
-						" ran out of time.");
+						", ran out of time.");
 				mMurderer.onDeath();
 			}
 			if (countdown % 60 == 0) {
@@ -184,7 +185,7 @@ public class PlayMatch extends Match {
 					start();
 				}
 			} else if (countdown % 10 == 0 || (countdown >= 1 && countdown <= 3)) {
-				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in " + ChatContext.COLOR_HIGHLIGHT + countdown + " seconds" + ChatContext.COLOR_LOWLIGHT + "!");
+				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in " + ChatContext.COLOR_HIGHLIGHT + countdown + " second" + (countdown != 1 ? "s" : "") + ChatContext.COLOR_LOWLIGHT + "!");
 			}
 		}
 	}
@@ -229,7 +230,7 @@ public class PlayMatch extends Match {
 		MPlayer mMurderer = rList.get(m);
 		MPlayer mGunner = null;
 		// Remove all entries of the selected murderer
-		while (rList.remove(mMurderer));
+		rList.removeAll(Collections.singleton(mMurderer));
 		
 		if (rList.size() > 0) {
 			// Select a gunner
@@ -333,7 +334,7 @@ public class PlayMatch extends Match {
 	public void onPlayerQuit(Player player) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		// Remove all this players entries from the list of ticket users
-		while (ticketUsers.remove(mPlayer));
+		ticketUsers.removeAll(Collections.singleton(mPlayer));
 		checkForEnd();
 	}
 	@Override
