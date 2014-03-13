@@ -18,7 +18,7 @@ commands:
       usage: /<command> <action> <player> <count>
    warn:
       description: Commands controlling warns.
-      usage: /<command> <player> [level]
+      usage: /<command> <player> [rule]
 
 permissions:
     murder.*:
