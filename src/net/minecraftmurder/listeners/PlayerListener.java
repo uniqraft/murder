@@ -72,11 +72,13 @@ public class PlayerListener implements Listener {
 		PlayerManager.onPlayerQuit(event.getPlayer());
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if (Murder.getInstance().isStarted()) {
 			// Only drop iron ingots
 			event.setCancelled(!(event.getItemDrop().getItemStack().getType() == MPlayerClass.MATERIAL_GUNPART));
+			event.getPlayer().updateInventory();
 		}
 	}
 
