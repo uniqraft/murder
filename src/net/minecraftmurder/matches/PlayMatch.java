@@ -2,6 +2,7 @@ package net.minecraftmurder.matches;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -29,7 +30,7 @@ public class PlayMatch extends Match {
 	public static final int MATCH_TIME = 60 * 6;
 	public static final int COUNTDOWN_TIME = 20;
 	public static final int MATCHEND_TIME = 10;
-	public static final int MIN_PLAYERS = 2;
+	public static final int MIN_PLAYERS = 1;
 	public static final int MAX_PLAYERS = 12;
 	public static final int MIN_PLAYERS_RANKED = 2;
 	
@@ -123,7 +124,7 @@ public class PlayMatch extends Match {
 				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + 
 						"The Murderer, " + ChatContext.COLOR_HIGHLIGHT + 
 						mMurderer.getName() + ChatContext.COLOR_LOWLIGHT +
-						" ran out of time.");
+						", ran out of time.");
 				mMurderer.onDeath();
 			}
 			if (countdown % 60 == 0) {
@@ -184,7 +185,7 @@ public class PlayMatch extends Match {
 					start();
 				}
 			} else if (countdown % 10 == 0 || (countdown >= 1 && countdown <= 3)) {
-				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in " + ChatContext.COLOR_HIGHLIGHT + countdown + " seconds" + ChatContext.COLOR_LOWLIGHT + "!");
+				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in " + ChatContext.COLOR_HIGHLIGHT + countdown + " second" + (countdown != 1 ? "s" : "") + ChatContext.COLOR_LOWLIGHT + "!");
 			}
 		}
 	}
@@ -214,40 +215,43 @@ public class PlayMatch extends Match {
 			isRanked = true;
 		}
 		
-		// Increase chance for ticket users
 		List<MPlayer> rList = new ArrayList<MPlayer>();
 		for (MPlayer mPlayer: getMPlayers()) {
 			rList.add(mPlayer);
-			if (ticketUsers.contains(mPlayer))
-				for (int i = 0; i < (getMPlayers().size() / 2); i++)
-					rList.add(mPlayer);
+		}
+		// Increase chance for ticket users
+		for (MPlayer ticketUser: ticketUsers) {
+			for (int i = 0; i < Math.max(1, (getMPlayers().size() / 2)); i++)
+				rList.add(ticketUser);
 		}
 		
 		SecureRandom random = new SecureRandom();
-		// Select a murderer
 		int m = random.nextInt(rList.size());
+		MPlayer mMurderer = rList.get(m);
+		MPlayer mGunner = null;
 		// Remove all entries of the selected murderer
-		while (rList.remove(rList.get(m)));
-		// Select a gunner
-		int g;
-		do {
-			g = random.nextInt(rList.size());
-		} while (g == m);
+		rList.removeAll(Collections.singleton(mMurderer));
+		
+		if (rList.size() > 0) {
+			// Select a gunner
+			int g;
+			do {
+				g = random.nextInt(rList.size());
+			} while (g == m);
+			mGunner = rList.get(g);
+			mGunner.switchPlayerClass(MPlayerClass.GUNNER);
+		}
 		
 		// Clear list of player who used a ticket
 		ticketUsers.clear();
 		
 		// Equip murderer
-		MPlayer mMurderer = rList.get(m);
 		mMurderer.switchPlayerClass(MPlayerClass.MURDERER);
-		// Equip gunner
-		MPlayer mGunner = rList.get(g);
-		mGunner.switchPlayerClass(MPlayerClass.GUNNER);
-		
 		murderer = mMurderer.getName();
 		
 		MLogger.log(Level.INFO, mMurderer.getName() + " is the murderer in Match " + this.hashCode() + ".");
-		MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in Match " + this.hashCode() + ".");
+		if (mGunner != null)
+			MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in Match " + this.hashCode() + ".");
 		
 		// Tell all players what role they play
 		for (MPlayer mPlayer: mPlayers) {
@@ -330,7 +334,12 @@ public class PlayMatch extends Match {
 	public void onPlayerQuit(Player player) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		// Remove all this players entries from the list of ticket users
-		while (ticketUsers.remove(mPlayer));
+		ticketUsers.removeAll(Collections.singleton(mPlayer));
+		if (mPlayer.getName().equals(murderer)) {
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", left the game.");
+			end();
+			return;
+		}
 		checkForEnd();
 	}
 	@Override

@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 public class PlayerListener implements Listener {
 	@EventHandler
@@ -242,7 +243,9 @@ public class PlayerListener implements Listener {
 		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_SPEEDBOOST && rightClicked) {
 			event.setCancelled(true);
 			event.getPlayer().setItemInHand(null);
-			player.setVelocity(player.getVelocity().add(player.getLocation().getDirection().multiply(2)));
+			Vector velocity = player.getVelocity().add(player.getLocation().getDirection().multiply(3));
+			velocity.setY(Math.max(1d, velocity.getY() / 10));
+			player.setVelocity(velocity);
 		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_TICKET && rightClicked) {
 			event.setCancelled(true);
 			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + 

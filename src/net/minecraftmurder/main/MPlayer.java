@@ -9,6 +9,7 @@ import net.minecraftmurder.inventory.MInventory;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
@@ -202,7 +203,7 @@ public class MPlayer {
 			p.kickPlayer("You were punished for inappropriate behavior.");
 		setUpcomingBan(player, p == null);
 		
-		Bukkit.getLogger().log(Level.INFO, player + "'s warn level was increased by " + level);
+		MLogger.log(Level.INFO, player + "'s warn level was increased by " + level);
 		
 		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		config.set("warn.level", totalLevel);
