@@ -28,7 +28,7 @@ public final class MatchManager {
 	public static LobbyMatch getLobbyMatch () {
 		if (lobbyMatch == null) {
 			MLogger.log(Level.INFO, "No Lobby Match, creating new one.");
-			return new LobbyMatch(ArenaManager.getLobbyArena());
+			return lobbyMatch = new LobbyMatch(ArenaManager.getLobbyArena());
 		}
 
 		return lobbyMatch;
