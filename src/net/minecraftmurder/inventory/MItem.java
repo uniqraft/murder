@@ -7,62 +7,62 @@ public enum MItem {
 	WOOD_SWORD
 	("wood-knife", "Wooden Knife", 0, Material.WOOD_SWORD),
 	STONE_SWORD		
-	("stone-knife", "Stone Knife", 1, Material.STONE_SWORD),
+	("stone-knife", "Stone Knife", 750, Material.STONE_SWORD),
 	IRON_SWORD		
-	("iron-knife", "Iron Knife", 2, Material.IRON_SWORD),
+	("iron-knife", "Iron Knife", 1500, Material.IRON_SWORD),
 	GOLD_SWORD		
-	("gold-knife", "Golden Knife", 3, Material.GOLD_SWORD),
+	("gold-knife", "Golden Knife", 3000, Material.GOLD_SWORD),
 	DIAMOND_SWORD	
-	("diamond-knife", "Diamond Knife", 4, Material.DIAMOND_SWORD),
+	("diamond-knife", "Diamond Knife", 6000, Material.DIAMOND_SWORD),
 	SHINY_SWORD_EFFECT
-	("shiny-knife", "Shiny Knife Effect", 5, Material.EYE_OF_ENDER),
+	("shiny-knife", "Shiny Knife Effect", 5000, Material.EYE_OF_ENDER),
 	
 	// == Armor ==
 	// Leather
 	ARMOR_LEATHER_BOOTS
-	("armor-leather-boots", "Leather Boots", 1, Material.LEATHER_BOOTS),
+	("armor-leather-boots", "Leather Boots", 250, Material.LEATHER_BOOTS),
 	ARMOR_LEATHER_PANTS
-	("armor-leather-pants", "Leather Leggings", 1, Material.LEATHER_LEGGINGS),
+	("armor-leather-pants", "Leather Leggings", 500, Material.LEATHER_LEGGINGS),
 	ARMOR_LEATHER_CHESTPLATE
-	("armor-leather-chest", "Leather Chestplate", 1, Material.LEATHER_CHESTPLATE),
+	("armor-leather-chest", "Leather Chestplate", 750, Material.LEATHER_CHESTPLATE),
 	ARMOR_LEATHER_HELMET
-	("armor-leather-helmet", "Leather Helmet", 1, Material.LEATHER_HELMET),
+	("armor-leather-helmet", "Leather Helmet", 300, Material.LEATHER_HELMET),
 	// Chainmail
 	ARMOR_CHAIN_BOOTS
-	("armor-chain-boots", "Chainmail Boots", 1, Material.CHAINMAIL_BOOTS),
+	("armor-chain-boots", "Chainmail Boots", 500, Material.CHAINMAIL_BOOTS),
 	ARMOR_CHAIN_PANTS
-	("armor-chain-pants", "Chainmail Leggings", 1, Material.CHAINMAIL_LEGGINGS),
+	("armor-chain-pants", "Chainmail Leggings", 1000, Material.CHAINMAIL_LEGGINGS),
 	ARMOR_CHAIN_CHESTPLATE
-	("armor-chain-chest", "Chainmail Chestplate", 1, Material.CHAINMAIL_CHESTPLATE),
+	("armor-chain-chest", "Chainmail Chestplate", 1500, Material.CHAINMAIL_CHESTPLATE),
 	ARMOR_CHAIN_HELMET
-	("armor-chain-helmet", "Chainmail Helmet", 1, Material.CHAINMAIL_HELMET),
-	// Gold
-	ARMOR_GOLD_BOOTS
-	("armor-gold-boots", "Golden Boots", 1, Material.GOLD_BOOTS),
-	ARMOR_GOLD_PANTS
-	("armor-gold-pants", "Golden Leggings", 1, Material.GOLD_LEGGINGS),
-	ARMOR_GOLD_CHESTPLATE
-	("armor-gold-chest", "Golden Chestplate", 1, Material.GOLD_CHESTPLATE),
-	ARMOR_GOLD_HELMET
-	("armor-gold-helmet", "Golden Helmet", 1, Material.GOLD_HELMET),
+	("armor-chain-helmet", "Chainmail Helmet", 600, Material.CHAINMAIL_HELMET),
 	// Iron
 	ARMOR_IRON_BOOTS
-	("armor-iron-boots", "Iron Boots", 1, Material.IRON_BOOTS),
+	("armor-iron-boots", "Iron Boots", 1000, Material.IRON_BOOTS),
 	ARMOR_IRON_PANTS
-	("armor-iron-pants", "Iron Leggings", 1, Material.IRON_LEGGINGS),
+	("armor-iron-pants", "Iron Leggings", 2000, Material.IRON_LEGGINGS),
 	ARMOR_IRON_CHESTPLATE
-	("armor-iron-chest", "Iron Chestplate", 1, Material.IRON_CHESTPLATE),
+	("armor-iron-chest", "Iron Chestplate", 3000, Material.IRON_CHESTPLATE),
 	ARMOR_IRON_HELMET
-	("armor-iron-helmet", "Iron Helmet", 1, Material.IRON_HELMET),
+	("armor-iron-helmet", "Iron Helmet", 1200, Material.IRON_HELMET),
+	// Gold
+	ARMOR_GOLD_BOOTS
+	("armor-gold-boots", "Golden Boots", 2000, Material.GOLD_BOOTS),
+	ARMOR_GOLD_PANTS
+	("armor-gold-pants", "Golden Leggings", 4000, Material.GOLD_LEGGINGS),
+	ARMOR_GOLD_CHESTPLATE
+	("armor-gold-chest", "Golden Chestplate", 6000, Material.GOLD_CHESTPLATE),
+	ARMOR_GOLD_HELMET
+	("armor-gold-helmet", "Golden Helmet", 2400, Material.GOLD_HELMET),
 	// Diamond
 	ARMOR_DIAMOND_BOOTS
-	("armor-diamond-boots", "Diamond Boots", 1, Material.DIAMOND_BOOTS),
+	("armor-diamond-boots", "Diamond Boots", 4000, Material.DIAMOND_BOOTS),
 	ARMOR_DIAMOND_PANTS
-	("armor-diamond-pants", "Diamond Leggings", 41000, Material.DIAMOND_LEGGINGS),
+	("armor-diamond-pants", "Diamond Leggings", 8000, Material.DIAMOND_LEGGINGS),
 	ARMOR_DIAMOND_CHESTPLATE
-	("armor-diamond-chest", "Diamond Chestplate", 1, Material.DIAMOND_CHESTPLATE),
+	("armor-diamond-chest", "Diamond Chestplate", 12000, Material.DIAMOND_CHESTPLATE),
 	ARMOR_DIAMOND_HELMET
-	("armor-diamond-helmet", "Diamond Helmet", 1, Material.DIAMOND_HELMET);
+	("armor-diamond-helmet", "Diamond Helmet", 4800, Material.DIAMOND_HELMET);
 	
 	// == Lists ==
 	/**
