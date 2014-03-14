@@ -212,11 +212,10 @@ public class MPlayer {
 	}
 	public static Date calculateBanDate (int level) {
 		GregorianCalendar calendar = new GregorianCalendar();
-		Bukkit.getLogger().log(Level.INFO, "Time now: " + calendar.getTime().toString());
-		int l = (int) Math.pow(level / 2, 2) * 10;
+		int l = (int) Math.round(Math.pow((double)level / 5d, 6d) * 10d);
 		Bukkit.getLogger().log(Level.INFO, "Ban time in minutes: " + l);
 		calendar.add(Calendar.MINUTE, l);
-		Bukkit.getLogger().log(Level.INFO, "Ban time now: " + calendar.getTime().toString());
+		Bukkit.getLogger().log(Level.INFO, "Banned until: " + calendar.getTime().toString());
 		return calendar.getTime();
 	}
 	public static boolean isBanned (String player) {
@@ -224,14 +223,14 @@ public class MPlayer {
 		boolean toBeBanned = config.getBoolean("warn.upcomingban", false);
 		if (toBeBanned) {
 			config.set("warn.date", Tools.dateToString(calculateBanDate(config.getInt("warn.level", 0)), "-"));
+			config.set("warn.upcomingban", false);
 		}
 		String dateString = config.getString("warn.date");
 		if (dateString == null || "".equalsIgnoreCase(dateString))
 			return false;
 		
+		SimpleFile.saveConfig(config, Paths.FOLDER_PLAYERS + player + ".yml");
 		Date date = Tools.stringToDate(dateString, "-");
-		Bukkit.getLogger().log(Level.INFO, "BanTime: " + date.toString());
-		Bukkit.getLogger().log(Level.INFO, "NowTime: " + new GregorianCalendar().getTime().toString());
 		return new GregorianCalendar().getTime().before(date);
 	}
 	/**
