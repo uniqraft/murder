@@ -39,6 +39,8 @@ public enum MPlayerClass {
 			mPlayer.getPlayer().setFoodLevel(2);
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
 	public static void setDefaultClassInventory (MPlayer mPlayer, MPlayerClass playerClass) {
 		Player player = mPlayer.getPlayer();
 		player.setFlying(false);
@@ -81,6 +83,8 @@ public enum MPlayerClass {
 			MLogger.log(Level.SEVERE, "PlayerClass " + playerClass + " doesn't exist!");
 			break;
 		}
+		
+		player.updateInventory();
 	}
 	
 	public static boolean isKnife (Material material) {

@@ -205,7 +205,7 @@ public class PlayMatch extends Match {
 		
 		List<MPlayer> mPlayers = getMPlayers();
 		int count = mPlayers.size();
-		System.out.println(count + " players in Match " + this.hashCode() + ".");
+		MLogger.log(Level.INFO, count + " players in Match " + this.hashCode() + ".");
 		if (count < MIN_PLAYERS_RANKED) {
 			// If not enough players to play ranked
 			sendMessage(ChatContext.MESSAGE_NOTENOUGHPLAYERSRANKED);
@@ -216,14 +216,17 @@ public class PlayMatch extends Match {
 		}
 		
 		List<MPlayer> rList = new ArrayList<MPlayer>();
-		for (MPlayer mPlayer: getMPlayers()) {
+		for (MPlayer mPlayer: getMPlayers())
 			rList.add(mPlayer);
-		}
+		
+		MLogger.log(Level.INFO, "Players: " + rList.size());
+		
 		// Increase chance for ticket users
 		for (MPlayer ticketUser: ticketUsers) {
 			for (int i = 0; i < Math.max(1, (getMPlayers().size() / 2)); i++)
 				rList.add(ticketUser);
 		}
+		MLogger.log(Level.INFO, "Size thing Stuff: " + rList.size());
 		
 		SecureRandom random = new SecureRandom();
 		int m = random.nextInt(rList.size());
@@ -232,15 +235,28 @@ public class PlayMatch extends Match {
 		// Remove all entries of the selected murderer
 		rList.removeAll(Collections.singleton(mMurderer));
 		
+		MLogger.log(Level.INFO, "Selected: " +  mMurderer.getName());
+		MLogger.log(Level.INFO, "rList size: " + rList.size());
+		
 		if (rList.size() > 0) {
 			// Select a gunner
+			MLogger.log(Level.INFO, "Selecting gunner");
 			int g;
 			do {
 				g = random.nextInt(rList.size());
-			} while (g == m);
+				MLogger.log(Level.INFO, "Gunner: " + g);
+				MLogger.log(Level.INFO, "Murderer: " + mMurderer.toString());
+				MLogger.log(Level.INFO, "Gunner: " + rList.get(g).toString());
+				MLogger.log(Level.INFO, "Murderer: " + mMurderer.hashCode());
+				MLogger.log(Level.INFO, "Gunner: " + rList.get(g).hashCode());
+			} while (rList.get(g).equals(mMurderer));
+			
+			MLogger.log(Level.INFO, "Gunner selected");
 			mGunner = rList.get(g);
 			mGunner.switchPlayerClass(MPlayerClass.GUNNER);
 		}
+		
+		MLogger.log(Level.INFO, "Selecting people stuff");
 		
 		// Clear list of player who used a ticket
 		ticketUsers.clear();
@@ -335,10 +351,12 @@ public class PlayMatch extends Match {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		// Remove all this players entries from the list of ticket users
 		ticketUsers.removeAll(Collections.singleton(mPlayer));
-		if (mPlayer.getName().equals(murderer)) {
-			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", left the game.");
-			end();
-			return;
+		if (isPlaying) {
+			if (mPlayer.getName().equals(murderer)) {
+				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", left the game.");
+				end();
+				return;
+			}
 		}
 		checkForEnd();
 	}
