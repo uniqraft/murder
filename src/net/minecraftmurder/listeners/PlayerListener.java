@@ -61,8 +61,8 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerLogin (PlayerLoginEvent event) {
 		event.setResult(Result.ALLOWED);
-		
 		Player player = event.getPlayer();
+		
 		// Kick if player is banned
 		if (MPlayer.isBanned(player.getName())) {
 			Date date = MPlayer.getBanDate(player.getName());
