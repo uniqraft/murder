@@ -15,6 +15,7 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -24,9 +25,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class EntityListener implements Listener {
-	public void onEntityInteract(EntityInteractEvent event) {
-		if (event.getBlock().getType() == Material.SOIL && event.getEntity() instanceof Creature)
-			event.setCancelled(true);
+	@EventHandler
+	public void onCreatureSpawn (CreatureSpawnEvent event) {
+		event.setCancelled(true);
 	}
 	
 	@EventHandler

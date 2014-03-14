@@ -186,6 +186,9 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
+		if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.SOIL)
+	        event.setCancelled(true);
+		
 		boolean rightClicked = (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK);
 
 		// If clicked a block

@@ -20,8 +20,16 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class BlockListener implements Listener {
+	
+	@EventHandler
+	public void onWeatherChange (WeatherChangeEvent event) {
+		event.setCancelled(true);
+		event.getWorld().setStorm(false);
+	}
+	
 	@EventHandler
 	public void onHangingBreak (HangingBreakEvent event) {
 		if (!Murder.getInstance().isDevMode()) {
