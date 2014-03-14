@@ -63,7 +63,7 @@ permissions:
             murder.joinfull: true
     murder.vip:
         description: VIP
-        default: false
+        default: op
         children:
             murder.joinfull: true
     murder.joinfull:

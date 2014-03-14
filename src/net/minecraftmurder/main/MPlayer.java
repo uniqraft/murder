@@ -61,9 +61,10 @@ public class MPlayer {
 			// Make all players unable to see me
 			me.setGameMode(GameMode.CREATIVE);
 			for (Player otherPlayer: Bukkit.getOnlinePlayers()) {
-				// If they can see me, hide me
-				if (otherPlayer.canSee(me))
-					otherPlayer.hidePlayer(me);
+				// Don't run on self
+				if (otherPlayer == me)
+					continue;
+				otherPlayer.hidePlayer(me);
 			}
 		} else {
 			// Make all players able to see me
@@ -72,9 +73,7 @@ public class MPlayer {
 				// Don't run on self
 				if (otherPlayer == me)
 					continue;
-				// If they can't see me, show me
-				if (!otherPlayer.canSee(me))
-					otherPlayer.showPlayer(me);
+				otherPlayer.showPlayer(me);
 			}
 		}
 		
@@ -184,11 +183,11 @@ public class MPlayer {
 		
 		if (mPlayer != null && tell) {
 			if (count >= 0)
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + (vip == true ? (count / 2d) : count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + (vip == true ? (ChatContext.COLOR_HIGHLIGHT + " (x2)" + ChatContext.COLOR_LOWLIGHT + "!") : "!"));
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + (vip == true ? (int)(count / 2d) : count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + (vip == true ? (ChatContext.COLOR_INNOCENT + " (x2 = " + count + ")" + ChatContext.COLOR_LOWLIGHT + "!") : "!"));
 			else
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1 ? " coins" : " coins") + "!");
 		}
-		return setCoins(player, getCoins(player) + count, false);
+		return setCoins(player, getCoins(mPlayer.getName()) + count, false);
 	}
 	public static boolean setCoins (String player, int count, boolean tell) {
 		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");

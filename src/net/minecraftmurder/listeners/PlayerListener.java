@@ -14,7 +14,6 @@ import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -82,7 +81,7 @@ public class PlayerListener implements Listener {
 		
 		// If the server is full
 		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
-		if (onlinePlayers.length > Murder.MAX_PLAYERS) {
+		if (onlinePlayers.length >= Murder.MAX_PLAYERS) {
 			if (player.hasPermission("murder.joinfull")) {
 				if (onlinePlayers.length > Murder.MAX_PLAYERS+Murder.VIP_SLOTS) {
 					event.setResult(Result.KICK_OTHER);
@@ -118,7 +117,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		event.setQuitMessage(null);
+		event.setQuitMessage(event.getPlayer().getDisplayName() + ChatContext.COLOR_LOWLIGHT + " left the game!");
 		PlayerManager.onPlayerQuit(event.getPlayer());
 	}
 

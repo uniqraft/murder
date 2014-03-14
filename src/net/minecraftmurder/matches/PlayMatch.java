@@ -30,9 +30,9 @@ public class PlayMatch extends Match {
 	public static final int MATCH_TIME = 60 * 6;
 	public static final int COUNTDOWN_TIME = 20;
 	public static final int MATCHEND_TIME = 10;
-	public static final int MIN_PLAYERS = 1;
+	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 12;
-	public static final int MIN_PLAYERS_RANKED = 2;
+	public static final int MIN_PLAYERS_RANKED = 3;
 	
 	private boolean isPlaying;
 	private boolean isRanked;
@@ -219,14 +219,11 @@ public class PlayMatch extends Match {
 		for (MPlayer mPlayer: getMPlayers())
 			rList.add(mPlayer);
 		
-		MLogger.log(Level.INFO, "Players: " + rList.size());
-		
 		// Increase chance for ticket users
 		for (MPlayer ticketUser: ticketUsers) {
 			for (int i = 0; i < Math.max(1, (getMPlayers().size() / 2)); i++)
 				rList.add(ticketUser);
 		}
-		MLogger.log(Level.INFO, "Size thing Stuff: " + rList.size());
 		
 		SecureRandom random = new SecureRandom();
 		int m = random.nextInt(rList.size());
@@ -235,28 +232,16 @@ public class PlayMatch extends Match {
 		// Remove all entries of the selected murderer
 		rList.removeAll(Collections.singleton(mMurderer));
 		
-		MLogger.log(Level.INFO, "Selected: " +  mMurderer.getName());
-		MLogger.log(Level.INFO, "rList size: " + rList.size());
-		
 		if (rList.size() > 0) {
 			// Select a gunner
-			MLogger.log(Level.INFO, "Selecting gunner");
 			int g;
 			do {
 				g = random.nextInt(rList.size());
-				MLogger.log(Level.INFO, "Gunner: " + g);
-				MLogger.log(Level.INFO, "Murderer: " + mMurderer.toString());
-				MLogger.log(Level.INFO, "Gunner: " + rList.get(g).toString());
-				MLogger.log(Level.INFO, "Murderer: " + mMurderer.hashCode());
-				MLogger.log(Level.INFO, "Gunner: " + rList.get(g).hashCode());
 			} while (rList.get(g).equals(mMurderer));
 			
-			MLogger.log(Level.INFO, "Gunner selected");
 			mGunner = rList.get(g);
 			mGunner.switchPlayerClass(MPlayerClass.GUNNER);
 		}
-		
-		MLogger.log(Level.INFO, "Selecting people stuff");
 		
 		// Clear list of player who used a ticket
 		ticketUsers.clear();
@@ -325,8 +310,7 @@ public class PlayMatch extends Match {
 			return;
 		}
 		if (innocentCount <= 0) {
-			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_HIGHLIGHT + " wins the match!");
-			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + " was " + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + "!");
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", won the match!");
 			// Reward the murderer for winning
 			if (isRanked)
 				MPlayer.addCoins(murderer, 10, true);

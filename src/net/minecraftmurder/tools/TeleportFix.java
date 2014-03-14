@@ -54,6 +54,9 @@ public class TeleportFix implements Listener {
             	if (mPlayer.getPlayerClass() != MPlayerClass.SPECTATOR) {
             		tpedPlayer.showPlayer(player);
                     player.showPlayer(tpedPlayer);	
+            	} else {
+            		tpedPlayer.hidePlayer(player);
+                    player.hidePlayer(tpedPlayer);
             	}
             } else {
             	tpedPlayer.hidePlayer(player);
