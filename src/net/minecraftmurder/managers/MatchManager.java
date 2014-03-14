@@ -3,10 +3,12 @@ package net.minecraftmurder.managers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import net.minecraftmurder.matches.LobbyMatch;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Tools;
 
 public final class MatchManager {	
@@ -24,8 +26,10 @@ public final class MatchManager {
 	}
 	
 	public static LobbyMatch getLobbyMatch () {
-		if (lobbyMatch == null)
+		if (lobbyMatch == null) {
+			MLogger.log(Level.INFO, "No Lobby Match, creating new one.");
 			return new LobbyMatch(ArenaManager.getLobbyArena());
+		}
 
 		return lobbyMatch;
 	}

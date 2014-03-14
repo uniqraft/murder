@@ -1,5 +1,6 @@
 package net.minecraftmurder.listeners;
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -25,7 +26,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -34,8 +34,11 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -50,7 +53,53 @@ public class PlayerListener implements Listener {
 		}
 	}
 	
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler
+	public void onServerListPing (ServerListPingEvent event) {
+		event.setMaxPlayers(Murder.MAX_PLAYERS);
+	}
+	
+	@EventHandler
+	public void onPlayerLogin (PlayerLoginEvent event) {
+		event.setResult(Result.ALLOWED);
+		
+		Player player = event.getPlayer();
+		// Kick if player is banned
+		if (MPlayer.isBanned(player.getName())) {
+			Date date = MPlayer.getBanDate(player.getName());
+			if (date != null) {
+				String dateString = date.toString();
+				event.setResult(Result.KICK_OTHER);
+				event.setKickMessage("You are banned until " + dateString);
+				MLogger.log(Level.INFO, player.getName() + " tried to login but is banned until: " + dateString);
+			} else {
+				// If there isn't a date, the file is corrupt
+				event.setResult(Result.KICK_OTHER);
+				event.setKickMessage("Player file corrupt. Contact staff.");
+				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
+			}
+			return;
+		}
+		
+		// If the server is full
+		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
+		if (onlinePlayers.length > Murder.MAX_PLAYERS) {
+			if (player.hasPermission("murder.joinfull")) {
+				if (onlinePlayers.length > Murder.MAX_PLAYERS+Murder.VIP_SLOTS) {
+					event.setResult(Result.KICK_OTHER);
+					event.setKickMessage("No empty VIP slots.");
+					MLogger.log(Level.INFO, "VIP Player " + player.getName() + " was rejected. No free VIP slots.");
+					return;
+				}
+			} else {
+				event.setResult(Result.KICK_OTHER);
+				event.setKickMessage("Server is full. Only VIP players can join.");
+				MLogger.log(Level.INFO, "Player " + player.getName() + " was rejected. Server full.");
+				return;
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(null);
 		

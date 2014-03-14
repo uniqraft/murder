@@ -1,7 +1,6 @@
 package net.minecraftmurder.managers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -9,7 +8,6 @@ import net.minecraft.server.v1_7_R1.ChatSerializer;
 import net.minecraft.server.v1_7_R1.IChatBaseComponent;
 import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
 import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
@@ -28,38 +26,7 @@ public final class PlayerManager {
 	
 	public static void onPlayerJoin (Player player) {
 		boolean firstJoin = !SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml");
-		MLogger.log(Level.INFO, player.getName() + " connected.");
-		
-		// Kick if player is banned
-		if (MPlayer.isBanned(player.getName())) {
-			Date date = MPlayer.getBanDate(player.getName());
-			if (date != null) {
-				String dateString = date.toString();
-				player.kickPlayer("You are banned until " + dateString);
-				MLogger.log(Level.INFO, player.getName() + " tried to join but is banned until: " + dateString);
-			} else {
-				// If there isn't a date, the file is corrupt
-				player.kickPlayer("Player file corrupt. Contact staff.");
-				MLogger.log(Level.SEVERE, player.getName() + "'s ban date info is corrupt.");
-			}
-			return;
-		}
-		
-		// If the server is full
-		Player[] onlinePlayers = Bukkit.getOnlinePlayers();
-		if (onlinePlayers.length > Murder.MAX_PLAYERS) {
-			if (player.hasPermission("murder.joinfull")) {
-				if (onlinePlayers.length > Murder.MAX_PLAYERS+Murder.VIP_SLOTS) {
-					player.kickPlayer("No empty VIP slots.");
-					MLogger.log(Level.INFO, "VIP Player " + player.getName() + " was rejected. No free VIP slots.");
-					return;
-				}
-			} else {
-				player.kickPlayer("Server is full. Only VIP players can join.");
-				MLogger.log(Level.INFO, "Player " + player.getName() + " was rejected. Server full.");
-				return;
-			}
-		}
+		MLogger.log(Level.INFO, player.getName() + " joined.");
 		
 		// Greet player
 		if (firstJoin) {
