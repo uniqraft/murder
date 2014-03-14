@@ -170,13 +170,23 @@ public class MPlayer {
 	}
 	
 	public static boolean addCoins (String player, int count, boolean tell) {
+		return addCoins (player, count, true, false);
+	}
+	public static boolean addCoins (String player, int count, boolean tell, boolean ignoreMultiplier) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
+		boolean vip = false;
+		if (!ignoreMultiplier && count > 0)
+			if (mPlayer.getPlayer().hasPermission("murder.vip"))
+				vip = true;
+				
+		if (vip)
+			count = count * 2;
+		
 		if (mPlayer != null && tell) {
 			if (count >= 0)
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + count + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + (vip == true ? (count / 2d) : count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + (vip == true ? (ChatContext.COLOR_HIGHLIGHT + " (x2)" + ChatContext.COLOR_LOWLIGHT + "!") : "!"));
 			else
 				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + "!");
-			
 		}
 		return setCoins(player, getCoins(player) + count, false);
 	}

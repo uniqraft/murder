@@ -27,7 +27,6 @@ public class BlockListener implements Listener {
 	@EventHandler
 	public void onWeatherChange (WeatherChangeEvent event) {
 		event.setCancelled(true);
-		event.getWorld().setStorm(false);
 	}
 	
 	@EventHandler
