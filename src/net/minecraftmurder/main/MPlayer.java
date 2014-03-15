@@ -29,7 +29,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class MPlayer {
-	public final static int RELOAD_TIME = 35;
+	public final static int RELOAD_TIME = 40;
 	
 	private String name;
 	private Match match;

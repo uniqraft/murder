@@ -15,6 +15,10 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
@@ -103,7 +107,7 @@ public class PlayMatch extends Match {
 	@Override
 	public void update() {
 		countdown--;
-		if (isPlaying) {			
+		if (isPlaying) {		
 			MPlayer mMurderer = null;
 			// Loop through all players in this match
 			for (MPlayer mPlayer: getMPlayers()) {
@@ -126,6 +130,10 @@ public class PlayMatch extends Match {
 						mMurderer.getName() + ChatContext.COLOR_LOWLIGHT +
 						", ran out of time.");
 				mMurderer.onDeath();
+			}
+			if (countdown % 1 == 12) {
+				Location location = arena.getRandomSpawn("scrap").getLocation(); 
+				location.getWorld().dropItem(location, new ItemStack(MPlayerClass.MATERIAL_GUNPART));
 			}
 			if (countdown % 60 == 0) {
 				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + 
@@ -301,7 +309,7 @@ public class PlayMatch extends Match {
 			}
 		}
 		if (mMurderer == null) {
-			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_INNOCENT + "The Innocents" + ChatContext.COLOR_HIGHLIGHT + " wins the match!");
+			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_INNOCENT + "The Innocent" + ChatContext.COLOR_HIGHLIGHT + " wins the match!");
 			// If someone killed the murderer
 			if (murdererKiller != null && !"".equalsIgnoreCase(murdererKiller)) {
 				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", was killed by " + ChatContext.COLOR_INNOCENT + murdererKiller + ChatContext.COLOR_LOWLIGHT + "!");
@@ -346,7 +354,8 @@ public class PlayMatch extends Match {
 	}
 	@Override
 	public void onPlayerDeath(Player player) {
-		player.playSound(player.getLocation(), Sound.DONKEY_HIT, 1, 1);
+		player.playSound(player.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
+		player.setVelocity(new Vector(0, 2, 0));
 		
 		MPlayer mKilled = PlayerManager.getMPlayer(player);
 		String killer = mKilled.getKillerName();
@@ -362,6 +371,7 @@ public class PlayMatch extends Match {
 		}
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5, 5), true);
 		checkForEnd();
 	}
 	

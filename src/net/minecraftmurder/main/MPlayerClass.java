@@ -113,7 +113,7 @@ public enum MPlayerClass {
 		ItemStack item = inventory.getItem(8);
 		if (item == null || !item.getType().equals(MATERIAL_GUNPART)) {
 			ItemStack newItem = new ItemStack(MATERIAL_GUNPART);
-			Tools.setItemStackName(newItem, "Gun Part", Arrays.asList("Collect 5 to craft a gun."));
+			Tools.setItemStackName(newItem, "Scrap", Arrays.asList("Collect 5 to craft a gun."));
 			inventory.setItem(8, newItem);
 		} else {
 			item.setAmount(item.getAmount() + 1);

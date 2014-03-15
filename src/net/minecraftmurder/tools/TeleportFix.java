@@ -51,12 +51,12 @@ public class TeleportFix implements Listener {
             if (visible) {
             	MPlayer mPlayer = PlayerManager.getMPlayer(player);
             	// Only make non-spectators visible again
-            	if (mPlayer.getPlayerClass() != MPlayerClass.SPECTATOR) {
-            		tpedPlayer.showPlayer(player);
-                    player.showPlayer(tpedPlayer);	
-            	} else {
+            	if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
             		tpedPlayer.hidePlayer(player);
                     player.hidePlayer(tpedPlayer);
+            	} else {
+                    tpedPlayer.showPlayer(player);
+                    player.showPlayer(tpedPlayer);	
             	}
             } else {
             	tpedPlayer.hidePlayer(player);

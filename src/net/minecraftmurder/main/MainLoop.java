@@ -1,5 +1,8 @@
 package net.minecraftmurder.main;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.managers.SignManager;
@@ -14,6 +17,19 @@ public class MainLoop implements Runnable {
 		for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
 			if (mPlayer.getReloadTime() > 0) {
 				mPlayer.addReloadTime(-1);
+			}
+		}
+		for (Player me: Bukkit.getOnlinePlayers()) {
+			if (PlayerManager.getMPlayer(me).getPlayerClass() == MPlayerClass.SPECTATOR) {
+				for (Player other: Bukkit.getOnlinePlayers()) {
+					if (me.equals(other)) continue;
+					other.hidePlayer(me);
+				}
+			} else {
+				for (Player other: Bukkit.getOnlinePlayers()) {
+					if (me.equals(other)) continue;
+					other.showPlayer(me);
+				}
 			}
 		}
 		// Every ½ second
