@@ -71,8 +71,7 @@ public abstract class Tools {
 		try {
 			String[] split = loc.split(" ");
 			if (Bukkit.getWorld(split[0]) == null) {
-				Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "Tried using world that doesn't exist.");
-				return null;
+				throw new NullPointerException("Tried using world that doesn't exist.");
 			}
 			World world = Bukkit.getWorld(split[0]);
 			double x = Double.parseDouble(split[1]);

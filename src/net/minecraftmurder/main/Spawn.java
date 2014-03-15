@@ -16,6 +16,8 @@ public class Spawn {
 	
 	public Spawn (Location location, String type) {
 		this.location = location;
+		if (location == null) 
+			throw new NullPointerException("Spawn location is null");
 		if (TYPES.contains(type))
 			this.type = type;
 		else

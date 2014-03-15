@@ -42,7 +42,7 @@ public class PlayMatch extends Match {
 	public static final int MATCHEND_TIME = 10;
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 12;
-	public static final int MIN_PLAYERS_RANKED = 3;
+	public static final int MIN_PLAYERS_RANKED = 6;
 	
 	private boolean isPlaying;
 	private boolean isRanked;
@@ -137,7 +137,7 @@ public class PlayMatch extends Match {
 						", ran out of time.");
 				mMurderer.onDeath();
 			}
-			if (countdown % 1 == 12) {
+			if (countdown % 12 == 0) {
 				Location location = arena.getRandomSpawn("scrap").getLocation(); 
 				location.getWorld().dropItem(location, new ItemStack(MPlayerClass.MATERIAL_GUNPART));
 			}
@@ -302,14 +302,14 @@ public class PlayMatch extends Match {
 	            Random r = new Random();   
 	 
 	            //Get the type
-	            int rt = r.nextInt(3) + 1;
+	            int rt = r.nextInt(3);
 	            Type type = null;
 	            switch (rt) {
-	            case 1:
+	            case 0:
 	            	type = Type.BALL;
-	            case 2:
+	            case 1:
 	            	type = Type.BURST;
-	            case 3:
+	            case 2:
 	            	type = Type.STAR;
 	            default:
 	            	type = Type.CREEPER;
@@ -386,10 +386,18 @@ public class PlayMatch extends Match {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 		
-		if (arena == null) return;
+		if (arena == null) {
+			throw new NullPointerException("No Arena");
+		}
 		Spawn spawn = arena.getRandomSpawn("player");
-		if (spawn == null) return;
-		player.teleport(spawn.getLocation());
+		if (spawn == null) {
+			throw new NullPointerException("No Spawn");
+		}
+		Location spawnLocation = spawn.getLocation();
+		if (spawnLocation == null) {
+			throw new NullPointerException("No Spawn Location");
+		}
+		player.teleport(spawnLocation);
 	}
 	@Override
 	public void onPlayerQuit(Player player) {
@@ -412,6 +420,10 @@ public class PlayMatch extends Match {
 		
 		MPlayer mKilled = PlayerManager.getMPlayer(player);
 		String killer = mKilled.getKillerName();
+		
+		if (mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
+			player.getWorld().dropItem(player.getLocation(), new ItemStack(MPlayerClass.MATERIAL_GUN));
+		}
 		
 		// If the murderer was killed
 		if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {

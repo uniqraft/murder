@@ -35,6 +35,8 @@ public class Arena {
 	}
 	
 	public void load () {
+		MLogger.log(Level.INFO, "Loading: " + path);
+		
 		// Clear all info stored in arena instance
 		info = new HashMap<String, String>();
 		spawns.clear();
@@ -45,23 +47,26 @@ public class Arena {
 		for (String type: INFO_TYPES) {
 			info.put(type, config.getString("info." + type, "Default Value"));
 		}
-		// Load spawns
-		for (String string: config.getStringList("spawns")) {
-			spawns.add(Spawn.stringToSpawn(string));
-		}
 		
 		// Make sure world exists
 		String worldName = info.get("world");
 		String worldPath = worldName + "/level.dat";
 		if (!new File(worldPath).exists()) {
-			MLogger.log(Level.SEVERE, worldPath + " does not exist, but " + path + " implies it does.");
+			MLogger.log(Level.SEVERE, worldPath + " does not exist.");
 		} else if (Bukkit.getWorld(worldName) == null) {
 			// Load the world
 			Bukkit.createWorld(new WorldCreator(worldName));
-			MLogger.log(Level.INFO, path + " loaded world: " + worldName);
+			MLogger.log(Level.INFO, "Loaded world: " + worldName);
 		} else {
-			MLogger.log(Level.INFO, path + " detected it's already loaded world: " + worldName);
+			MLogger.log(Level.INFO, "Detected already loaded world: " + worldName);
 		}
+		
+		// Load spawns
+		for (String string: config.getStringList("spawns")) {
+			spawns.add(Spawn.stringToSpawn(string));
+		}
+		
+		MLogger.log(Level.INFO, "Found " + spawns.size() + " spawns.");
 	}
 	public boolean save () {
 		YamlConfiguration config = new YamlConfiguration();
@@ -165,8 +170,9 @@ public class Arena {
 	}
 	public Spawn getRandomSpawn (String type) {
 		List<Spawn> spawns = getSpawns(type);
-		if (spawns == null)
-			return null;
+		if (spawns == null) {
+			throw new NullPointerException("No spawns could be loaded.");
+		}
 		return getSpawns(type).get(new SecureRandom().nextInt(spawns.size()));
 	}
 	

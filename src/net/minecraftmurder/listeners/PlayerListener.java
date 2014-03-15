@@ -256,7 +256,7 @@ public class PlayerListener implements Listener {
 		
 		if (MPlayerClass.isKnife(itemInHand.getType()) && rightClicked) {			
 			Arrow arrow = player.launchProjectile(Arrow.class);
-			arrow.setVelocity(player.getEyeLocation().getDirection().multiply(1.5));
+			arrow.setVelocity(player.getEyeLocation().getDirection().multiply(1.2));
 			event.setCancelled(true);
 			player.getWorld().playSound(player.getLocation(), Sound.WITHER_SHOOT, 1, 1.5f);
 			
