@@ -4,18 +4,24 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Effect;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -276,16 +282,63 @@ public class PlayMatch extends Match {
 		}
 		MLogger.log(Level.INFO, "Match " + this.hashCode() + " started.");
 	}
-	private void end () {
+	private void end (boolean murdererWon) {
 		MLogger.log(Level.INFO, "Match " + this.hashCode() + " ended.");
 		isPlaying = false;
 		countdown = COUNTDOWN_TIME + MATCHEND_TIME;
+		
+		final Arena a = arena;
+		final Color color = (murdererWon == true ? Color.RED : Color.BLUE);
+		
+		final int fireworkTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Murder.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				//Spawn the Firework, get the FireworkMeta.
+				Location spawn = a.getRandomSpawn("scrap").getLocation();
+	            Firework fw = (Firework) spawn.getWorld().spawnEntity(spawn, EntityType.FIREWORK);
+	            FireworkMeta fwm = fw.getFireworkMeta();
+	           
+	            //Our random generator
+	            Random r = new Random();   
+	 
+	            //Get the type
+	            int rt = r.nextInt(3) + 1;
+	            Type type = null;
+	            switch (rt) {
+	            case 1:
+	            	type = Type.BALL;
+	            case 2:
+	            	type = Type.BURST;
+	            case 3:
+	            	type = Type.STAR;
+	            default:
+	            	type = Type.CREEPER;
+	            	MLogger.log(Level.WARNING, "Invalid firework");
+	            }
+	           
+	            //Create our effect with this
+	            FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean()).withColor(color).withFade(color).with(type).trail(r.nextBoolean()).build();
+	           
+	            //Then apply the effect to the meta
+	            fwm.addEffect(effect);
+	           
+	            //Generate some random power and set it
+	            int rp = r.nextInt(2) + 1;
+	            fwm.setPower(rp);
+	           
+	            //Then apply this to our rocket
+	            fw.setFireworkMeta(fwm);           
+			}
+		}, 0L, 10L);
+		
 		final PlayMatch playMatch = this;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				MLogger.log(Level.INFO, "Match " + playMatch.hashCode() + " swiches arena.");
 				switchArena();
+				
+				Bukkit.getScheduler().cancelTask(fireworkTask);
 				
 				// Reconnect each player to the match
 				for (MPlayer mPlayer: playMatch.getMPlayers()) {
@@ -314,7 +367,7 @@ public class PlayMatch extends Match {
 			if (murdererKiller != null && !"".equalsIgnoreCase(murdererKiller)) {
 				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", was killed by " + ChatContext.COLOR_INNOCENT + murdererKiller + ChatContext.COLOR_LOWLIGHT + "!");
 			}
-			end();
+			end(false);
 			return;
 		}
 		if (innocentCount <= 0) {
@@ -323,7 +376,7 @@ public class PlayMatch extends Match {
 			if (isRanked)
 				MPlayer.addCoins(murderer, 10, true);
 			
-			end();
+			end(true);
 			return;
 		}
 	}
@@ -346,14 +399,14 @@ public class PlayMatch extends Match {
 		if (isPlaying) {
 			if (mPlayer.getName().equals(murderer)) {
 				sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER + "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", " + ChatContext.COLOR_HIGHLIGHT + murderer + ChatContext.COLOR_LOWLIGHT + ", left the game.");
-				end();
+				end(false);
 				return;
 			}
 		}
 		checkForEnd();
 	}
 	@Override
-	public void onPlayerDeath(Player player) {
+	public void onPlayerDeath(final Player player) {
 		player.playSound(player.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
 		player.setVelocity(new Vector(0, 2, 0));
 		
@@ -371,7 +424,13 @@ public class PlayMatch extends Match {
 		}
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5, 5), true);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5, 1), true);
+			}
+		}, 1L);
+		
 		checkForEnd();
 	}
 	
