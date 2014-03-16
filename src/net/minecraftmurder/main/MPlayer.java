@@ -96,7 +96,7 @@ public class MPlayer {
 			public void run() {
 				zombie.setHealth(0);
 			}
-		}, 1L);
+		}, 2L);
 		
 		MPlayerClass.setFoodLevel(this);
 		player.setHealth(20);

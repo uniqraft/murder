@@ -16,6 +16,7 @@ import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -31,12 +32,10 @@ public final class PlayerManager {
 		// Greet player
 		if (firstJoin) {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome back to Murder!");
-			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_LOWLIGHT + " joined the game!", player);
 		} else {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome to Murder!");
-			Tools.sendMessageAll(player.getDisplayName() + ChatContext.COLOR_LOWLIGHT + " joined the game for their first time!", player);
 		}
-		
+		Tools.sendMessageAll(ChatColor.GRAY + player.getName() + " joined the server.", player);
 		// Send a clickable link to the player
 		IChatBaseComponent comp = ChatSerializer
 				.a("{\"text\":\"§2[MURDER] \", \"extra\":[{\"text\":\"§bClick to visit our website!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cwww.minecraft-murder.net\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://www.minecraft-murder.net/\"}}]}");

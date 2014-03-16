@@ -129,8 +129,8 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		event.setQuitMessage(event.getPlayer().getDisplayName()
-				+ ChatContext.COLOR_LOWLIGHT + " left the game!");
+		event.setQuitMessage(event.getPlayer().getName()
+				+ ChatColor.GRAY + " left the server.");
 		PlayerManager.onPlayerQuit(event.getPlayer());
 	}
 

@@ -328,15 +328,17 @@ public class PlayMatch extends Match {
 						new Runnable() {
 							@Override
 							public void run() {
+								Random r = new Random();
+								
 								// Spawn the Firework, get the FireworkMeta.
+								double range = 8d;
 								Location spawn = a.getRandomSpawn("scrap")
-										.getLocation();
+										.getLocation().add(-range + (range + range) * r.nextDouble(), -range + (range + range) * r.nextDouble(), -range + (range + range) * r.nextDouble());
 								Firework fw = (Firework) spawn
 										.getWorld()
 										.spawnEntity(spawn, EntityType.FIREWORK);
 								FireworkMeta fwm = fw.getFireworkMeta();
 
-								Random r = new Random();
 								Type type = null;
 								switch (r.nextInt(3)) {
 								case 0:
@@ -518,7 +520,7 @@ public class PlayMatch extends Match {
 						player.addPotionEffect(new PotionEffect(
 								PotionEffectType.BLINDNESS, 5, 1), true);
 					}
-				}, 1L);
+				}, 2L);
 
 		checkForEnd();
 	}

@@ -1,3 +1,5 @@
+depends: [Votifier]
+
 name: Murder
 main: net.minecraftmurder.main.Murder
 version: 2.0

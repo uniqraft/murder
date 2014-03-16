@@ -12,6 +12,7 @@ import net.minecraftmurder.listeners.BlockListener;
 import net.minecraftmurder.listeners.EntityListener;
 import net.minecraftmurder.listeners.InventoryListener;
 import net.minecraftmurder.listeners.PlayerListener;
+import net.minecraftmurder.listeners.VotifierListener;
 import net.minecraftmurder.managers.ArenaManager;
 import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
@@ -67,6 +68,7 @@ public class Murder extends JavaPlugin {
 		pm.registerEvents(new BlockListener(), this);
 		pm.registerEvents(new TeleportFix(), this);
 		pm.registerEvents(new InventoryListener(), this);
+		pm.registerEvents(new VotifierListener(), this);
 		
 		// Tell player manager about all already connected players
 		for (Player player: getServer().getOnlinePlayers()) {
