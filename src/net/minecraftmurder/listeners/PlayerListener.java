@@ -218,7 +218,7 @@ public class PlayerListener implements Listener {
 			if (mPlayer.getPlayerClass() == MPlayerClass.INNOCENT
 					&& mPlayer.getGunBanTime() <= 0) {
 				player.sendMessage(ChatContext.MESSAGE_PICKEDUPGUN);
-				MPlayerClass.giveGun(player.getInventory());
+				mPlayer.switchPlayerClass(MPlayerClass.GUNNER);
 				// Remove drop and play sound
 				event.getItem().remove();
 				player.getLocation()

@@ -113,6 +113,12 @@ public class PlayMatch extends Match {
 
 	@Override
 	public void update() {
+		if (arena != null && getMPlayers().size() == 0) {
+			MLogger.log(Level.INFO, "PlayMatch " + hashCode() + " unloaded arena, as match is empty.");
+			arena.setActive(false);
+			arena = null;
+		}
+		
 		countdown--;
 		if (isPlaying) {
 			MPlayer mMurderer = null;
@@ -453,12 +459,12 @@ public class PlayMatch extends Match {
 	@Override
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
-		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR
-				: MPlayerClass.PREGAMEMAN);
+		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 
 		if (arena == null) {
-			throw new NullPointerException("No Arena");
+			switchArena();
 		}
+		
 		Spawn spawn = arena.getRandomSpawn("player");
 		if (spawn == null) {
 			throw new NullPointerException("No Spawn");

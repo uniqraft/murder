@@ -2,9 +2,11 @@ package net.minecraftmurder.matches;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.managers.PlayerManager;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -18,11 +20,14 @@ public abstract class Match {
 	public abstract void onPlayerDeath (Player player);
 	
 	public Arena getArena () {
+		if (arena == null) {
+			throw new NullPointerException("Arena null.");
+		}
 		return arena;
 	}
 	
 	public Location getRandomSpawn () {
-		return arena.getRandomSpawn ("player").getLocation();
+		return getArena().getRandomSpawn ("player").getLocation();
 	}
 	
 	public List<MPlayer> getMPlayers () {
