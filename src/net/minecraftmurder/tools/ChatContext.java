@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 
 
 public class ChatContext {
-	
+
 	public static final String COLOR_MAIN = ChatColor.WHITE + "";
 	public static final String COLOR_LOWLIGHT = ChatColor.YELLOW + "";
 	public static final String COLOR_HIGHLIGHT = ChatColor.GREEN + "";

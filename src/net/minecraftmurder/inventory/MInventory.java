@@ -128,8 +128,8 @@ public class MInventory {
 	public void openInventorySelectionScreen () {
 		Inventory inventory = Bukkit.createInventory(null, 9*6, "Equipment Selection");
 		// == Knifes ==
-		for (int i = 0; i < MPlayerClass.ITEM_KNIFES.length; i++) {
-			MItem mItem = MPlayerClass.ITEM_KNIFES[i];
+		for (int i = 0; i < MPlayerClass.ITEM_KNIVES.length; i++) {
+			MItem mItem = MPlayerClass.ITEM_KNIVES[i];
 			ItemStack item = new ItemStack(mItem.getMaterial(), 1);
 			
 			if (getSelectedKnife() == mItem) {
