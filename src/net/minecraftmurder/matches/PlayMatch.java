@@ -436,7 +436,7 @@ public class PlayMatch extends Match {
 						.getPlayerClass() == MPlayerClass.GUNNER) && isRanked) {
 					// TODO make coins awarded constant variables, not magic
 					// numbers
-					MPlayer.addCoins(p.getName(), 5, true);
+					MPlayer.addCoins(p.getName(), 10, true);
 				}
 			}
 			end(false);
@@ -449,7 +449,7 @@ public class PlayMatch extends Match {
 					+ ChatContext.COLOR_LOWLIGHT + ", won the match!");
 			// Reward the murderer for winning
 			if (isRanked)
-				MPlayer.addCoins(murderer, 10, true);
+				MPlayer.addCoins(murderer, 20, true);
 
 			end(true);
 			return;
@@ -513,9 +513,9 @@ public class PlayMatch extends Match {
 			murdererKiller = killer;
 			// If there was a killer, reward him
 			if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
-				MPlayer.addCoins(killer, 5, true);
+				MPlayer.addCoins(killer, 8, true);
 		} else if (mKilled.getKillerName().equals(murderer)) {
-			MPlayer.addCoins(murderer, 1, true);
+			MPlayer.addCoins(murderer, 3, true);
 		}
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);

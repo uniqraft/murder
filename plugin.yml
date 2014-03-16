@@ -55,13 +55,20 @@ permissions:
             murder.joinfull: true
     murder.owner:
         description: Owner
-        default: op
         children:
+            murder.core: true
+            murder.arenas: true
+            murder.spawns: true
+            murder.coins: true
+            murder.admin: true
+            murder.mod: true
             murder.joinfull: true
+        default: op
     murder.admin:
         description: Admin
         default: op
         children:
+            murder.mod: true
             murder.joinfull: true
     murder.vip:
         description: VIP

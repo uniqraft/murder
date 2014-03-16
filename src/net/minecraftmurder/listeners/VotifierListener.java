@@ -19,8 +19,12 @@ public class VotifierListener implements Listener {
 	public void onVotifier (VotifierEvent event) {
 		Vote vote = event.getVote();
 		Player player = Bukkit.getPlayer(vote.getUsername());
-		MLogger.log(Level.INFO, player.getName() + " casted a vote.");
-		player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + "Thank you for voting! <3");
-		MPlayer.addCoins(player.getName(), 15, true);
+		if (player == null) {
+			MLogger.log(Level.INFO, "Offline player " + vote.getUsername() + " casted a vote.");
+		} else {
+			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + "Thank you for voting! <3");
+			MLogger.log(Level.INFO, "Online player " + player.getName() + " casted a vote.");
+		}
+		MPlayer.addCoins(vote.getUsername(), 20, true);
 	}
 }

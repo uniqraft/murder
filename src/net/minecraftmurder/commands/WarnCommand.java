@@ -57,5 +57,4 @@ public class WarnCommand implements CommandExecutor {
 		MLogger.log(Level.INFO, sender.getName() + " warned " + args[0] + " for breaking rule #" + rule + ".");
 		return true;
 	}
-
 }
