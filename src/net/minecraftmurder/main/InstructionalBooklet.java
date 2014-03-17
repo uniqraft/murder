@@ -22,13 +22,14 @@ public class InstructionalBooklet extends ItemStack {
 
 	// Everything happens in this constructor, because this is haphazardly
 	// thrown together.
-	public InstructionalBooklet(Murder plugin) {
+	public InstructionalBooklet() {
 		super(Material.WRITTEN_BOOK);
 
 		List<String> pages = new ArrayList<String>();
 		// If we want to change the instructional booklet WITHOUT uploading a
 		// new plugin, this line can't point to defaults.
-		for (String instructions : delimit(plugin.getConfig().getDefaults()
+		// TODO Line 33 throws a NullPointerException
+		for (String instructions : delimit(Murder.getInstance().getConfig().getDefaults()
 				.getString("instructions"), 256)) {
 			pages.add(ChatColor.translateAlternateColorCodes('$', instructions));
 		}

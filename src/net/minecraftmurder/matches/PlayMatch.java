@@ -434,8 +434,7 @@ public class PlayMatch extends Match {
 				// Give surviving innocent money.
 				if ((p.getPlayerClass() == MPlayerClass.INNOCENT || p
 						.getPlayerClass() == MPlayerClass.GUNNER) && isRanked) {
-					// TODO make coins awarded constant variables, not magic
-					// numbers
+					// TODO Make coins awarded constant variables, not magic numbers
 					MPlayer.addCoins(p.getName(), 10, true);
 				}
 			}

@@ -215,5 +215,14 @@ public enum MPlayerClass {
 	public static void giveSpecCompass(Inventory inventory) {
 		ItemStack item = new ItemStack(MATERIAL_DETECTOR);
 		Tools.setItemStackName(item, "Spectate Players", Arrays.asList("Right-click to teleport to another player."));
+		inventory.setItem(8, item);
+	}
+	
+	public static void giveInstructionalBooklet(Inventory inventory) {
+		ItemStack item = new InstructionalBooklet();
+		// This might break Birk's implementation on books, idk?
+		// Commented out for now
+		// Tools.setItemStackName(item, ChatColor.AQUA + "Instructions", Arrays.asList("How to play", "Rules"));
+		inventory.setItem(7, item);
 	}
 }
