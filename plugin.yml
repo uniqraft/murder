@@ -59,7 +59,7 @@ permissions:
             murder.core: true
             murder.arenas: true
             murder.spawns: true
-            murder.coins: true
+            murder.coins.manage: true
             murder.admin: true
             murder.mod: true
             murder.joinfull: true
@@ -68,6 +68,7 @@ permissions:
         description: Admin
         default: op
         children:
+            murder.coins.manage: true
             murder.mod: true
             murder.joinfull: true
     murder.vip:

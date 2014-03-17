@@ -1,5 +1,7 @@
 package net.minecraftmurder.commands;
 
+import java.util.logging.Level;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 
@@ -44,6 +47,7 @@ public class CoinCommand implements CommandExecutor {
 					sender.sendMessage(ChatContext.COLOR_WARNING + args[2] + " is not a valid number.");
 					return true;
 				}
+				MLogger.log(Level.INFO, sender.getName() + " gave " + count + " coins to " + args[1] + ".");
 				MPlayer.addCoins(args[1], count, true, true);
 				return true;
 			} else if (args[0].equalsIgnoreCase("set")) {
