@@ -85,10 +85,10 @@ public class Murder extends JavaPlugin {
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		// Load from config
-		COINS_INNOCENT_KILL		= getConfig().getInt("innocent.kill", 0);
-		COINS_INNOCENT_SURVIVE	= getConfig().getInt("innocent.survive", 0);
-		COINS_MURDERER_KILL		= getConfig().getInt("murderer.kill", 0);
-		COINS_MURDERER_WIN		= getConfig().getInt("murderer.win", 0);
+		COINS_INNOCENT_KILL		= getConfig().getInt("coins.innocent.kill", 0);
+		COINS_INNOCENT_SURVIVE	= getConfig().getInt("coins.innocent.survive", 0);
+		COINS_MURDERER_KILL		= getConfig().getInt("coins.murderer.kill", 0);
+		COINS_MURDERER_WIN		= getConfig().getInt("coins.murderer.win", 0);
 		MAX_PLAYERS				= getConfig().getInt("server.max-players", 0);
 		VIP_SLOTS				= getConfig().getInt("server.vip-slots", 0);
 		
