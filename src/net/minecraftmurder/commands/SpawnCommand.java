@@ -15,7 +15,9 @@ public class SpawnCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
 		// spawn <action> [name] [info] [radius]
-		
+		if (!sender.hasPermission("murder.admin")) {
+			return false;
+		}
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(ChatContext.ERROR_NOTPLAYERSENDER);
 			return true;

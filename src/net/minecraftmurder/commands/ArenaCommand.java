@@ -14,6 +14,10 @@ public class ArenaCommand implements CommandExecutor {
 			String[] args) {
 		// arena <action> [name] [info-type] [info]
 		
+		if (!sender.hasPermission("murder.admin")) {
+			return false;
+		}
+		
 		if (args.length < 1) {
 			sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 			return false;

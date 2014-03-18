@@ -22,6 +22,11 @@ public class MurderCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
 		// murder <action>
+		
+		if (!sender.hasPermission("murder.admin")) {
+			return false;
+		}
+		
 		if (args.length != 1) {
 			sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 			return false;
