@@ -27,12 +27,13 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Murder extends JavaPlugin {
-	public static final int VIP_SLOTS = 10;
-	public static final int MAX_PLAYERS = 36;
 	public static final int GUNBAN_TIME = 60;
 	public static final int CRAFTGUNPARTS_COUNT = 5;
 	public static final float ARROW_SPEED = 4;
 	public static EmptyEnchantment emptyEnchantment;
+	
+	public static int VIP_SLOTS, MAX_PLAYERS;
+	public static int COINS_INNOCENT_KILL, COINS_INNOCENT_SURVIVE, COINS_MURDERER_KILL, COINS_MURDERER_WIN;
 
 	private static Murder instance;
 	
@@ -43,7 +44,8 @@ public class Murder extends JavaPlugin {
 	public void onEnable () {
 		instance = this;
 		
-		emptyEnchantment = new EmptyEnchantment(120);
+		// Create custom enchantment
+		emptyEnchantment = new EmptyEnchantment(121);
 		try {
 		    Field f = Enchantment.class.getDeclaredField("acceptingNew");
 		    f.setAccessible(true);
@@ -57,11 +59,13 @@ public class Murder extends JavaPlugin {
 			MLogger.log(Level.SEVERE, e.getLocalizedMessage());
 		}
 		
+		// Initialize all managers
 		ArenaManager.initialize();
 		MatchManager.initialize();
 		PlayerManager.initialize();
 		SignManager.initialize();
 		
+		// Register all events
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new PlayerListener(), this);
 		pm.registerEvents(new EntityListener(), this);
@@ -70,16 +74,28 @@ public class Murder extends JavaPlugin {
 		pm.registerEvents(new InventoryListener(), this);
 		pm.registerEvents(new VotifierListener(), this);
 		
-		// Tell player manager about all already connected players
-		for (Player player: getServer().getOnlinePlayers()) {
-			PlayerManager.onPlayerJoin(player);
-		}
-		
+		// Register all command listeners
 		getCommand("arena").setExecutor(new ArenaCommand());
 		getCommand("murder").setExecutor(new MurderCommand());
 		getCommand("spawn").setExecutor(new SpawnCommand());
 		getCommand("coins").setExecutor(new CoinCommand());
 		getCommand("warn").setExecutor(new WarnCommand());
+		
+		// Setup config
+		saveDefaultConfig();
+		getConfig().options().copyDefaults(true);
+		// Load from config
+		COINS_INNOCENT_KILL		= getConfig().getInt("innocent.kill", 0);
+		COINS_INNOCENT_SURVIVE	= getConfig().getInt("innocent.survive", 0);
+		COINS_MURDERER_KILL		= getConfig().getInt("murderer.kill", 0);
+		COINS_MURDERER_WIN		= getConfig().getInt("murderer.win", 0);
+		MAX_PLAYERS				= getConfig().getInt("server.max-players", 0);
+		VIP_SLOTS				= getConfig().getInt("server.vip-slots", 0);
+		
+		// Tell player manager about all already connected players
+		for (Player player: getServer().getOnlinePlayers()) {
+			PlayerManager.onPlayerJoin(player);
+		}
 	}
 	
 	public void start () {

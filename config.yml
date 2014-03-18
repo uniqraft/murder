@@ -7,3 +7,13 @@ instructions: >
   \n
   1. Respect your fellow players, or you're UNCOOL. Yeah.\n
   2. I don't know if \n works in this. If it does, this rule will look weird. Probably doesn't though... argh
+coins:
+  innocent:
+    kill: 10
+    survive: 30
+  murderer:
+    kill: 5
+    win: 40
+server.
+  max-players: 36
+  vip-slots: 10

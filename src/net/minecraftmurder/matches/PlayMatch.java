@@ -433,8 +433,7 @@ public class PlayMatch extends Match {
 				// Give surviving innocent money.
 				if ((p.getPlayerClass() == MPlayerClass.INNOCENT || p
 						.getPlayerClass() == MPlayerClass.GUNNER) && isRanked) {
-					// TODO Make coins awarded constant variables, not magic numbers
-					MPlayer.addCoins(p.getName(), 10, true);
+					MPlayer.addCoins(p.getName(), Murder.COINS_INNOCENT_SURVIVE, true);
 				}
 			}
 			end(false);
@@ -447,7 +446,7 @@ public class PlayMatch extends Match {
 					+ ChatContext.COLOR_LOWLIGHT + ", won the match!");
 			// Reward the murderer for winning
 			if (isRanked)
-				MPlayer.addCoins(murderer, 20, true);
+				MPlayer.addCoins(murderer, Murder.COINS_MURDERER_WIN, true);
 
 			end(true);
 			return;
@@ -494,37 +493,37 @@ public class PlayMatch extends Match {
 	}
 
 	@Override
-	public void onPlayerDeath(final Player player) {
-		player.playSound(player.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
-		player.setVelocity(new Vector(0, 2, 0));
+	public void onPlayerDeath(final Player killedPlayer) {
+		killedPlayer.playSound(killedPlayer.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
+		killedPlayer.setVelocity(new Vector(0, 2, 0));
 
-		MPlayer mKilled = PlayerManager.getMPlayer(player);
+		MPlayer mKilled = PlayerManager.getMPlayer(killedPlayer);
 		String killer = mKilled.getKillerName();
 
+		// If player who died was a gunner
 		if (mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
-			player.getWorld().dropItem(player.getLocation(),
+			// Drop a gun
+			killedPlayer.getWorld().dropItem(killedPlayer.getLocation(),
 					new ItemStack(MPlayerClass.MATERIAL_GUN));
 		}
 
-		// If the murderer was killed
-		if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
-			murdererKiller = killer;
-			// If there was a killer, reward him
-			if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
-				MPlayer.addCoins(killer, 8, true);
-		} else if (mKilled.getKillerName().equals(murderer)) {
-			MPlayer.addCoins(murderer, 3, true);
+		if (isRanked()) {
+			// If the murderer was killed
+			if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
+				murdererKiller = killer;
+				// If there was a killer, reward him
+				if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
+					MPlayer.addCoins(killer, Murder.COINS_INNOCENT_KILL, true);
+			// If an innocent died
+			} else if (mKilled.getPlayerClass() == MPlayerClass.INNOCENT || mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
+				MPlayer.addCoins(murderer, Murder.COINS_MURDERER_KILL, true);
+			}
 		}
+		
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(),
-				new Runnable() {
-					@Override
-					public void run() {
-						player.addPotionEffect(new PotionEffect(
-								PotionEffectType.BLINDNESS, 5, 1), true);
-					}
-				}, 2L);
+		killedPlayer.addPotionEffect(new PotionEffect(
+				PotionEffectType.BLINDNESS, 15, 1), true);
 
 		checkForEnd();
 	}
