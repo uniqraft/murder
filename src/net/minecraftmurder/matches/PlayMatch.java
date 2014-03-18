@@ -127,14 +127,13 @@ public class PlayMatch extends Match {
 				Player player = mPlayer.getPlayer();
 
 				// If outside the world, kill the player
-				if (player.getLocation().getBlockY() < 0) {
+				if (player.getLocation().getY() < 0) {
 					mPlayer.onDeath();
 				}
 
 				// Find murderer
 				if (mPlayer.getPlayerClass() == MPlayerClass.MURDERER) {
 					mMurderer = mPlayer;
-					break;
 				}
 			}
 			if (countdown <= 0) {
