@@ -1,6 +1,8 @@
 package net.minecraftmurder.matches;
 
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
@@ -24,6 +26,9 @@ public class LobbyMatch extends Match {
 	public void onPlayerJoin(Player player) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
+		
+		if (player.hasPermission("murder.vip"))
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 2), true);
 		
 		if (arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");

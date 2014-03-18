@@ -42,7 +42,7 @@ public class PlayMatch extends Match {
 	public static final int MATCHEND_TIME = 10;
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 12;
-	public static final int MIN_PLAYERS_RANKED = 6;
+	public static final int MIN_PLAYERS_RANKED = 4;
 
 	private boolean isPlaying;
 	private boolean isRanked;
@@ -144,7 +144,7 @@ public class PlayMatch extends Match {
 						+ ChatContext.COLOR_LOWLIGHT + ", ran out of time.");
 				mMurderer.onDeath();
 			}
-			if (countdown % 12 == 0) {
+			if (countdown % 8 == 0) {
 				Location location = arena.getRandomSpawn("scrap").getLocation();
 				location.getWorld().dropItem(location,
 						new ItemStack(MPlayerClass.MATERIAL_GUNPART));

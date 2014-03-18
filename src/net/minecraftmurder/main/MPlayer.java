@@ -39,7 +39,9 @@ public class MPlayer {
 	
 	private String killerName;
 	
+	/** When at 0, the player can fire their gun */
 	private int reloadTime = 0;
+	/** When at 0, the player can pickup a gun */
 	private int gunBanTime = 0;
 	
 	public MPlayer (String name) {
@@ -183,9 +185,9 @@ public class MPlayer {
 		
 		if (mPlayer != null && tell) {
 			if (count >= 0)
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + (vip == true ? (int)(count / 2d) : count) + ChatContext.COLOR_LOWLIGHT + (count != 1?" coins":" coins") + (vip == true ? (ChatContext.COLOR_INNOCENT + " (x2 = " + count + ")" + ChatContext.COLOR_LOWLIGHT + "!") : "!"));
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You earned " + ChatContext.COLOR_HIGHLIGHT + (vip == true ? (int)(count / 2d) : count) + ChatContext.COLOR_LOWLIGHT + (count != 1 ? " coins" : " coin") + (vip == true ? (ChatContext.COLOR_INNOCENT + " (x2 = " + count + ")" + ChatContext.COLOR_LOWLIGHT + "!") : "!"));
 			else
-				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1 ? " coins" : " coins") + "!");
+				mPlayer.getPlayer().sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You lost " + ChatContext.COLOR_HIGHLIGHT + Math.abs(count) + ChatContext.COLOR_LOWLIGHT + (count != 1 ? " coins" : " coin") + "!");
 		}
 		return setCoins(player, getCoins(mPlayer.getName()) + count, false);
 	}

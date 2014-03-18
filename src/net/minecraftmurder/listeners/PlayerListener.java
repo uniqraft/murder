@@ -118,7 +118,7 @@ public class PlayerListener implements Listener {
 			player.setDisplayName(ChatColor.RED + "[Admin] " + ChatColor.WHITE
 					+ player.getName());
 		else if (player.hasPermission("murder.mod"))
-			player.setDisplayName(ChatColor.DARK_BLUE + "[Mod] "
+			player.setDisplayName(ChatColor.BLUE + "[Mod] "
 					+ ChatColor.WHITE + player.getName());
 		else if (player.hasPermission("murder.vip"))
 			player.setDisplayName(ChatColor.AQUA + "[VIP] " + ChatColor.WHITE
@@ -219,6 +219,7 @@ public class PlayerListener implements Listener {
 					&& mPlayer.getGunBanTime() <= 0) {
 				player.sendMessage(ChatContext.MESSAGE_PICKEDUPGUN);
 				mPlayer.switchPlayerClass(MPlayerClass.GUNNER);
+				mPlayer.setReloadTime(MPlayer.RELOAD_TIME);
 				// Remove drop and play sound
 				event.getItem().remove();
 				player.getLocation()
