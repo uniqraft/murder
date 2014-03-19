@@ -46,7 +46,7 @@ public abstract class Match {
 	 * The message to be sent.
 	 */
 	public void sendMessage (String message) {
-		for (MPlayer mPlayer: getMPlayers())
+		for (MPlayer mPlayer : getMPlayers())
 			mPlayer.getPlayer().sendMessage(message);
 	}
 }
