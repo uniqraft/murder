@@ -27,8 +27,10 @@ public class LobbyMatch extends Match {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
 		
-		if (player.hasPermission("murder.vip"))
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 2), true);
+		if (player.hasPermission("murder.vip")) {
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 72000, 2), true);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 72000, 1), true);
+		}
 		
 		if (arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");
