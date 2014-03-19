@@ -23,6 +23,7 @@ public class Arena {
 	public static final List<String> INFO_TYPES = Arrays.asList("name", "author", "world");
 
 	private String path;
+	private int minY;
 
 	HashMap<String, String> info;
 	private List<Spawn> spawns = new ArrayList<Spawn>();
@@ -47,6 +48,7 @@ public class Arena {
 		for (String type: INFO_TYPES) {
 			info.put(type, config.getString("info." + type, "Default Value"));
 		}
+		minY = config.getInt("settings.min-y", 0);
 		
 		// Make sure world exists
 		String worldName = info.get("world");
@@ -74,6 +76,7 @@ public class Arena {
 		for (String type: INFO_TYPES) {
 			config.set("info." + type, info.get(type));
 		}
+		config.set("settings.min-y", minY);
 		// Save spawns
 		List<String> spawnStrings = new ArrayList<String>();
 		if (spawns != null) {
@@ -106,7 +109,15 @@ public class Arena {
 			return save();
 		return true;
 	}
-	
+	public int getMinY () {
+		return minY;
+	}
+	public boolean setMinY (int y, boolean save) {
+		minY = y;
+		if (save)
+			return save();
+		return false;
+	}
 	public boolean setInfo (String type, String info, boolean save) {
 		if (INFO_TYPES.contains(type)) {
 			this.info.put(type, info);

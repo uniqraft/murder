@@ -127,7 +127,7 @@ public class PlayMatch extends Match {
 				Player player = mPlayer.getPlayer();
 
 				// If outside the world, kill the player
-				if (player.getLocation().getY() < 0) {
+				if (player.getLocation().getY() <= getArena().getMinY()) {
 					mPlayer.onDeath();
 				}
 

@@ -50,7 +50,14 @@ public class ArenaCommand implements CommandExecutor {
 			}
 			Arena arena = ArenaManager.getArenaByPathname(args[1]);
 			if (arena != null) {
-				if (Arena.INFO_TYPES.contains(args[2].toLowerCase())) {
+				if (args[2].equalsIgnoreCase("min-y")) {
+					try {
+						arena.setMinY(Integer.parseInt(args[3]), true);
+						sender.sendMessage(ChatContext.PREFIX_PLUGIN + args[1] + "'s " + args[2] + " was set to " + args[3] + ".");
+					} catch (Exception e) {
+						sender.sendMessage(args[3] + " is not a valid number.");
+					}
+				} else if (Arena.INFO_TYPES.contains(args[2].toLowerCase())) {
 					if (arena.setInfo(args[2], args[3], true)) {
 						sender.sendMessage(ChatContext.PREFIX_PLUGIN + args[1] + "'s " + args[2] + " was set to " + args[3] + ".");
 					} else {
