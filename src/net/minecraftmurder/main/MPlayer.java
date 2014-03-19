@@ -218,23 +218,27 @@ public class MPlayer {
 		
 		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		config.set("warn.level", totalLevel);
-		config.set("warn.date", Tools.dateToString(calculateBanDate(totalLevel), "-"));
+		Date date = calculateBanDate(totalLevel);
+		config.set("warn.date", Tools.dateToString(date, "-"));
+		MLogger.log(Level.INFO, "Banned until " + date.toString());
 		return SimpleFile.saveConfig(config, Paths.FOLDER_PLAYERS + player + ".yml");
 	}
 	public static Date calculateBanDate (int level) {
 		GregorianCalendar calendar = new GregorianCalendar();
-		int l = (int) Math.round(Math.pow((double)level / 5d, 6d) * 10d);
-		Bukkit.getLogger().log(Level.INFO, "Ban time in minutes: " + l);
+		// (x / 5)^8 * 10 + x*5 - 20
+		int l = (int) Math.round(Math.pow((double)level/5d, 8d) * 10 + level*5 - 20);
+		MLogger.log(Level.INFO, "Ban time in minutes: " + Math.max(l, 0d));
 		calendar.add(Calendar.MINUTE, l);
-		Bukkit.getLogger().log(Level.INFO, "Banned until: " + calendar.getTime().toString());
 		return calendar.getTime();
 	}
 	public static boolean isBanned (String player) {
 		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS + player + ".yml");
 		boolean toBeBanned = config.getBoolean("warn.upcomingban", false);
 		if (toBeBanned) {
-			config.set("warn.date", Tools.dateToString(calculateBanDate(config.getInt("warn.level", 0)), "-"));
+			Date date = calculateBanDate(config.getInt("warn.level", 0));
+			config.set("warn.date", Tools.dateToString(date, "-"));
 			config.set("warn.upcomingban", false);
+			MLogger.log(Level.INFO, "Played had upcomming ban, banned until: " + date.toString());
 		}
 		String dateString = config.getString("warn.date");
 		if (dateString == null || "".equalsIgnoreCase(dateString))
