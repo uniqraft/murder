@@ -7,13 +7,18 @@ import net.minecraftmurder.tools.ChatContext;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class ArenaCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
 		// arena <action> [name] [info-type] [info]
-		
+		if (!(sender instanceof Player)) {
+			sender.sendMessage(ChatContext.PREFIX_WARNING + "Only players may execute this command.");
+			return false;
+		}
+		Player player = (Player) sender;
 		if (!sender.hasPermission("murder.admin")) {
 			return false;
 		}
@@ -23,13 +28,17 @@ public class ArenaCommand implements CommandExecutor {
 			return false;
 		}
 		
-		if (args[0].equalsIgnoreCase("add")) {
+		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("create")) {
 			if (args.length != 2) {
 				sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
 				return false;
 			}
-			if (ArenaManager.createArena(args[1])) {
+			Arena arena = ArenaManager.createArena(args[1]); 
+			if (arena != null) {
 				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "Arena created.");
+				arena.setInfo("world", player.getWorld().getName(), false);
+				arena.setInfo("name", player.getWorld().getName(), false);
+				arena.setInfo("author", player.getName(), true);
 			} else {
 				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't create arena!");
 			}

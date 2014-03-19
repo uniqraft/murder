@@ -38,7 +38,8 @@ public final class ArenaManager {
 		}
 	}
 	
-	public static boolean createArena (String pathName) {
+	public static Arena createArena (String pathName) {
+		Arena arena = null;
 		YamlConfiguration config = new YamlConfiguration();
 		String path = PATH_ARENAS + pathName + ".yml";
 		// Is this the lobby?
@@ -46,17 +47,23 @@ public final class ArenaManager {
 			// Is there already a lobby?
 			if (lobby != null) {
 				// Cancel
-				Tools.sendMessageAll(ChatContext.PREFIX_WARNING + "Can't add lobby arena. One already exists.");
-				return false;
+				MLogger.log(Level.WARNING, "Can't create lobby arena. One already exists.");
+				return null;
 			} else {
 				// Assign lobby arena
-				lobby = new Arena(path);
+				lobby = arena = new Arena(path);
 			}
 		} else {
 			// Add arena
-			playArenas.add(new Arena(path));
+			playArenas.add(arena = new Arena(path));
 		}
-		return SimpleFile.saveConfig(config, path);
+		try {
+			SimpleFile.saveConfig(config, path);
+		} catch (Exception e) {
+			MLogger.log(Level.SEVERE, "Couldn't create arena. Check console for error.");
+			e.printStackTrace();
+		}
+		return arena;
 	}
 	
 	public static Arena getArenaByPathname (String arena) {
