@@ -14,6 +14,6 @@ coins:
   murderer:
     kill: 5
     win: 40
-server.
+server:
   max-players: 36
   vip-slots: 10
