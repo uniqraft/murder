@@ -192,6 +192,9 @@ public class MPlayer {
 			// if the player is not online.
 			// it might be possible to do this in a more elegant way, but...
 			// frankly I don't really care.
+			// TODO Fix this as it wont work. Javadocs for getPlayer() says:
+			// "If the player is online, this will return that player. Otherwise, it will return null."
+			// I have to find another way to check if a player is a VIP.
 			if (mPlayer == null) {
 				vip = Bukkit.getOfflinePlayer(player).getPlayer()
 						.hasPermission("murder.vip");
