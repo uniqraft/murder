@@ -1,5 +1,6 @@
 package net.minecraftmurder.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -7,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import net.minecraftmurder.commands.MCommandResult.Result;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
@@ -17,7 +19,67 @@ import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
-public class MurderCommand implements CommandExecutor {
+public class MurderCommand extends MCommand {
+	private final List<MCommand> mCommands;
+	
+	public MurderCommand(String label) {
+		super(label);
+		mCommands = new ArrayList<MCommand>();
+		mCommands.add(new StartCommand("start"));
+	}
+	
+	@Override
+	public MCommandResult exectute(CommandSender sender, String[] args) {
+		if (args.length < 1)
+			return new MCommandResult(Result.FAIL_ARGUMENTS, null);
+		for (MCommand mCommand : mCommands) {
+			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
+				String[] newArgs = new String[args.length - 1];
+				for (int i = 0; i < args.length - 1; i++)
+					newArgs[i] = args[i - 1];
+				
+				return mCommand.exectute(sender, newArgs);
+			}
+		}
+		return new MCommandResult(Result.FAIL_ARGUMENTS, null);
+	}
+	@Override
+	public String getHelp() {
+		String help = "Actions:\n";
+		for (MCommand mCommand : mCommands) {
+			help += mCommand.getUsage() + "\n";
+		}
+		return help;
+	}
+	@Override
+	public String getUsage() {
+		return "[action]";
+	}
+
+	class StartCommand extends MCommand { 
+		public StartCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(String[] args) {
+			return MCommandResult.SUCCESS;
+		}
+		@Override
+		public String getHelp() {
+			return "[ + " + getLabel() + " + ]";
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		@Override
+		public String getUsage() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
