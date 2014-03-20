@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import net.minecraftmurder.commands.ArenaCommand;
 import net.minecraftmurder.commands.CoinCommand;
-import net.minecraftmurder.commands.MurderCommand;
+import net.minecraftmurder.commands.CommandListener;
 import net.minecraftmurder.commands.SpawnCommand;
 import net.minecraftmurder.commands.WarnCommand;
 import net.minecraftmurder.listeners.BlockListener;
@@ -74,9 +74,11 @@ public class Murder extends JavaPlugin {
 		pm.registerEvents(new InventoryListener(), this);
 		pm.registerEvents(new VotifierListener(), this);
 		
-		// Register all command listeners
+		// Instantiate command listener
+		CommandListener listener = new CommandListener();
+		// Register all commands to the listener
 		getCommand("arena").setExecutor(new ArenaCommand());
-		getCommand("murder").setExecutor(new MurderCommand());
+		getCommand("murder").setExecutor(listener);
 		getCommand("spawn").setExecutor(new SpawnCommand());
 		getCommand("coins").setExecutor(new CoinCommand());
 		getCommand("warn").setExecutor(new WarnCommand());

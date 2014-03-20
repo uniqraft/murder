@@ -6,14 +6,25 @@ public final class MCommandResult {
 	public enum Result {
 		SUCCESS,
 		FAIL_ARGUMENTS,
-		FAIL_PEMISSIONS,
+		FAIL_PERMISSIONS,
 		FAIL_CUSTOM;
 	}
-	final Result result;
-	final String message;
-	public MCommandResult (Result result, String message) {
+	private final MCommand mCommand;
+	private final Result result;
+	private final String message;
+	public MCommandResult (MCommand mCommand, Result result) {
+		this(mCommand, result, null);
+	}
+	public MCommandResult (MCommand mCommand, Result result, String message) {
+		this.mCommand = mCommand;
 		this.result = result;
 		this.message = message;
+	}
+	public Result getResult () {
+		return result;
+	}
+	public MCommand getExecutedMCommand() {
+		return mCommand;
 	}
 	public String getMessage () {
 		switch (result) {
@@ -21,7 +32,7 @@ public final class MCommandResult {
 			return ChatColor.YELLOW + (message != null ? message : "");
 		case FAIL_ARGUMENTS:
 			return ChatColor.GOLD + "Invalid arguments.";
-		case FAIL_PEMISSIONS:
+		case FAIL_PERMISSIONS:
 			return ChatColor.RED + "You don't have permission to use this command.";
 		case FAIL_CUSTOM:
 			if (message == null)

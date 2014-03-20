@@ -4,18 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import net.minecraftmurder.commands.MCommandResult.Result;
-import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.Murder;
-import net.minecraftmurder.managers.ArenaManager;
-import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
-import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
@@ -25,23 +21,26 @@ public class MurderCommand extends MCommand {
 	public MurderCommand(String label) {
 		super(label);
 		mCommands = new ArrayList<MCommand>();
+		// Register commands
 		mCommands.add(new StartCommand("start"));
+		mCommands.add(new DevCommand("dev"));
+		mCommands.add(new ListPlayersCommand("list"));
+		mCommands.add(new KillCommand("kill"));
 	}
 	
 	@Override
 	public MCommandResult exectute(CommandSender sender, String[] args) {
 		if (args.length < 1)
-			return new MCommandResult(Result.FAIL_ARGUMENTS, null);
+			return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
 				String[] newArgs = new String[args.length - 1];
 				for (int i = 0; i < args.length - 1; i++)
 					newArgs[i] = args[i - 1];
-				
 				return mCommand.exectute(sender, newArgs);
 			}
 		}
-		return new MCommandResult(Result.FAIL_ARGUMENTS, null);
+		return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
 	}
 	@Override
 	public String getHelp() {
@@ -61,79 +60,123 @@ public class MurderCommand extends MCommand {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(String[] args) {
-			return MCommandResult.SUCCESS;
-		}
-		@Override
-		public String getHelp() {
-			return "[ + " + getLabel() + " + ]";
-		}
-		@Override
 		public MCommandResult exectute(CommandSender sender, String[] args) {
-			// TODO Auto-generated method stub
-			return null;
+			// Arguments
+			if (args.length != 0)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			// Permission
+			if (!sender.hasPermission("murder.admin"))
+				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
+			
+			// Check if not already started
+			if (!Murder.getInstance().isStarted()) {
+				MLogger.log(Level.INFO, sender.getName() + " activated gameplay mode.");
+				return new MCommandResult(this, Result.SUCCESS, "Murder started.");
+			} else {
+				return new MCommandResult(this, Result.FAIL_CUSTOM, "Murder has already been started.");
+			}
 		}
 		@Override
 		public String getUsage() {
-			// TODO Auto-generated method stub
-			return null;
+			return "[ + " + getLabel() + " + ]";
+		}
+		@Override
+		public String getHelp() {
+			return "This will put Murder in gameplay mode.";
 		}
 	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label,
-			String[] args) {
-		// murder <action>
-		
-		if (!sender.hasPermission("murder.admin")) {
-			return false;
+	class DevCommand extends MCommand { 
+		public DevCommand(String label) {
+			super(label);
 		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// Arguments
+			if (args.length != 0)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			// Permission
+			if (!sender.hasPermission("murder.admin"))
+				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
+			// Check if already started
+			if (!Murder.getInstance().isDevMode())
+				return new MCommandResult(this, Result.FAIL_CUSTOM, "Murder has already been started.");
 		
-		if (args.length != 1) {
-			sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
-			return false;
-		}
-		
-		if (args[0].equalsIgnoreCase("start")) {
-			Murder.getInstance().start();
-			return true;
-		} else if (args[0].equalsIgnoreCase("dev")) {
+			// Put Murder in gameplay mode
 			Murder.getInstance().activateDevMode();
 			MLogger.log(Level.INFO, sender.getName() + " activated dev mode.");
-			return true;
-		} else if (args[0].equalsIgnoreCase("matches")) {
-			String s = "Matches: ";
-			for (int i = 0; i < MatchManager.MAX_MATCHES; i++) {
-				PlayMatch playMatch = MatchManager.getPlayMatch(i);
-				if (playMatch != null) {
-					if (i > 0)
-						s += ", ";
-					s += i;
-				}
-			}
-			sender.sendMessage(ChatContext.PREFIX_PLUGIN + s);
-			return true;
-		} else if (args[0].equalsIgnoreCase("arenas")) {
-			List<Arena> arenas = ArenaManager.getAllArenas();
-			if (arenas != null && arenas.size() > 0) {
-				for (Arena arena: arenas) {
-					sender.sendMessage(ChatContext.PREFIX_PLUGIN + "Path: " + arena.getPath() + ", Name: " + arena.getInfo("name") + ", By: " + arena.getInfo("author"));
-				}
-			} else {
-				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "No arenas.");
-			}
-			return true;
-		} else if (args[0].equalsIgnoreCase("mplayers") || args[0].equalsIgnoreCase("players")) {
-			for (MPlayer mplayer: PlayerManager.getMPlayers()) {
-				sender.sendMessage(ChatContext.PREFIX_PLUGIN + mplayer.getName());
-			}
-			return true;
-		} else if (args[0].equalsIgnoreCase("kill")) {
-			MPlayer mPlayer = PlayerManager.getMPlayer(sender.getName());
-			if (mPlayer != null)
-				mPlayer.onDeath();
-			return true;
+			return new MCommandResult(this, Result.SUCCESS, "Murder put in dev mode.");
 		}
-		return false;
+		@Override
+		public String getUsage() {
+			return "[ + " + getLabel() + " + ]";
+		}
+		@Override
+		public String getHelp() {
+			return "This will put Murder in dev mode.";
+		}
+	}
+	class ListPlayersCommand extends MCommand { 
+		public ListPlayersCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// Arguments
+			if (args.length != 0)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			// Permission
+			if (!sender.hasPermission("murder.admin"))
+				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
+			
+			// List players
+			for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
+				sender.sendMessage(
+						ChatContext.COLOR_HIGHLIGHT + ">" + mPlayer.getName()
+						+ ChatContext.COLOR_LOWLIGHT + "|" + mPlayer.getPlayerClass().toString());
+			}
+			
+			return new MCommandResult(this, Result.SUCCESS);
+		}
+		@Override
+		public String getUsage() {
+			return "[ + " + getLabel() + " + ]";
+		}
+		@Override
+		public String getHelp() {
+			return "Lists all players.";
+		}
+	}
+	class KillCommand extends MCommand { 
+		public KillCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// Arguments
+			if (args.length != 1)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			// Permission
+			if (!sender.hasPermission("murder.admin"))
+				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
+			
+			// Get targeted player
+			Player player = Bukkit.getPlayer(args[0]);
+			if (player == null)
+				return new MCommandResult(this, Result.FAIL_CUSTOM, "Couldn't find player " + args[0] + "!");
+			
+			// Find and kill player
+			MPlayer mPlayer = PlayerManager.getMPlayer(player);
+			mPlayer.onDeath();
+			
+			return new MCommandResult(this, Result.SUCCESS);
+		}
+		@Override
+		public String getUsage() {
+			return "[ + " + getLabel() + " + ]";
+		}
+		@Override
+		public String getHelp() {
+			return "Kills a player.";
+		}
 	}
 }

@@ -22,36 +22,48 @@ public class CommandListener implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		String name = command.getName();
-		String[] newArgs = new String[args.length-2];
-		String returnedMessage = null;
 		// Loop through registered commands
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(name)) {
-				switch (mCommand.exectute(newArgs)) {
-				case SUCCESS:
-					returnedMessage = ChatColor.YELLOW.toString();
-					if (mCommand.getCustomMessage() != null)
-						returnedMessage += mCommand.getCustomMessage();
-					break;
-				case FAIL_ARGUMENTS:
-					returnedMessage = ChatColor.GOLD.toString() + 
-					"Invalid arguments.";
-					break;
-				case FAIL_PEMISSIONS:
-					returnedMessage = ChatColor.RED.toString() +
-					"You don't have permission to use this command.";
-					break;
-				case FAIL_CUSTOM:
-					returnedMessage = ChatColor.RED.toString();
-					if (mCommand.getCustomMessage() != null)
-						returnedMessage += mCommand.getCustomMessage();
-					else
-						throw new NullPointerException("Command " + mCommand.getLabel() + " returned FAIL_CUSTOM, but didn't set custom message.");
-					break;
-				}
+				executeCommand(mCommand, sender, args);
 				break;
 			}	
 		}
 		return true;
+	}
+	
+	private void executeCommand (MCommand originalMCommand, CommandSender sender, String[] args) {
+		String returnedMessage = null;
+		// Create arguments for command
+		String[] newArgs = new String[args.length - 1];
+		for (int i = 0; i < args.length - 1; i++)
+			newArgs[i] = args[i-2];
+		// Execute command
+		MCommandResult commandResult = originalMCommand.exectute(sender, newArgs);
+		MCommand executedMCommand = commandResult.getExecutedMCommand();
+		// Handle result
+		// TODO Show returnedMessage, format and show help for failed commands
+		switch (commandResult.getResult()) {
+		case SUCCESS:
+			returnedMessage = ChatColor.YELLOW.toString();
+			if (executedMCommand.getCustomMessage() != null)
+				returnedMessage += executedMCommand.getCustomMessage();
+			break;
+		case FAIL_ARGUMENTS:
+			returnedMessage = ChatColor.GOLD.toString() + 
+				"Invalid arguments.";
+			break;
+		case FAIL_PERMISSIONS:
+			returnedMessage = ChatColor.RED.toString() +
+				"You don't have permission to use this command.";
+			break;
+		case FAIL_CUSTOM:
+			returnedMessage = ChatColor.RED.toString();
+			if (executedMCommand.getCustomMessage() != null)
+				returnedMessage += executedMCommand.getCustomMessage();
+			else
+				throw new NullPointerException("Command " + executedMCommand.getLabel() + " returned FAIL_CUSTOM, but didn't set custom message.");
+			break;
+		}
 	}
 }
