@@ -3,6 +3,8 @@ package net.minecraftmurder.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraftmurder.commands.MCommandResult.Result;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;	
 import org.bukkit.command.CommandExecutor;
@@ -64,6 +66,17 @@ public class CommandListener implements CommandExecutor {
 			else
 				throw new NullPointerException("Command " + executedMCommand.getLabel() + " returned FAIL_CUSTOM, but didn't set custom message.");
 			break;
+		}
+		sender.sendMessage(returnedMessage);
+		if (commandResult.getResult() != Result.SUCCESS) {
+			// Format help
+			String[] splitHelp = executedMCommand.getHelp().split("\n");
+			String[] help = new String[splitHelp.length];
+			for (int i = 0; i < splitHelp.length; i++)
+				help[i] = ChatColor.RED + "| " + ChatColor.YELLOW + splitHelp[i];
+			// Send usage and help
+			sender.sendMessage(ChatColor.RED + "> " + ChatColor.YELLOW + "/" + executedMCommand.getUsage());
+			sender.sendMessage(help);
 		}
 	}
 }
