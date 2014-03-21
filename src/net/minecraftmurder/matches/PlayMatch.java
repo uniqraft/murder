@@ -337,8 +337,7 @@ public class PlayMatch extends Match {
 								
 								// Spawn the Firework, get the FireworkMeta.
 								double range = 8d;
-								Location spawn = a.getRandomSpawn("scrap").getLocation().clone();
-								spawn.add(-range + 2 * range * r.nextDouble(), -range + 2 * range * r.nextDouble(), -range + 2 * range * r.nextDouble());
+								Location spawn = a.getRandomSpawn("scrap").getLocation().clone().add(-range + 2 * range * r.nextDouble(), -range + 2 * range * r.nextDouble(), -range + 2 * range * r.nextDouble());
 								Firework fw = (Firework) spawn
 										.getWorld()
 										.spawnEntity(spawn, EntityType.FIREWORK);

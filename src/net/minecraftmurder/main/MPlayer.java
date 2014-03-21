@@ -252,8 +252,10 @@ public class MPlayer {
 	}
 
 	public static int getCoins(String player) {
-		YamlConfiguration config = SimpleFile.loadConfig(Paths.FOLDER_PLAYERS
-				+ player + ".yml");
+		String path = Paths.FOLDER_PLAYERS + player + ".yml";
+		if (!SimpleFile.exists(path))
+			return 0;
+		YamlConfiguration config = SimpleFile.loadConfig(path);
 		return config.getInt("coins", 0);
 	}
 

@@ -80,7 +80,7 @@ public class Murder extends JavaPlugin {
 		getCommand("arena").setExecutor(new ArenaCommand());
 		getCommand("murder").setExecutor(listener);
 		getCommand("spawn").setExecutor(new SpawnCommand());
-		getCommand("coins").setExecutor(new CoinCommand());
+		getCommand("coins").setExecutor(listener);
 		getCommand("warn").setExecutor(new WarnCommand());
 		
 		// Setup config

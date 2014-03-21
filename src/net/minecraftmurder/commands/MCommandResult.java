@@ -7,6 +7,7 @@ public final class MCommandResult {
 		SUCCESS,
 		FAIL_ARGUMENTS,
 		FAIL_PERMISSIONS,
+		FAIL_NOTPLAYER,
 		FAIL_CUSTOM;
 	}
 	private final MCommand mCommand;
@@ -34,6 +35,8 @@ public final class MCommandResult {
 			return ChatColor.GOLD + "Invalid arguments.";
 		case FAIL_PERMISSIONS:
 			return ChatColor.RED + "You don't have permission to use this command.";
+		case FAIL_NOTPLAYER:
+			return ChatColor.RED + "Only players can execute this command.";
 		case FAIL_CUSTOM:
 			if (message == null)
 				throw new NullPointerException("Message was set to null.");

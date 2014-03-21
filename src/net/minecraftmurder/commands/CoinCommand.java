@@ -1,82 +1,155 @@
 package net.minecraftmurder.commands;
 
-import java.util.logging.Level;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import net.minecraftmurder.commands.MCommandResult.Result;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.tools.ChatContext;
-import net.minecraftmurder.tools.MLogger;
-import net.minecraftmurder.tools.Paths;
-import net.minecraftmurder.tools.SimpleFile;
 
-public class CoinCommand implements CommandExecutor {
+public class CoinCommand extends MCommand {
+private final List<MCommand> mCommands;
+	
+	public CoinCommand(String label) {
+		super(label);
+		mCommands = new ArrayList<MCommand>();
+		// Register commands
+		mCommands.add(new GetCommand("get"));
+	}
+	
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label,
-			String[] args) {
+	public MCommandResult exectute(CommandSender sender, String[] args) {
+		// If no arguments were used
 		if (args.length < 1) {
-			if (!(sender instanceof Player)) {
-				sender.sendMessage(ChatContext.PREFIX_WARNING + "Only players may execute this command.");
-				return true;
+			if (!(sender instanceof Player))
+				return new MCommandResult(this, Result.FAIL_NOTPLAYER);
+			int coins = MPlayer.getCoins(sender.getName());
+			sender.sendMessage(
+					ChatContext.COLOR_LOWLIGHT + "You have "
+					+ ChatContext.COLOR_HIGHLIGHT + coins
+					+ ChatContext.COLOR_LOWLIGHT + (coins != 1 ? "coins" : "coin") + "!");
+			return new MCommandResult(this, Result.SUCCESS);
+		}
+		// If sender doesn't have permission
+		if (!sender.hasPermission("murder.coins.manage"))
+			return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			// Yes, it's supposed to be FAIL_ARGUMENTS.
+			// If regular players uses this command we
+			// tell them that they may not use arguments
+			// on this command.
+		
+		for (MCommand mCommand : mCommands) {
+			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
+				String[] newArgs = new String[args.length - 1];
+				for (int i = 0; i < args.length - 1; i++)
+					newArgs[i] = args[i - 1];
+				return mCommand.exectute(sender, newArgs);
 			}
-			Player player = (Player) sender;
-			int coins = 0;
-			if (SimpleFile.exists(Paths.FOLDER_PLAYERS + player.getName() + ".yml")) {
-				coins = MPlayer.getCoins(player.getName());
+		}
+		return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
+	}
+	@Override
+	public String getHelp() {
+		return "Checks how many coins you have.";
+	}
+	@Override
+	public String getUsage() {
+		return "";
+		// Don't tell regular players about the actions.
+		// It's simple anyways, just get, set and add.
+	}
+	class GetCommand extends MCommand { 
+		public GetCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// Arguments
+			if (args.length != 1)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			
+			int coins = MPlayer.getCoins(args[0]);
+			sender.sendMessage(
+					ChatContext.COLOR_LOWLIGHT + args[0] + " have "
+					+ ChatContext.COLOR_HIGHLIGHT + coins
+					+ ChatContext.COLOR_LOWLIGHT + (coins != 1 ? "coins" : "coin") + "!");
+			return new MCommandResult(this, Result.SUCCESS);
+		}
+		@Override
+		public String getUsage() {
+			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + "[player]";
+		}
+		@Override
+		public String getHelp() {
+			return "Checks how many coins a player have.";
+		}
+	}
+	class AddCommand extends MCommand { 
+		public AddCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// Arguments
+			if (args.length != 2)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			
+			// If argument is an integer
+			int addCoins = 0;
+			try {
+				addCoins = Integer.parseInt(args[1]);
+			} catch (Exception e) {
+				return new MCommandResult(this, Result.FAIL_CUSTOM,
+						args[1] + " cannot be cast into an integer.");
 			}
-			sender.sendMessage(ChatContext.PREFIX_PLUGIN + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT  + (coins != 1?" coins":" coins") + "!");
-			return true;
-		} else {
-			if (!sender.hasPermission("murder.coins.manage"))  {
-				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "You're not allowed to use arguments on this command.");
-				return true;
+			
+			// Give player coins
+			MPlayer.addCoins(args[0], addCoins, true, true);
+			return new MCommandResult(this, Result.SUCCESS,
+					"You gave " + addCoins + (addCoins != 1 ? "coins" : "coin") + " to " + args[0] + ".");
+		}
+		@Override
+		public String getUsage() {
+			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + "<player> <coins>";
+		}
+		@Override
+		public String getHelp() {
+			return "Gives a player coins.";
+		}
+	}
+	class SetCommand extends MCommand { 
+		public SetCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			// Arguments
+			if (args.length != 2)
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			
+			// If argument is an integer
+			int setCoins = 0;
+			try {
+				setCoins = Integer.parseInt(args[1]);
+			} catch (Exception e) {
+				return new MCommandResult(this, Result.FAIL_CUSTOM,
+						args[1] + " cannot be cast into an integer.");
 			}
-			if (args[0].equalsIgnoreCase("add")) {
-				if (args.length != 3) {
-					sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
-					sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/coins add <player> <count>");
-					return true;
-				}
-				int count;
-				try {
-					count = Integer.parseInt(args[2]);
-				} catch (Exception e) {
-					sender.sendMessage(ChatContext.COLOR_WARNING + args[2] + " is not a valid number.");
-					return true;
-				}
-				MLogger.log(Level.INFO, sender.getName() + " gave " + count + " coins to " + args[1] + ".");
-				MPlayer.addCoins(args[1], count, true, true);
-				return true;
-			} else if (args[0].equalsIgnoreCase("set")) {
-				if (args.length != 3) {
-					sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
-					sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/coins set <player> <count>");
-					return true;
-				}
-				int count;
-				try {
-					count = Integer.parseInt(args[2]);
-				} catch (Exception e) {
-					sender.sendMessage(ChatContext.COLOR_WARNING + args[2] + " is not a valid number.");
-					return true;
-				}
-				MPlayer.setCoins(args[1], count, true);
-				return true;
-			} else if (args[0].equalsIgnoreCase("get")) {
-					if (args.length != 2) {
-						sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
-						sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/coins get <player>");
-						return true;
-					}
-					if (SimpleFile.exists(Paths.FOLDER_PLAYERS + args[1] + ".yml"))
-						sender.sendMessage(ChatContext.PREFIX_PLUGIN + args[1] + " has " + MPlayer.getCoins(args[1]) + " coins.");
-					else
-						sender.sendMessage(ChatContext.PREFIX_WARNING + args[1] + " doesn't exist.");
-				}
-			return false;
+			
+			// Give player coins
+			MPlayer.setCoins(args[0], setCoins, true);
+			return new MCommandResult(this, Result.SUCCESS,
+					"You set " + args[0] + "'s coin count to " + setCoins + ".");
+		}
+		@Override
+		public String getUsage() {
+			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + "<player> <coins>";
+		}
+		@Override
+		public String getHelp() {
+			return "Sets a player's coin count.";
 		}
 	}
 }

@@ -52,7 +52,7 @@ public class MurderCommand extends MCommand {
 	}
 	@Override
 	public String getUsage() {
-		return "[action]";
+		return "<action>";
 	}
 
 	class StartCommand extends MCommand { 
@@ -78,7 +78,7 @@ public class MurderCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " [ + " + getLabel() + " + ]";
+			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >";
 		}
 		@Override
 		public String getHelp() {
@@ -108,7 +108,7 @@ public class MurderCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " [ + " + getLabel() + " + ]";
+			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >";
 		}
 		@Override
 		public String getHelp() {
@@ -139,7 +139,7 @@ public class MurderCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " [ + " + getLabel() + " + ]";
+			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >";
 		}
 		@Override
 		public String getHelp() {
@@ -172,7 +172,7 @@ public class MurderCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " [ + " + getLabel() + " + ]";
+			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >" + "<player>";
 		}
 		@Override
 		public String getHelp() {

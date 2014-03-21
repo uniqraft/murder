@@ -16,6 +16,7 @@ public class ChatContext {
 	public static final String COLOR_MURDERER = ChatColor.RED + "";
 	public static final String COLOR_SPECTATOR = ChatColor.GRAY + "";
 	
+	@Deprecated
 	public static final String PREFIX_PLUGIN = ChatColor.DARK_GREEN + "" + COLOR_LOWLIGHT;
 	public static final String PREFIX_DEBUG = PREFIX_PLUGIN + ChatColor.GOLD + "[DEBUG] " + COLOR_MAIN;
 	public static final String PREFIX_CRITICAL = PREFIX_PLUGIN + ChatColor.DARK_RED + "[CRITICAL] ";
