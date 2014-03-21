@@ -30,8 +30,13 @@ public class MurderCommand extends MCommand {
 	
 	@Override
 	public MCommandResult exectute(CommandSender sender, String[] args) {
+		// Permission
+		if (!sender.hasPermission("murder.admin"))
+			return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
+		// Arguments
 		if (args.length < 1)
 			return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
+		// Execute
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
 				String[] newArgs = new String[args.length - 1];
@@ -64,9 +69,6 @@ public class MurderCommand extends MCommand {
 			// Arguments
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
-			// Permission
-			if (!sender.hasPermission("murder.admin"))
-				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
 			
 			// Check if not already started
 			if (!Murder.getInstance().isStarted()) {
@@ -94,9 +96,6 @@ public class MurderCommand extends MCommand {
 			// Arguments
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
-			// Permission
-			if (!sender.hasPermission("murder.admin"))
-				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
 			// Check if already started
 			if (!Murder.getInstance().isDevMode())
 				return new MCommandResult(this, Result.FAIL_CUSTOM, "Murder has already been started.");
@@ -124,9 +123,6 @@ public class MurderCommand extends MCommand {
 			// Arguments
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
-			// Permission
-			if (!sender.hasPermission("murder.admin"))
-				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
 			
 			// List players
 			for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
@@ -155,9 +151,6 @@ public class MurderCommand extends MCommand {
 			// Arguments
 			if (args.length != 1)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
-			// Permission
-			if (!sender.hasPermission("murder.admin"))
-				return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
 			
 			// Get targeted player
 			Player player = Bukkit.getPlayer(args[0]);

@@ -17,6 +17,8 @@ private final List<MCommand> mCommands;
 		mCommands = new ArrayList<MCommand>();
 		// Register commands
 		mCommands.add(new GetCommand("get"));
+		mCommands.add(new GetCommand("set"));
+		mCommands.add(new GetCommand("add"));
 	}
 	
 	@Override
