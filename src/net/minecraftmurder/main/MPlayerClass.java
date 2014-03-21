@@ -167,7 +167,7 @@ public enum MPlayerClass {
 		ItemStack item = new ItemStack(MATERIAL_GUNPART);
 		Tools.setItemStackName(item, "Fake Gun Piece",
 				Arrays.asList("Use this to trick the innocent into thinking you're one of them!"));
-		inventory.setItem(9, item);
+		inventory.setItem(8, item);
 	}
 
 	public static void giveInventorySelect(Inventory inventory) {
