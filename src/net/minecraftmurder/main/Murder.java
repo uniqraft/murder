@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 import net.minecraftmurder.commands.ArenaCommand;
-import net.minecraftmurder.commands.CoinCommand;
 import net.minecraftmurder.commands.CommandListener;
 import net.minecraftmurder.commands.SpawnCommand;
 import net.minecraftmurder.commands.WarnCommand;
