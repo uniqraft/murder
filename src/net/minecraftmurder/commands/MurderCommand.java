@@ -1,10 +1,12 @@
 package net.minecraftmurder.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,9 +41,7 @@ public class MurderCommand extends MCommand {
 		// Execute
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
-				String[] newArgs = new String[args.length - 1];
-				for (int i = 0; i < args.length - 1; i++)
-					newArgs[i] = args[i - 1];
+				String[] newArgs = Arrays.copyOfRange(args, 1, args.length);
 				return mCommand.exectute(sender, newArgs);
 			}
 		}
@@ -49,15 +49,15 @@ public class MurderCommand extends MCommand {
 	}
 	@Override
 	public String getHelp() {
-		String help = "Actions:\n";
+		String help = ChatColor.GOLD + "Actions:\n" + ChatColor.YELLOW;
 		for (MCommand mCommand : mCommands) {
-			help += mCommand.getUsage() + "\n";
+			help += "/" + mCommand.getUsage() + "\n";
 		}
 		return help;
 	}
 	@Override
 	public String getUsage() {
-		return "<action>";
+		return getLabel() + " <action>";
 	}
 
 	class StartCommand extends MCommand { 
@@ -80,7 +80,7 @@ public class MurderCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >";
+			return MurderCommand.this.getLabel() +  " <" + getLabel() + ">";
 		}
 		@Override
 		public String getHelp() {
@@ -97,8 +97,8 @@ public class MurderCommand extends MCommand {
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
 			// Check if already started
-			if (!Murder.getInstance().isDevMode())
-				return new MCommandResult(this, Result.FAIL_CUSTOM, "Murder has already been started.");
+			if (Murder.getInstance().isDevMode())
+				return new MCommandResult(this, Result.FAIL_CUSTOM, "Murder is already in dev mode.");
 		
 			// Put Murder in gameplay mode
 			Murder.getInstance().activateDevMode();
@@ -107,7 +107,7 @@ public class MurderCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >";
+			return MurderCommand.this.getLabel() +  " <" + getLabel() + ">";
 		}
 		@Override
 		public String getHelp() {
@@ -126,16 +126,16 @@ public class MurderCommand extends MCommand {
 			
 			// List players
 			for (MPlayer mPlayer: PlayerManager.getMPlayers()) {
-				sender.sendMessage(
-						ChatContext.COLOR_HIGHLIGHT + ">" + mPlayer.getName()
-						+ ChatContext.COLOR_LOWLIGHT + "|" + mPlayer.getPlayerClass().toString());
+				sender.sendMessage("> "
+						+ ChatContext.COLOR_HIGHLIGHT + mPlayer.getName()
+						+ ChatContext.COLOR_LOWLIGHT + " | " + mPlayer.getPlayerClass().toString() + " | " + mPlayer.getMatch().hashCode());
 			}
 			
 			return new MCommandResult(this, Result.SUCCESS);
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >";
+			return MurderCommand.this.getLabel() +  " <" + getLabel() + ">";
 		}
 		@Override
 		public String getHelp() {
@@ -161,15 +161,16 @@ public class MurderCommand extends MCommand {
 			MPlayer mPlayer = PlayerManager.getMPlayer(player);
 			mPlayer.onDeath();
 			
-			return new MCommandResult(this, Result.SUCCESS);
+			return new MCommandResult(this, Result.SUCCESS,
+					"Player killed!");
 		}
 		@Override
 		public String getUsage() {
-			return MurderCommand.this.getUsage() +  " < + " + getLabel() + " + >" + "<player>";
+			return MurderCommand.this.getLabel() +  " <" + getLabel() + ">" + " <player>";
 		}
 		@Override
 		public String getHelp() {
-			return "Kills a player.";
+			return "Kills the specified player.";
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package net.minecraftmurder.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -19,7 +20,10 @@ public class CommandListener implements CommandExecutor {
 	public CommandListener () {
 		mCommands = new ArrayList<MCommand>();
 		// Register commands
+		mCommands.add(new ArenaCommand("arena"));
+		mCommands.add(new CoinCommand("coins"));
 		mCommands.add(new MurderCommand("murder"));
+		mCommands.add(new WarnCommand("warn"));
 	}
 	
 	@Override
@@ -43,26 +47,27 @@ public class CommandListener implements CommandExecutor {
 	
 	private void executeCommand (MCommand originalMCommand, CommandSender sender, String[] args) {
 		String returnedMessage = null;
-		// Create arguments for command
-		String[] newArgs = new String[args.length - 1];
-		for (int i = 0; i < args.length - 1; i++)
-			newArgs[i] = args[i-2];
 		// Execute command
-		MCommandResult commandResult = originalMCommand.exectute(sender, newArgs);
+		MCommandResult commandResult = originalMCommand.exectute(sender, args);
 		MCommand executedMCommand = commandResult.getExecutedMCommand();
 		// Handle result
-		returnedMessage = executedMCommand.getCustomMessage();
-		sender.sendMessage(returnedMessage);
-		MLogger.log(Level.INFO, "Command outputed: " + returnedMessage);
+		returnedMessage = commandResult.getMessage();
+		if (returnedMessage != null) {
+			sender.sendMessage((commandResult.getResult() == Result.SUCCESS ? "" : ChatColor.RED + "> ") + returnedMessage);
+			MLogger.log(Level.INFO, "Command outputed: " + returnedMessage);
+		} else {
+			MLogger.log(Level.INFO, "Command outputed: " + commandResult.getResult().toString());
+		}
+		
 		// If the command was not successful
-		if (commandResult.getResult() != Result.SUCCESS) {
+		if (commandResult.getResult() == Result.FAIL_ARGUMENTS) {
 			// Format help
 			String[] splitHelp = executedMCommand.getHelp().split("\n");
 			String[] help = new String[splitHelp.length];
 			for (int i = 0; i < splitHelp.length; i++)
 				help[i] = ChatColor.RED + "| " + ChatColor.YELLOW + splitHelp[i];
 			// Send usage and help
-			sender.sendMessage(ChatColor.RED + "> " + ChatColor.YELLOW + "/" + executedMCommand.getUsage());
+			sender.sendMessage(ChatColor.RED + "> " + ChatColor.GREEN + "/" + executedMCommand.getUsage());
 			sender.sendMessage(help);
 		}
 	}

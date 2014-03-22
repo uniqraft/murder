@@ -63,6 +63,6 @@ public class WarnCommand extends MCommand {
 	}
 	@Override
 	public String getUsage() {
-		return "<player> <rule>";
+		return getLabel() + " <player> <rule>";
 	}
 }

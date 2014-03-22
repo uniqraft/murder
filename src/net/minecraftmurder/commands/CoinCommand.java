@@ -1,7 +1,10 @@
 package net.minecraftmurder.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,8 +20,8 @@ private final List<MCommand> mCommands;
 		mCommands = new ArrayList<MCommand>();
 		// Register commands
 		mCommands.add(new GetCommand("get"));
-		mCommands.add(new GetCommand("set"));
-		mCommands.add(new GetCommand("add"));
+		mCommands.add(new SetCommand("set"));
+		mCommands.add(new AddCommand("add"));
 	}
 	
 	@Override
@@ -31,7 +34,7 @@ private final List<MCommand> mCommands;
 			sender.sendMessage(
 					ChatContext.COLOR_LOWLIGHT + "You have "
 					+ ChatContext.COLOR_HIGHLIGHT + coins
-					+ ChatContext.COLOR_LOWLIGHT + (coins != 1 ? "coins" : "coin") + "!");
+					+ ChatContext.COLOR_LOWLIGHT + (coins != 1 ? " coins" : " coin") + "!");
 			return new MCommandResult(this, Result.SUCCESS);
 		}
 		// If sender doesn't have permission
@@ -44,9 +47,7 @@ private final List<MCommand> mCommands;
 		
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
-				String[] newArgs = new String[args.length - 1];
-				for (int i = 0; i < args.length - 1; i++)
-					newArgs[i] = args[i - 1];
+				String[] newArgs = Arrays.copyOfRange(args, 1, args.length);
 				return mCommand.exectute(sender, newArgs);
 			}
 		}
@@ -58,7 +59,7 @@ private final List<MCommand> mCommands;
 	}
 	@Override
 	public String getUsage() {
-		return "";
+		return getLabel();
 		// Don't tell regular players about the actions.
 		// It's simple anyways, just get, set and add.
 	}
@@ -74,14 +75,14 @@ private final List<MCommand> mCommands;
 			
 			int coins = MPlayer.getCoins(args[0]);
 			sender.sendMessage(
-					ChatContext.COLOR_LOWLIGHT + args[0] + " have "
+					ChatContext.COLOR_LOWLIGHT + args[0] + " has "
 					+ ChatContext.COLOR_HIGHLIGHT + coins
-					+ ChatContext.COLOR_LOWLIGHT + (coins != 1 ? "coins" : "coin") + "!");
+					+ ChatContext.COLOR_LOWLIGHT + (coins != 1 ? " coins" : " coin") + "!");
 			return new MCommandResult(this, Result.SUCCESS);
 		}
 		@Override
 		public String getUsage() {
-			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + "[player]";
+			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + " <player>";
 		}
 		@Override
 		public String getHelp() {
@@ -110,11 +111,11 @@ private final List<MCommand> mCommands;
 			// Give player coins
 			MPlayer.addCoins(args[0], addCoins, true, true);
 			return new MCommandResult(this, Result.SUCCESS,
-					"You gave " + addCoins + (addCoins != 1 ? "coins" : "coin") + " to " + args[0] + ".");
+					"You gave " + ChatContext.COLOR_HIGHLIGHT + addCoins + ChatContext.COLOR_LOWLIGHT + (addCoins != 1 ? " coins" : " coin") + " to " + args[0] + ".");
 		}
 		@Override
 		public String getUsage() {
-			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + "<player> <coins>";
+			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + " <player> <coins>";
 		}
 		@Override
 		public String getHelp() {
@@ -147,7 +148,7 @@ private final List<MCommand> mCommands;
 		}
 		@Override
 		public String getUsage() {
-			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + "<player> <coins>";
+			return CoinCommand.this.getUsage() +  " <" + getLabel() + ">" + " <player> <coins>";
 		}
 		@Override
 		public String getHelp() {

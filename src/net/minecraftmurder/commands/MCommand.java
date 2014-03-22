@@ -3,7 +3,6 @@ package net.minecraftmurder.commands;
 import org.bukkit.command.CommandSender;
 
 public abstract class MCommand {
-	private String customMessage;
 	private final String label;
 	
 	public MCommand(String label) {
@@ -17,10 +16,12 @@ public abstract class MCommand {
 	public String getLabel() {
 		return label;
 	}
+	@Deprecated
 	public String getCustomMessage() {
-		return customMessage;
+		return null;
 	}
+	@Deprecated
 	public void setCustomMessage(String customMessage) {
-		this.customMessage = customMessage;
+		return;
 	}
 }

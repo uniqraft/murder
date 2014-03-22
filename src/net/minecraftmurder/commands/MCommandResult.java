@@ -30,7 +30,9 @@ public final class MCommandResult {
 	public String getMessage () {
 		switch (result) {
 		case SUCCESS:
-			return ChatColor.YELLOW + (message != null ? message : "");
+			if (message == null)
+				return null;
+			return ChatColor.YELLOW + message;
 		case FAIL_ARGUMENTS:
 			return ChatColor.GOLD + "Invalid arguments.";
 		case FAIL_PERMISSIONS:

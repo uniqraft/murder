@@ -76,11 +76,11 @@ public class Murder extends JavaPlugin {
 		// Instantiate command listener
 		CommandListener listener = new CommandListener();
 		// Register all commands to the listener
-		getCommand("arena").setExecutor(new ArenaCommand());
+		getCommand("arena").setExecutor(listener);
 		getCommand("murder").setExecutor(listener);
 		getCommand("spawn").setExecutor(new SpawnCommand());
 		getCommand("coins").setExecutor(listener);
-		getCommand("warn").setExecutor(new WarnCommand());
+		getCommand("warn").setExecutor(listener);
 		
 		// Setup config
 		saveDefaultConfig();
