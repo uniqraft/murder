@@ -23,7 +23,7 @@ public class VotifierListener implements Listener {
 			MLogger.log(Level.INFO, "Offline player " + vote.getUsername() + " casted a vote.");
 		} else {
 			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_HIGHLIGHT + "Thank you for voting! <3");
-			MLogger.log(Level.INFO, "Online player " + player.getName() + " casted a vote.");
+			MLogger.log(Level.INFO, "Online player " + vote.getUsername() + " casted a vote.");
 		}
 		MPlayer.addCoins(vote.getUsername(), 20, true);
 	}

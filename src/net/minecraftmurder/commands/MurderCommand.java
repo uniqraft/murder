@@ -72,6 +72,7 @@ public class MurderCommand extends MCommand {
 			
 			// Check if not already started
 			if (!Murder.getInstance().isStarted()) {
+				Murder.getInstance().start();
 				MLogger.log(Level.INFO, sender.getName() + " activated gameplay mode.");
 				return new MCommandResult(this, Result.SUCCESS, "Murder started.");
 			} else {

@@ -100,6 +100,13 @@ public class EntityListener implements Listener {
 				newArrow.setBounce(false);
 				arrow.remove();
 				return;
+			// Murderer was hit by arrow
+			} else if (mDamaged.getPlayerClass() == MPlayerClass.MURDERER) {
+				// Is this the knife?
+				if (arrow.getPassenger() != null) {
+					event.setCancelled(true);
+					return;
+				}
 			}
 			
 			// Was I shot by a player?

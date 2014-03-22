@@ -317,6 +317,11 @@ public class PlayMatch extends Match {
 			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 		}
 		MLogger.log(Level.INFO, "Match " + this.hashCode() + " started.");
+		sendMessage(
+				ChatContext.COLOR_HIGHLIGHT + getMPlayers().size()
+				+ ChatContext.COLOR_LOWLIGHT + " out of "
+				+ ChatContext.COLOR_HIGHLIGHT + MAX_PLAYERS
+				+ ChatContext.COLOR_LOWLIGHT + " players are playing.");
 	}
 
 	private void end(boolean murdererWon) {

@@ -187,25 +187,13 @@ public class MPlayer {
 	public static boolean addCoins(String player, int count, boolean tell,
 			boolean ignoreMultiplier) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
-		boolean vip = false;
-		if (!ignoreMultiplier && count > 0) {
-			// if the player is not online.
-			// it might be possible to do this in a more elegant way, but...
-			// frankly I don't really care.
-			// TODO Fix this as it wont work. Javadocs for getPlayer() says:
-			// "If the player is online, this will return that player. Otherwise, it will return null."
-			// I have to find another way to check if a player is a VIP.
-			if (mPlayer == null) {
-				vip = Bukkit.getOfflinePlayer(player).getPlayer()
-						.hasPermission("murder.vip");
-			} else {
-				vip = mPlayer.getPlayer().hasPermission("murder.vip");
-			}
-		}
+		/* TODO
+		 * Fixed error, but not optimal. Now only /online/ VIP players get double coins.
+		 */
+		boolean vip = (mPlayer != null && mPlayer.getPlayer().hasPermission("murder.vip") && !ignoreMultiplier && count > 0);
 
-		if (vip) {
+		if (vip)
 			count *= 2;
-		}
 
 		if (mPlayer != null && tell) {
 			if (count >= 0) {
