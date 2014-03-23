@@ -2,7 +2,6 @@ package net.minecraftmurder.listeners;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
@@ -283,8 +282,7 @@ public class PlayerListener implements Listener {
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			// ... unless they're spectating another player.
 			if (itemInHand.getType() == MPlayerClass.MATERIAL_DETECTOR) {
-				List<MPlayer> mPlayers = mPlayer.getMatch().getMPlayers();
-				player.teleport(mPlayers.get(new Random().nextInt(mPlayers.size())).getPlayer().getLocation());
+				mPlayer.getMInventory().openSpectatorMenu();
 			}
 			event.setCancelled(true);
 		}

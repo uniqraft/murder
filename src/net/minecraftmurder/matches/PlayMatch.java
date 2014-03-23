@@ -37,11 +37,11 @@ import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
 public class PlayMatch extends Match {
-	public static final int MATCH_TIME = 60 * 6;
+	public static final int MATCH_TIME = 60 * 5;
 	public static final int COUNTDOWN_TIME = 20;
 	public static final int MATCHEND_TIME = 10;
 	public static final int MIN_PLAYERS = 2;
-	public static final int MAX_PLAYERS = 12;
+	public static final int MAX_PLAYERS = 10;
 	public static final int MIN_PLAYERS_RANKED = 4;
 
 	private boolean isPlaying;
@@ -137,8 +137,8 @@ public class PlayMatch extends Match {
 				}
 			}
 			if (countdown <= 0) {
-				sendMessage(ChatContext.PREFIX_PLUGIN
-						+ ChatContext.COLOR_MURDERER + "The Murderer, "
+				sendMessage(
+						ChatContext.COLOR_MURDERER + "The Murderer, "
 						+ ChatContext.COLOR_HIGHLIGHT + mMurderer.getName()
 						+ ChatContext.COLOR_LOWLIGHT + ", ran out of time.");
 				mMurderer.onDeath();
@@ -149,10 +149,10 @@ public class PlayMatch extends Match {
 						new ItemStack(MPlayerClass.MATERIAL_GUNPART));
 			}
 			if (countdown % 60 == 0) {
-				sendMessage(ChatContext.PREFIX_PLUGIN
-						+ ChatContext.COLOR_HIGHLIGHT + (int) (countdown / 60)
+				sendMessage(
+						ChatContext.COLOR_HIGHLIGHT + (int) (countdown / 60)
 						+ ChatContext.COLOR_LOWLIGHT
-						+ " minutes left of the match.");
+						+ " minute" + (countdown != 60 ? "s " : " ") +  "left of the match.");
 			}
 			World world = arena.getWorld();
 			if (world != null) {
@@ -211,7 +211,7 @@ public class PlayMatch extends Match {
 					start();
 				}
 			} else if (countdown % 10 == 0
-					|| (countdown >= 1 && countdown <= 3)) {
+					|| (countdown == 3)) {
 				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in "
 						+ ChatContext.COLOR_HIGHLIGHT + countdown + " second"
 						+ (countdown != 1 ? "s" : "")
@@ -398,8 +398,8 @@ public class PlayMatch extends Match {
 
 						// Reconnect each player to the match
 						for (MPlayer mPlayer : playMatch.getMPlayers()) {
-							playMatch.onPlayerQuit(mPlayer.getPlayer());
-							playMatch.onPlayerJoin(mPlayer.getPlayer());
+							playMatch.onPlayerQuit(mPlayer);
+							playMatch.onPlayerJoin(mPlayer);
 						}
 					}
 				}, 20 * MATCHEND_TIME);
@@ -458,8 +458,8 @@ public class PlayMatch extends Match {
 	}
 
 	@Override
-	public void onPlayerJoin(Player player) {
-		MPlayer mPlayer = PlayerManager.getMPlayer(player);
+	public void onPlayerJoin(MPlayer mPlayer) {
+		Player pPlayer = mPlayer.getPlayer();
 		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 
 		if (arena == null) {
@@ -474,12 +474,11 @@ public class PlayMatch extends Match {
 		if (spawnLocation == null) {
 			throw new NullPointerException("No Spawn Location");
 		}
-		player.teleport(spawnLocation);
+		pPlayer.teleport(spawnLocation);
 	}
 
 	@Override
-	public void onPlayerQuit(Player player) {
-		MPlayer mPlayer = PlayerManager.getMPlayer(player);
+	public void onPlayerQuit(MPlayer mPlayer) {
 		// Remove all this players entries from the list of ticket users
 		ticketUsers.removeAll(Collections.singleton(mPlayer));
 		if (isPlaying) {
@@ -497,17 +496,18 @@ public class PlayMatch extends Match {
 	}
 
 	@Override
-	public void onPlayerDeath(final Player killedPlayer) {
-		killedPlayer.playSound(killedPlayer.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
-		killedPlayer.setVelocity(new Vector(0, 2, 0));
+	public void onPlayerDeath(MPlayer mKilled) {
+		Player pKilled = mKilled.getPlayer();
+		
+		pKilled.playSound(pKilled.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
+		pKilled.setVelocity(new Vector(0, 2, 0));
 
-		MPlayer mKilled = PlayerManager.getMPlayer(killedPlayer);
 		String killer = mKilled.getKillerName();
 
 		// If player who died was a gunner
 		if (mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
 			// Drop a gun
-			killedPlayer.getWorld().dropItem(killedPlayer.getLocation(),
+			pKilled.getWorld().dropItem(pKilled.getLocation(),
 					new ItemStack(MPlayerClass.MATERIAL_GUN));
 		}
 
@@ -526,7 +526,7 @@ public class PlayMatch extends Match {
 		
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
-		killedPlayer.addPotionEffect(new PotionEffect(
+		pKilled.addPotionEffect(new PotionEffect(
 				PotionEffectType.BLINDNESS, 15, 1), true);
 
 		checkForEnd();

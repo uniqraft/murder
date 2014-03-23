@@ -23,9 +23,9 @@ public class LobbyMatch extends Match {
 	}
 
 	@Override
-	public void onPlayerJoin(Player player) {
-		MPlayer mPlayer = PlayerManager.getMPlayer(player);
+	public void onPlayerJoin(MPlayer mPlayer) {
 		mPlayer.switchPlayerClass(MPlayerClass.LOBBYMAN);
+		Player player = mPlayer.getPlayer();
 		
 		if (player.hasPermission("murder.vip")) {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 72000, 2), true);
@@ -39,8 +39,8 @@ public class LobbyMatch extends Match {
 	}
 
 	@Override
-	public void onPlayerQuit(Player player) {}
+	public void onPlayerQuit(MPlayer player) {}
 
 	@Override
-	public void onPlayerDeath(Player player) {}
+	public void onPlayerDeath(MPlayer player) {}
 }

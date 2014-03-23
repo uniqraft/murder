@@ -53,6 +53,7 @@ public final class PlayerManager {
 	public static void onPlayerQuit (Player player) {
 		// Save and remove
 		MPlayer mPlayer = getMPlayer(player);
+		mPlayers.remove(mPlayer);
 		if (mPlayer == null) {
 			Bukkit.getLogger().log(Level.INFO, "Player " + player.getName() + " doesn't have an entry in PlayerManager, but left the game. Most likely this user is banned but tried to connect.");
 			return;
@@ -61,9 +62,8 @@ public final class PlayerManager {
 		if (match == null) {
 			Bukkit.getLogger().log(Level.WARNING, "MPlayer " + player.getName() + " wasn't part of a match, but left the game.");
 		} else {
-			match.onPlayerQuit(player); // Tell player's match that this player left
+			match.onPlayerQuit(mPlayer); // Tell player's match that this player left
 		}
-		mPlayers.remove(mPlayer);
 	}
 	
 	public static MPlayer getMPlayer (Player player) {

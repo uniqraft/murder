@@ -3,10 +3,8 @@ package net.minecraftmurder.main;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 
-import net.minecraftmurder.commands.ArenaCommand;
 import net.minecraftmurder.commands.CommandListener;
 import net.minecraftmurder.commands.SpawnCommand;
-import net.minecraftmurder.commands.WarnCommand;
 import net.minecraftmurder.listeners.BlockListener;
 import net.minecraftmurder.listeners.EntityListener;
 import net.minecraftmurder.listeners.InventoryListener;
@@ -41,6 +39,7 @@ public class Murder extends JavaPlugin {
 	
 	@Override
 	public void onEnable () {
+		
 		instance = this;
 		
 		// Create custom enchantment

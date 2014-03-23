@@ -45,6 +45,7 @@ public enum MPlayerClass {
 	public static void setDefaultClassInventory(MPlayer mPlayer,
 			MPlayerClass playerClass) {
 		Player player = mPlayer.getPlayer();
+		player.closeInventory();	// Force player to close inventory
 		player.setFlying(false);
 		PlayerInventory inventory = player.getInventory();
 		inventory.setHeldItemSlot(0);
@@ -68,6 +69,7 @@ public enum MPlayerClass {
 			break;
 		case SPECTATOR:
 			giveLeaveItem(inventory);
+			giveSpecCompass(inventory);
 			break;
 		case GUNNER:
 			giveGun(inventory);
@@ -214,8 +216,8 @@ public enum MPlayerClass {
 	
 	public static void giveSpecCompass(Inventory inventory) {
 		ItemStack item = new ItemStack(MATERIAL_DETECTOR);
-		Tools.setItemStackName(item, "Spectate Players", Arrays.asList("Right-click to teleport to another player."));
-		inventory.setItem(8, item);
+		Tools.setItemStackName(item, "Spectator Menu", Arrays.asList("Right-click to open spectator menu."));
+		inventory.setItem(7, item);
 	}
 	
 	public static void giveInstructionalBooklet(Inventory inventory) {

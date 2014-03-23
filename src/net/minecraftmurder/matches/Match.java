@@ -8,16 +8,15 @@ import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.managers.PlayerManager;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public abstract class Match {
 	protected Arena arena;
 	
 	public abstract void update ();
 	
-	public abstract void onPlayerJoin (Player player);
-	public abstract void onPlayerQuit (Player player);
-	public abstract void onPlayerDeath (Player player);
+	public abstract void onPlayerJoin (MPlayer player);
+	public abstract void onPlayerQuit (MPlayer player);
+	public abstract void onPlayerDeath (MPlayer player);
 	
 	public Arena getArena () {
 		if (arena == null) {
@@ -34,7 +33,7 @@ public abstract class Match {
 		List<MPlayer> allMPlayers = PlayerManager.getMPlayers();
 		List<MPlayer> myMPlayers = new ArrayList<MPlayer>();
 		for (MPlayer mPlayer: allMPlayers) {
-			if (mPlayer.getMatch() == this)
+			if (mPlayer.getMatch().equals(this))
 				myMPlayers.add(mPlayer);
 		}
 		return myMPlayers;

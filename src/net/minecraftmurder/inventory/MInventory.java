@@ -1,18 +1,23 @@
 package net.minecraftmurder.inventory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -176,6 +181,19 @@ public class MInventory {
 		
 		mPlayer.getPlayer().openInventory(inventory);
 	}
+	public void openSpectatorMenu () {
+		List<MPlayer> mPlayers = new ArrayList<MPlayer>();
+		for (MPlayer mP : mPlayer.getMatch().getMPlayers()) {
+			if (mP.getPlayerClass() != MPlayerClass.SPECTATOR)
+				mPlayers.add(mP);
+		}
+		Inventory inventory = Bukkit.createInventory(null, 9 * (int)Math.ceil((double)mPlayers.size() / 9d), "Spectator Menu");
+		for (int i = 0; i < mPlayers.size(); i++) {
+			inventory.setItem(i, Tools.setItemStackName(new ItemStack(Material.SKULL_ITEM, 1, (byte) 3), ChatColor.AQUA + mPlayers.get(i).getName(), Arrays.asList("Click to teleport.")));
+		}
+		mPlayer.getPlayer().openInventory(inventory);
+	}
+	
 	public boolean buyMItem (MItem mItem) {
 		if (mItem == null) return false;
 		

@@ -9,6 +9,9 @@ import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.Tools;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -91,6 +94,14 @@ public class InventoryListener implements Listener {
 						} else {
 							player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + "You can't afford this item!");
 							player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+						}
+					}
+				} else if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
+					if (item.getType().equals(Material.SKULL_ITEM)) {
+						Player target = Bukkit.getPlayer(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+						if (target != null) {
+							player.teleport(target.getLocation());
+							player.closeInventory();
 						}
 					}
 				}

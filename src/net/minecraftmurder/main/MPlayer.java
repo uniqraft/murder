@@ -100,14 +100,14 @@ public class MPlayer {
 					public void run() {
 						zombie.setHealth(0);
 					}
-				}, 2L);
+				}, 1L);
 
 		MPlayerClass.setFoodLevel(this);
 		player.setHealth(20);
 		for (PotionEffect effect : player.getActivePotionEffects())
 			player.removePotionEffect(effect.getType());
 
-		match.onPlayerDeath(player);
+		match.onPlayerDeath(PlayerManager.getMPlayer(player));
 	}
 
 	public void decreaseGunBanTime() {
@@ -136,10 +136,10 @@ public class MPlayer {
 
 	public void setMatch(Match match) {
 		if (this.match != null)
-			this.match.onPlayerQuit(getPlayer()); // Tell current match that
+			this.match.onPlayerQuit(this); // Tell current match that
 													// this player left
 		this.match = match;
-		this.match.onPlayerJoin(getPlayer()); // Tell new match that this player
+		this.match.onPlayerJoin(this); // Tell new match that this player
 												// joined
 	}
 
