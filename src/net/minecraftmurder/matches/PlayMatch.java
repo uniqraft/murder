@@ -32,7 +32,6 @@ import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
-import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
@@ -495,6 +494,14 @@ public class PlayMatch extends Match {
 		checkForEnd();
 	}
 
+	@Override
+	public boolean onPlayerInteractItem(ItemStack itemStack, MPlayer mPlayer) {
+		
+		
+		// Handle default actions
+		return super.onPlayerInteractItem(itemStack, mPlayer);
+	}
+	
 	@Override
 	public void onPlayerDeath(MPlayer mKilled) {
 		Player pKilled = mKilled.getPlayer();

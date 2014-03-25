@@ -305,22 +305,11 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
-
-		if (MPlayerClass.isKnife(itemInHand.getType()) && rightClicked) {
-			Arrow arrow = player.launchProjectile(Arrow.class);
-			arrow.setVelocity(player.getEyeLocation().getDirection()
-					.multiply(1.2));
-			event.setCancelled(true);
-			player.getWorld().playSound(player.getLocation(),
-					Sound.WITHER_SHOOT, 1, 1.5f);
-
-			Item item = player.getWorld().dropItem(player.getLocation(),
-					itemInHand);
-			arrow.setPassenger(item);
-
-			// Remove gun
-			player.setItemInHand(new ItemStack(Material.AIR));
-		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_GUN
+		
+		event.setCancelled(mPlayer.getMatch().onPlayerInteractItem(itemInHand, mPlayer));
+		
+		if (MPlayerClass.isKnife(itemInHand.getType()) && rightClicked) {}
+		else if (itemInHand.getType() == MPlayerClass.MATERIAL_GUN
 				&& rightClicked) {
 			if (mPlayer.getReloadTime() <= 0) {
 				// Fire arrow
