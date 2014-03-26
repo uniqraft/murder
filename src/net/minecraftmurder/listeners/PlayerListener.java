@@ -278,10 +278,13 @@ public class PlayerListener implements Listener {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		ItemStack itemInHand = player.getItemInHand();
 
+		boolean rightClicked = 
+				(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK);
+		
 		// Spectators can't interact...
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			// ... unless they're spectating another player.
-			if (itemInHand.getType() == MPlayerClass.MATERIAL_DETECTOR) {
+			if (itemInHand.getType() == MPlayerClass.MATERIAL_DETECTOR && rightClicked) {
 				mPlayer.getMInventory().openSpectatorMenu();
 			}
 			event.setCancelled(true);
@@ -291,12 +294,8 @@ public class PlayerListener implements Listener {
 				&& event.getClickedBlock().getType() == Material.SOIL)
 			event.setCancelled(true);
 
-		boolean rightClicked = (event.getAction() == Action.RIGHT_CLICK_AIR || event
-				.getAction() == Action.RIGHT_CLICK_BLOCK);
-
 		// If clicked a block
-		if (event.getAction() == Action.LEFT_CLICK_BLOCK
-				|| event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (event.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) event.getClickedBlock().getState();
 				if (SignManager.existsSigns(sign.getLocation())) {
@@ -306,73 +305,7 @@ public class PlayerListener implements Listener {
 			}
 		}
 		
-		event.setCancelled(mPlayer.getMatch().onPlayerInteractItem(itemInHand, mPlayer));
-		
-		if (MPlayerClass.isKnife(itemInHand.getType()) && rightClicked) {}
-		else if (itemInHand.getType() == MPlayerClass.MATERIAL_GUN
-				&& rightClicked) {
-			if (mPlayer.getReloadTime() <= 0) {
-				// Fire arrow
-				Arrow arrow = player.launchProjectile(Arrow.class);
-				arrow.setVelocity(player.getEyeLocation().getDirection()
-						.multiply(Murder.ARROW_SPEED));
-				event.setCancelled(true);
-				mPlayer.setReloadTime(MPlayer.RELOAD_TIME);
-				player.getWorld().playSound(player.getLocation(),
-						Sound.FIREWORK_BLAST, 1, .8f);
-			}
-		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_TELEPORTER
-				&& rightClicked) {
+		if (rightClicked && mPlayer.getMatch().onPlayerInteractItem(itemInHand, mPlayer))
 			event.setCancelled(true);
-			event.getPlayer().setItemInHand(null);
-			// Teleport all gunners and innocents in the player's match to a
-			// random spawn
-			final List<MPlayer> playersInMatch = mPlayer.getMatch()
-					.getMPlayers();
-			for (MPlayer mP : playersInMatch) {
-				if (mP.getPlayerClass() == MPlayerClass.INNOCENT
-						|| mP.getPlayerClass() == MPlayerClass.GUNNER)
-					mP.getPlayer().teleport(
-							mPlayer.getMatch().getArena()
-									.getRandomSpawn("player").getLocation());
-			}
-			mPlayer.getMatch().sendMessage(
-					ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER
-							+ "The Murderer" + ChatContext.COLOR_LOWLIGHT
-							+ " used the teleportation device.");
-			// Play sound at each player's new location one tick later
-			Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(),
-					new Runnable() {
-						@Override
-						public void run() {
-							for (MPlayer mPlayer : playersInMatch) {
-								Player player = mPlayer.getPlayer();
-								player.playSound(player.getLocation(),
-										Sound.ENDERMAN_TELEPORT, 1, .5f);
-							}
-						}
-					}, 1);
-		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_INVENTORY
-				&& rightClicked) {
-			mPlayer.getMInventory().openInventorySelectionScreen();
-		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_SPEEDBOOST
-				&& rightClicked) {
-			event.setCancelled(true);
-			event.getPlayer().setItemInHand(null);
-			Vector velocity = player.getVelocity().add(
-					player.getLocation().getDirection().multiply(3));
-			velocity.setY(Math.max(1d, velocity.getY() / 10));
-			player.setVelocity(velocity);
-		} else if (itemInHand.getType() == MPlayerClass.MATERIAL_TICKET
-				&& rightClicked) {
-			event.setCancelled(true);
-			player.sendMessage(ChatContext.PREFIX_PLUGIN
-					+ ChatContext.COLOR_WARNING
-					+ "To buy a ticket, open your inventory and click it!");
-		} else if (itemInHand.getType() == MPlayerClass.MATERIAl_LEAVE
-				&& rightClicked) {
-			event.setCancelled(true);
-			mPlayer.setMatch(MatchManager.getLobbyMatch());
-		}
 	}
 }
