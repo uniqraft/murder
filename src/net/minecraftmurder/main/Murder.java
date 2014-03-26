@@ -39,7 +39,6 @@ public class Murder extends JavaPlugin {
 	
 	@Override
 	public void onEnable () {
-		
 		instance = this;
 		
 		// Create custom enchantment

@@ -3,9 +3,12 @@ package net.minecraftmurder.commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import net.minecraftmurder.commands.MCommandResult.Result;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.managers.ArenaManager;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,6 +29,9 @@ public class ArenaCommand extends MCommand {
 		super(label);
 		mCommands = new ArrayList<MCommand>();
 		// Register commands
+		mCommands.add(new CreateCommand("create"));
+		mCommands.add(new SetCommand("set"));
+		mCommands.add(new GetCommand("get"));
 	}
 	
 	@Override
@@ -47,15 +53,15 @@ public class ArenaCommand extends MCommand {
 	}
 	@Override
 	public String getHelp() {
-		String help = "Actions:\n";
+		String help = ChatColor.GOLD + "Actions:\n" + ChatColor.YELLOW;
 		for (MCommand mCommand : mCommands) {
-			help += mCommand.getUsage() + "\n";
+			help += "/" + mCommand.getUsage() + "\n";
 		}
 		return help;
 	}
 	@Override
 	public String getUsage() {
-		return "<action>";
+		return getLabel() + " <action>";
 	}
 	
 	class CreateCommand extends MCommand { 
@@ -87,7 +93,7 @@ public class ArenaCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return ArenaCommand.this.getUsage() +  " < + " + getLabel() + " + >  <name>";
+			return ArenaCommand.this.getUsage() +  " " + getLabel() + " <name>";
 		}
 		@Override
 		public String getHelp() {
@@ -131,7 +137,7 @@ public class ArenaCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return ArenaCommand.this.getUsage() +  " < + " + getLabel() + " + > <name> <type> <info>";
+			return ArenaCommand.this.getUsage() +  " " + getLabel() + " <name> <type> <info>";
 		}
 		@Override
 		public String getHelp() {
@@ -166,7 +172,7 @@ public class ArenaCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return ArenaCommand.this.getUsage() +  " < + " + getLabel() + " + > <name> <type>";
+			return ArenaCommand.this.getUsage() +  " " + getLabel() + " <name> <type>";
 		}
 		@Override
 		public String getHelp() {
