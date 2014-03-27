@@ -50,10 +50,12 @@ public class PlayMatch extends Match {
 	private String murderer;
 	private String murdererKiller;
 
-	private List<MPlayer> ticketUsers;
+	private List<MPlayer> murdererTicketUsers;
+	private List<MPlayer> gunnerTicketUsers;
 
 	public PlayMatch() {
-		ticketUsers = new ArrayList<MPlayer>();
+		murdererTicketUsers = new ArrayList<MPlayer>();
+		gunnerTicketUsers = new ArrayList<MPlayer>();
 
 		isPlaying = false;
 		isRanked = false;
@@ -246,76 +248,56 @@ public class PlayMatch extends Match {
 			isRanked = true;
 		}
 
-		List<MPlayer> rList = new ArrayList<MPlayer>();
-		for (MPlayer mPlayer : getMPlayers())
-			rList.add(mPlayer);
+		List<MPlayer> murdererEntires = new ArrayList<MPlayer>();
+		List<MPlayer> gunnerEntires = new ArrayList<MPlayer>();
+		for (MPlayer mPlayer : getMPlayers()) {
+			murdererEntires.add(mPlayer);
+			gunnerEntires.add(mPlayer);
+		}
 
 		// Increase chance for ticket users
-		for (MPlayer ticketUser : ticketUsers) {
+		for (MPlayer ticketUser : murdererTicketUsers) {
 			for (int i = 0; i < Math.max(1, getMPlayers().size()); i++)
-				rList.add(ticketUser);
+				murdererEntires.add(ticketUser);
+		}
+		for (MPlayer ticketUser : gunnerTicketUsers) {
+			for (int i = 0; i < Math.max(1, getMPlayers().size()); i++)
+				gunnerEntires.add(ticketUser);
 		}
 
 		SecureRandom random = new SecureRandom();
-		int m = random.nextInt(rList.size());
-		MPlayer mMurderer = rList.get(m);
-		MPlayer mGunner = null;
-		// Remove all entries of the selected murderer
-		rList.removeAll(Collections.singleton(mMurderer));
+		
+		// Select murderer
+		MPlayer mMurderer = murdererEntires.get(random.nextInt(murdererEntires.size()));
+		gunnerEntires.removeAll(Collections.singleton(mMurderer)); // This player can't become gunner
+		// Select gunner
+		MPlayer mGunner = gunnerEntires.get(random.nextInt(gunnerEntires.size()));
 
-		if (rList.size() > 0) {
-			// Select a gunner
-			int g;
-			do {
-				g = random.nextInt(rList.size());
-			} while (rList.get(g).equals(mMurderer));
+		// Clear list of players who've used a ticket
+		murdererTicketUsers.clear();
+		gunnerTicketUsers.clear();
 
-			mGunner = rList.get(g);
-			mGunner.switchPlayerClass(MPlayerClass.GUNNER);
-		}
-
-		// Clear list of player who used a ticket
-		ticketUsers.clear();
-
-		// Equip murderer
+		// Switch their classes
 		mMurderer.switchPlayerClass(MPlayerClass.MURDERER);
+		mGunner.switchPlayerClass(MPlayerClass.GUNNER);
+		
 		murderer = mMurderer.getName();
 
-		MLogger.log(Level.INFO, mMurderer.getName()
-				+ " is the murderer in Match " + this.hashCode() + ".");
-		if (mGunner != null)
-			MLogger.log(Level.INFO, mGunner.getName()
-					+ " is the original gunner in Match " + this.hashCode()
-					+ ".");
+		// Log
+		MLogger.log(Level.INFO, mMurderer.getName()	+ " is the murderer in " + toString() + ".");
+		MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in " + toString() + ".");
 
 		// Tell all players what role they play
+		mMurderer.getPlayer().sendMessage(ChatContext.MESSAGE_CHOSEN_MURDERER);
+		mGunner.getPlayer().sendMessage(ChatContext.MESSAGE_CHOSEN_GUNNER);
 		for (MPlayer mPlayer : mPlayers) {
-			if (mPlayer == mMurderer) {
-				mPlayer.getPlayer().sendMessage(
-						ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT
-								+ "You are " + ChatContext.COLOR_MURDERER
-								+ "The Murderer" + ChatContext.COLOR_LOWLIGHT
-								+ "!");
-			} else if (mPlayer == mGunner) {
-				mPlayer.getPlayer()
-						.sendMessage(
-								ChatContext.PREFIX_PLUGIN
-										+ ChatContext.COLOR_LOWLIGHT
-										+ "You are "
-										+ ChatContext.COLOR_INNOCENT
-										+ "a Gunner"
-										+ ChatContext.COLOR_LOWLIGHT + "!");
-			} else {
-				mPlayer.getPlayer().sendMessage(
-						ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT
-								+ "You are " + ChatContext.COLOR_INNOCENT
-								+ "an Innocent" + ChatContext.COLOR_LOWLIGHT
-								+ "!");
+			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
+			if (mPlayer != mMurderer && mPlayer != mGunner) {
+				mPlayer.getPlayer().sendMessage(ChatContext.MESSAGE_CHOSEN_INNOCENT);
 				mPlayer.switchPlayerClass(MPlayerClass.INNOCENT);
 			}
-			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 		}
-		MLogger.log(Level.INFO, "Match " + this.hashCode() + " started.");
+		MLogger.log(Level.INFO, toString() + " started.");
 		sendMessage(
 				ChatContext.COLOR_HIGHLIGHT + getMPlayers().size()
 				+ ChatContext.COLOR_LOWLIGHT + " out of "
@@ -479,7 +461,8 @@ public class PlayMatch extends Match {
 	@Override
 	public void onPlayerQuit(MPlayer mPlayer) {
 		// Remove all this players entries from the list of ticket users
-		ticketUsers.removeAll(Collections.singleton(mPlayer));
+		murdererTicketUsers.removeAll(Collections.singleton(mPlayer));
+		gunnerTicketUsers.removeAll(Collections.singleton(mPlayer));
 		if (isPlaying) {
 			if (mPlayer.getName().equals(murderer)) {
 				sendMessage(ChatContext.PREFIX_PLUGIN
@@ -539,7 +522,10 @@ public class PlayMatch extends Match {
 		checkForEnd();
 	}
 
-	public void addTicketUser(MPlayer mPlayer) {
-		ticketUsers.add(mPlayer);
+	public void addMurdererTicketUser(MPlayer mPlayer) {
+		murdererTicketUsers.add(mPlayer);
+	}
+	public void addGunnerTicketUser(MPlayer mPlayer) {
+		gunnerTicketUsers.add(mPlayer);
 	}
 }

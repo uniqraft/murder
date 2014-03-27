@@ -85,16 +85,32 @@ public class InventoryListener implements Listener {
 				} else if (mPlayer.getPlayerClass() == MPlayerClass.PREGAMEMAN) {
 					if (item.getType().equals(MPlayerClass.MATERIAL_TICKET)) {
 						int coins = MPlayer.getCoins(player.getName());
-						if (coins >= MPlayerClass.TICKET_MURDERER_COST) {
-							MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_MURDERER_COST, true);
-							player.sendMessage(
-									ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
-									"Bought ticket! Increased chance of becoming the murderer.");
-							((PlayMatch) mPlayer.getMatch()).addTicketUser(mPlayer);
-						} else {
-							player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + "You can't afford this item!");
-							player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+						
+						if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equalsIgnoreCase("murderer ticket")) {
+							if (coins >= MPlayerClass.TICKET_MURDERER_COST) {
+								MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_MURDERER_COST, true);
+								player.sendMessage(
+										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
+										"Bought ticket! Increased chance of becoming the murderer.");
+								((PlayMatch) mPlayer.getMatch()).addMurdererTicketUser(mPlayer);
+							} else {
+								player.sendMessage(ChatContext.COLOR_WARNING + "You can't afford this item!");
+								player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+							}
+						} else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equalsIgnoreCase("gunner ticket")) {
+							if (coins >= MPlayerClass.TICKET_GUNNER_COST) {
+								MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_GUNNER_COST, true);
+								player.sendMessage(
+										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
+										"Bought ticket! Increased chance of becoming the gunner.");
+								((PlayMatch) mPlayer.getMatch()).addGunnerTicketUser(mPlayer);
+							} else {
+								player.sendMessage(ChatContext.COLOR_WARNING + "You can't afford this item!");
+								player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+							}
 						}
+						
+						
 					}
 				} else if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 					if (item.getType().equals(Material.SKULL_ITEM)) {

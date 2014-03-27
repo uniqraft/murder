@@ -40,6 +40,19 @@ public class ChatContext {
 	public static final String MESSAGE_NOTENOUGHPLAYERSRANKED = 
 			PREFIX_PLUGIN + COLOR_HIGHLIGHT + "This match is unranked. You will not gain any coins.";
 	public static final String MESSAGE_NOTENOUGHPLAYERSRANKED_2 = 
-			PREFIX_PLUGIN + COLOR_LOWLIGHT + "You need at least " + COLOR_HIGHLIGHT + PlayMatch.MIN_PLAYERS_RANKED + " players" + COLOR_LOWLIGHT + " for a ranked match.";	
+			PREFIX_PLUGIN + COLOR_LOWLIGHT + "You need at least " + COLOR_HIGHLIGHT + PlayMatch.MIN_PLAYERS_RANKED + " players" + COLOR_LOWLIGHT + " for a ranked match.";
+	
+	public static final String MESSAGE_CHOSEN_MURDERER =
+			COLOR_LOWLIGHT + "You are " +
+			COLOR_MURDERER + "The Murderer" +
+			COLOR_LOWLIGHT + "!";
+	public static final String MESSAGE_CHOSEN_GUNNER =
+			COLOR_LOWLIGHT + "You are " +
+			COLOR_INNOCENT + "a Gunner" +
+			COLOR_LOWLIGHT + "!";
+	public static final String MESSAGE_CHOSEN_INNOCENT =
+			COLOR_LOWLIGHT + "You are " +
+			COLOR_INNOCENT + "an Innocent" +
+			COLOR_LOWLIGHT + "!";
 	
 }

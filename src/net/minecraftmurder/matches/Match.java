@@ -150,4 +150,9 @@ public abstract class Match {
 		for (MPlayer mPlayer : getMPlayers())
 			mPlayer.getPlayer().sendMessage(message);
 	}
+	
+	@Override
+	public String toString() {
+		return "Match (" + this.hashCode() + ")";
+	}
 }

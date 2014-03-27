@@ -18,8 +18,8 @@ import org.bukkit.inventory.PlayerInventory;
 public enum MPlayerClass {
 	LOBBYMAN, PREGAMEMAN, MURDERER, GUNNER, INNOCENT, SPECTATOR;
 
-	public static final int TICKET_MURDERER_COST = 50;
-	public static final int TICKET_GUNNER_COST = 40;
+	public static final int TICKET_MURDERER_COST = 60;
+	public static final int TICKET_GUNNER_COST = 30;
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
 	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR;
@@ -189,11 +189,11 @@ public enum MPlayerClass {
 						ChatColor.YELLOW + "Click to buy for "
 								+ ChatColor.GREEN + TICKET_MURDERER_COST
 								+ ChatColor.YELLOW + " coins!"));
-		Tools.setItemStackName(murdererTicket, ChatColor.AQUA + "Gunner Ticket", Arrays
+		Tools.setItemStackName(gunnerTicket, ChatColor.AQUA + "Gunner Ticket", Arrays
 				.asList(ChatColor.YELLOW
-						+ "Increase your chance of becoming the murderer!",
+						+ "Increase your chance of becoming the gunner!",
 						ChatColor.YELLOW + "Click to buy for "
-								+ ChatColor.GREEN + TICKET_MURDERER_COST
+								+ ChatColor.GREEN + TICKET_GUNNER_COST
 								+ ChatColor.YELLOW + " coins!"));
 		inventory.setItem(7, murdererTicket);
 		inventory.setItem(6, gunnerTicket);
