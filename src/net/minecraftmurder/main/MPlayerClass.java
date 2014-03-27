@@ -18,7 +18,8 @@ import org.bukkit.inventory.PlayerInventory;
 public enum MPlayerClass {
 	LOBBYMAN, PREGAMEMAN, MURDERER, GUNNER, INNOCENT, SPECTATOR;
 
-	public static final int TICKET_COST = 100;
+	public static final int TICKET_MURDERER_COST = 50;
+	public static final int TICKET_GUNNER_COST = 40;
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
 	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR;
@@ -60,7 +61,7 @@ public enum MPlayerClass {
 			giveInventorySelect(inventory);
 			break;
 		case PREGAMEMAN:
-			giveTicket(inventory);
+			giveTickets(inventory);
 			giveArmor(mPlayer);
 			giveLeaveItem(inventory);
 			break;
@@ -179,15 +180,23 @@ public enum MPlayerClass {
 		inventory.setItem(8, item);
 	}
 
-	public static void giveTicket(Inventory inventory) {
-		ItemStack item = new ItemStack(MATERIAL_TICKET);
-		Tools.setItemStackName(item, ChatColor.AQUA + "Murderer Ticket", Arrays
+	public static void giveTickets(Inventory inventory) {
+		ItemStack murdererTicket = new ItemStack(MATERIAL_TICKET);
+		ItemStack gunnerTicket = new ItemStack(MATERIAL_TICKET);
+		Tools.setItemStackName(murdererTicket, ChatColor.AQUA + "Murderer Ticket", Arrays
 				.asList(ChatColor.YELLOW
-						+ "Increase your chances of becoming the murderer!",
+						+ "Increase your chance of becoming the murderer!",
 						ChatColor.YELLOW + "Click to buy for "
-								+ ChatColor.GREEN + TICKET_COST
+								+ ChatColor.GREEN + TICKET_MURDERER_COST
 								+ ChatColor.YELLOW + " coins!"));
-		inventory.setItem(7, item);
+		Tools.setItemStackName(murdererTicket, ChatColor.AQUA + "Gunner Ticket", Arrays
+				.asList(ChatColor.YELLOW
+						+ "Increase your chance of becoming the murderer!",
+						ChatColor.YELLOW + "Click to buy for "
+								+ ChatColor.GREEN + TICKET_MURDERER_COST
+								+ ChatColor.YELLOW + " coins!"));
+		inventory.setItem(7, murdererTicket);
+		inventory.setItem(6, gunnerTicket);
 	}
 
 	public static void giveLeaveItem(Inventory inventory) {

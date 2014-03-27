@@ -85,8 +85,8 @@ public class InventoryListener implements Listener {
 				} else if (mPlayer.getPlayerClass() == MPlayerClass.PREGAMEMAN) {
 					if (item.getType().equals(MPlayerClass.MATERIAL_TICKET)) {
 						int coins = MPlayer.getCoins(player.getName());
-						if (coins >= MPlayerClass.TICKET_COST) {
-							MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_COST, true);
+						if (coins >= MPlayerClass.TICKET_MURDERER_COST) {
+							MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_MURDERER_COST, true);
 							player.sendMessage(
 									ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
 									"Bought ticket! Increased chance of becoming the murderer.");

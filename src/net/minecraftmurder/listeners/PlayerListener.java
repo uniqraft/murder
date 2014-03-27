@@ -1,13 +1,11 @@
 package net.minecraftmurder.listeners;
 
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
-import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.matches.Match;
@@ -20,7 +18,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
@@ -40,14 +37,12 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public class PlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (Murder.getInstance().isDevMode())
 			return;
-
 		Entity entity = event.getRightClicked();
 		if (entity instanceof ItemFrame) {
 			event.setCancelled(true);

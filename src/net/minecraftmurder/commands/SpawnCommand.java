@@ -8,11 +8,7 @@ import net.minecraftmurder.commands.MCommandResult.Result;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
-import net.minecraftmurder.tools.ChatContext;
-
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -197,8 +193,12 @@ private final List<MCommand> mCommands;
 			int radius;
 			try {
 				radius = Integer.parseInt(args[2]);
+			} catch (Exception e) {
+				return new MCommandResult(this, Result.FAIL_CUSTOM,
+						args[2] + " is not a valid number");
 			}
-			
+			return new MCommandResult(this, Result.SUCCESS,
+					arena.getSpawnDensity(pPlayer.getLocation(), args[1], radius) + "spawns/1000m³");
 		}
 		@Override
 		public String getUsage() {
@@ -210,38 +210,10 @@ private final List<MCommand> mCommands;
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean onCommand(CommandSender sender, Command command, String label,
 			String[] args) {
-		if (args[0].equalsIgnoreCase("density")) {
-			// Remove nearest spawn
-			if (args.length != 4) {
-				sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
-				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/spawn density <arena> <type> <radius>");
-				return true;
-			}
-			// Does arena exist?
-			Arena arena = ArenaManager.getArenaByPathname(args[1]);
-			if (arena == null) {
-				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't find arena " + args[1] + "!");
-				return true;
-			}
-			// Is it a valid spawn type?
-			if (!Spawn.TYPES.contains(args[2].toLowerCase())) {
-				sender.sendMessage(ChatContext.PREFIX_WARNING + args[2] + " is not a valid spawn type!");
-				return true;
-			}
-			// Is the third argument an integer?
-			int radius;
-			try {
-				radius = Integer.parseInt(args[3]);
-			} catch (Exception e) {
-				sender.sendMessage(ChatContext.PREFIX_WARNING + args[3] + " is not a valid number!");
-				return false;
-			}
-			sender.sendMessage(ChatContext.PREFIX_PLUGIN + arena.getSpawnDensity(player.getLocation(), args[2], radius)*1000 + " spawns/1000m³");
-			return true;
-		} else if (args[0].equalsIgnoreCase("types")) {
+		if (args[0].equalsIgnoreCase("types")) {
 			sender.sendMessage(ChatContext.PREFIX_PLUGIN + Spawn.TYPES.toString());
 			return true;
 		} else if (args[0].equalsIgnoreCase("count")) {
@@ -270,5 +242,5 @@ private final List<MCommand> mCommands;
 			return true;
 		}
 		return false;
-	}
+	}*/
 }
