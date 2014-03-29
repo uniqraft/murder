@@ -263,7 +263,6 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	// TODO Clean up the onPlayerInteract listener.
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (!Murder.getInstance().isStarted())

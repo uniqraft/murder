@@ -432,7 +432,7 @@ public class PlayMatch extends Match {
 			// Reward the murderer for winning
 			if (isRanked)
 				MPlayer.addCoins(murderer, Murder.COINS_MURDERER_WIN, true);
-
+			
 			end(true);
 			return;
 		}

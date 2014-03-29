@@ -54,13 +54,6 @@ public class EntityListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDamage (EntityDamageEvent event) {
-		// TODO Rewrite info, this is not longer accurate
-		/*
-		 * As far as I know, EntityDamageEvent is called after EntityDamageByEntityEvent.
-		 * Therefore death logic is handled here. OnPlayerDeath will be called for the
-		 * player's match and the match takes care of respawning. This method just ensures
-		 * that the player never actually dies.
-		 */
 		if (event.getEntity() instanceof Player) {
 			event.setCancelled(true);
 			Player player = (Player) event.getEntity();

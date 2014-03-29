@@ -187,9 +187,7 @@ public class MPlayer {
 	public static boolean addCoins(String player, int count, boolean tell,
 			boolean ignoreMultiplier) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
-		/* TODO
-		 * Fixed error, but not optimal. Now only /online/ VIP players get double coins.
-		 */
+		// TODO Fixed error, but not optimal. Now only /online/ VIP players get double coins.
 		boolean vip = (mPlayer != null && mPlayer.getPlayer().hasPermission("murder.vip") && !ignoreMultiplier && count > 0);
 
 		if (vip)
