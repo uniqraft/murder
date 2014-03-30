@@ -123,9 +123,18 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		event.setQuitMessage(event.getPlayer().getName()
-				+ ChatColor.GRAY + " left the server.");
-		PlayerManager.onPlayerQuit(event.getPlayer());
+		MPlayer mPlayer = PlayerManager.getMPlayer(event.getPlayer());
+		event.setQuitMessage(
+				ChatColor.GRAY + ChatColor.stripColor(event.getPlayer().getName())
+				+ " left the server.");
+		PlayMatch pm = null;
+		if (mPlayer.getMatch() instanceof PlayMatch)
+			pm = (PlayMatch) mPlayer.getMatch();
+		if (pm != null)
+			pm.setReloading(true);
+		PlayerManager.onPlayerQuit(mPlayer);
+		if (pm != null)
+			pm.setReloading(false);
 	}
 
 	@SuppressWarnings("deprecation")

@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
@@ -45,6 +46,15 @@ public class PlayMatch extends Match {
 
 	private boolean isPlaying;
 	private boolean isRanked;
+	/** If this is true, join/quit messages will be hidden */
+	private boolean isReloading = false;
+	public boolean isReloading() {
+		return isReloading;
+	}
+
+	public void setReloading(boolean isReloading) {
+		this.isReloading = isReloading;
+	}
 	private int countdown;
 
 	private String murderer;
@@ -378,10 +388,12 @@ public class PlayMatch extends Match {
 						Bukkit.getScheduler().cancelTask(fireworkTask);
 
 						// Reconnect each player to the match
+						isReloading = true;
 						for (MPlayer mPlayer : playMatch.getMPlayers()) {
 							playMatch.onPlayerQuit(mPlayer);
 							playMatch.onPlayerJoin(mPlayer);
 						}
+						isReloading = false;
 					}
 				}, 20 * MATCHEND_TIME);
 	}
@@ -425,7 +437,7 @@ public class PlayMatch extends Match {
 			return;
 		}
 		if (innocentCount <= 0) {
-			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_MURDERER
+			sendMessage(ChatContext.COLOR_MURDERER
 					+ "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", "
 					+ ChatContext.COLOR_HIGHLIGHT + murderer
 					+ ChatContext.COLOR_LOWLIGHT + ", won the match!");
@@ -440,6 +452,9 @@ public class PlayMatch extends Match {
 
 	@Override
 	public void onPlayerJoin(MPlayer mPlayer) {
+		if (!isReloading)
+			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE + " joined your match.", mPlayer.getPlayer());
+		
 		Player pPlayer = mPlayer.getPlayer();
 		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
 
@@ -463,24 +478,22 @@ public class PlayMatch extends Match {
 		// Remove all this players entries from the list of ticket users
 		murdererTicketUsers.removeAll(Collections.singleton(mPlayer));
 		gunnerTicketUsers.removeAll(Collections.singleton(mPlayer));
-		if (isPlaying) {
-			if (mPlayer.getName().equals(murderer)) {
-				sendMessage(ChatContext.PREFIX_PLUGIN
-						+ ChatContext.COLOR_MURDERER + "The Murderer"
-						+ ChatContext.COLOR_LOWLIGHT + ", "
-						+ ChatContext.COLOR_HIGHLIGHT + murderer
-						+ ChatContext.COLOR_LOWLIGHT + ", left the game.");
-				end(false);
-				return;
-			}
+		if (isPlaying && mPlayer.getName().equals(murderer)) {
+			sendMessage(
+					ChatContext.COLOR_MURDERER + "The Murderer" +
+					ChatContext.COLOR_LOWLIGHT + ", " +
+					ChatContext.COLOR_HIGHLIGHT + murderer +
+					ChatContext.COLOR_LOWLIGHT + ", left the game.");
+			end(false);
+			return;
 		}
+		if (!isReloading)
+			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE + " left your match.", mPlayer.getPlayer());
 		checkForEnd();
 	}
 
 	@Override
 	public boolean onPlayerInteractItem(ItemStack itemStack, MPlayer mPlayer) {
-		
-		
 		// Handle default actions
 		return super.onPlayerInteractItem(itemStack, mPlayer);
 	}
@@ -517,8 +530,7 @@ public class PlayMatch extends Match {
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
 		pKilled.addPotionEffect(new PotionEffect(
-				PotionEffectType.BLINDNESS, 15, 1), true);
-
+				PotionEffectType.BLINDNESS, 40, 1), true);
 		checkForEnd();
 	}
 

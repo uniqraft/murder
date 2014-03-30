@@ -36,7 +36,7 @@ public class MPlayer {
 
 	private MPlayerClass playerClass;
 	private MInventory inventory;
-
+	
 	private String killerName;
 
 	/** When at 0, the player can fire their gun */

@@ -1,6 +1,7 @@
 package net.minecraftmurder.matches;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraftmurder.main.Arena;
@@ -100,7 +101,7 @@ public abstract class Match {
 		// Jump boost
 		else if (itemStack.getType().equals(MPlayerClass.MATERIAL_SPEEDBOOST)) {
 			Vector velocity = pPlayer.getLocation().getDirection();
-			velocity.setY(Math.max(1d, velocity.getY() / 10));
+			velocity.setY(0.1);
 			velocity.normalize().multiply(3);
 			pPlayer.setVelocity(velocity);
 			pPlayer.setItemInHand(null);
@@ -146,9 +147,19 @@ public abstract class Match {
 	 * @param message
 	 * The message to be sent.
 	 */
-	public void sendMessage (String message) {
-		for (MPlayer mPlayer : getMPlayers())
-			mPlayer.getPlayer().sendMessage(message);
+	public void sendMessage(String message) {
+		ArrayList<Player> n = null; // We need this null variable to avoid ambiguous call
+		sendMessage(message, n);
+	}
+	public void sendMessage(String message, Player ignore) {
+		sendMessage(message, Arrays.asList(ignore));
+	}
+	public void sendMessage(String message, List<Player> ignore) {
+		for (MPlayer mPlayer : getMPlayers()) {
+			Player player = mPlayer.getPlayer();
+			if (ignore == null || !ignore.contains(player))
+				player.sendMessage(message);
+		}
 	}
 	
 	@Override
