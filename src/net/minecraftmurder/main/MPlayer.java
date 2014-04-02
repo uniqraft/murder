@@ -184,39 +184,42 @@ public class MPlayer {
 		return addCoins(player, count, true, false);
 	}
 
-	public static boolean addCoins(String player, int count, boolean tell,
+	public static boolean addCoins(String player, int coins, boolean tell,
 			boolean ignoreMultiplier) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		// TODO Fixed error, but not optimal. Now only /online/ VIP players get double coins.
-		boolean vip = (mPlayer != null && mPlayer.getPlayer().hasPermission("murder.vip") && !ignoreMultiplier && count > 0);
-
-		if (vip)
-			count *= 2;
+		
+		// Only the most important one is true
+		boolean ultra = (mPlayer != null && mPlayer.getPlayer().hasPermission("murder.ultra") && !ignoreMultiplier && coins > 0);
+		boolean vip = (mPlayer != null && mPlayer.getPlayer().hasPermission("murder.vip") && !ignoreMultiplier && coins > 0 && !ultra);
+		
+		// Determine multiplier
+		int multiplier = 1;
+		if (ultra)
+			multiplier = 3;
+		if (vip) // Doesn't override ultra, as only ultra or vip can be true at once
+			multiplier = 2;
 
 		if (mPlayer != null && tell) {
-			if (count >= 0) {
+			if (coins >= 0) {
 				mPlayer.getPlayer().sendMessage(
-						ChatContext.PREFIX_PLUGIN
-								+ ChatContext.COLOR_LOWLIGHT
-								+ "You earned "
-								+ ChatContext.COLOR_HIGHLIGHT
-								+ ((vip) ? (int) (count / 2d) : count)
-								+ ChatContext.COLOR_LOWLIGHT
-								+ (count != 1 ? " coins" : " coin")
-								+ ((vip) ? (ChatContext.COLOR_INNOCENT
-										+ " (x2 = " + count + ")"
-										+ ChatContext.COLOR_LOWLIGHT + "!")
-										: "!"));
+						ChatContext.COLOR_LOWLIGHT
+						+ "You earned "
+						+ ChatContext.COLOR_HIGHLIGHT
+						+ coins * multiplier
+						+ ChatContext.COLOR_LOWLIGHT
+						+ ((coins * multiplier) != 1 ? " coins" : " coin") + "! "
+						+ ((multiplier > 1) ? ChatContext.COLOR_INNOCENT + "(" + coins + " x " + multiplier + ")" : ""));
 			} else {
 				mPlayer.getPlayer().sendMessage(
-						ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT
-								+ "You lost " + ChatContext.COLOR_HIGHLIGHT
-								+ Math.abs(count) + ChatContext.COLOR_LOWLIGHT
-								+ (count != 1 ? " coins" : " coin") + "!");
+						ChatContext.COLOR_LOWLIGHT
+						+ "You lost " + ChatContext.COLOR_HIGHLIGHT
+						+ Math.abs(coins) + ChatContext.COLOR_LOWLIGHT
+						+ (coins != 1 ? " coins" : " coin") + "!");
 			}
 		}
 
-		return setCoins(player, getCoins(player) + count, false);
+		return setCoins(player, getCoins(player) + coins * multiplier, false);
 	}
 
 	public static boolean setCoins(String player, int count, boolean tell) {

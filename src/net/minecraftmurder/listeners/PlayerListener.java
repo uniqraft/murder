@@ -105,18 +105,21 @@ public class PlayerListener implements Listener {
 		event.setJoinMessage(null);
 
 		Player player = event.getPlayer();
-		if (player.hasPermission("murder.owner"))
-			player.setDisplayName(ChatColor.RED + "[Owner] " + ChatColor.WHITE
-					+ player.getName());
-		else if (player.hasPermission("murder.admin"))
-			player.setDisplayName(ChatColor.RED + "[Admin] " + ChatColor.WHITE
-					+ player.getName());
-		else if (player.hasPermission("murder.mod"))
-			player.setDisplayName(ChatColor.BLUE + "[Mod] "
-					+ ChatColor.WHITE + player.getName());
+		if (player.hasPermission("murder.owner")) 
+			player.setDisplayName(ChatColor.RED + "[Owner] " 
+		+ ChatColor.WHITE + player.getName());
+		else if (player.hasPermission("murder.admin")) 
+			player.setDisplayName(ChatColor.RED + "[Admin] " 
+		+ ChatColor.WHITE + player.getName());
+		else if (player.hasPermission("murder.mod")) 
+			player.setDisplayName(ChatColor.BLUE + "[Mod] " 
+		+ ChatColor.WHITE + player.getName());
+		else if (player.hasPermission("murder.ultra"))
+			player.setDisplayName(ChatColor.DARK_PURPLE + "[Ultra]" 
+		+ ChatColor.WHITE + player.getName());
 		else if (player.hasPermission("murder.vip"))
-			player.setDisplayName(ChatColor.AQUA + "[VIP] " + ChatColor.WHITE
-					+ player.getName());
+			player.setDisplayName(ChatColor.AQUA + "[VIP] " 
+		+ ChatColor.WHITE + player.getName());
 
 		PlayerManager.onPlayerJoin(player);
 	}

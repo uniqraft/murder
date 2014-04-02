@@ -71,8 +71,13 @@ permissions:
             murder.coins.manage: true
             murder.mod: true
             murder.joinfull: true
+    murder.ultra:
+        description: Ultra Rank
+        default: op
+        children:
+            murder.vip
     murder.vip:
-        description: VIP
+        description: VIP Rank
         default: op
         children:
             murder.joinfull: true
