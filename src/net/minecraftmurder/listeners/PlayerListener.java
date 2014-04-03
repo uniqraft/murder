@@ -115,7 +115,7 @@ public class PlayerListener implements Listener {
 			player.setDisplayName(ChatColor.BLUE + "[Mod] " 
 		+ ChatColor.WHITE + player.getName());
 		else if (player.hasPermission("murder.ultra"))
-			player.setDisplayName(ChatColor.DARK_PURPLE + "[Ultra]" 
+			player.setDisplayName(ChatColor.DARK_PURPLE + "[Ultra] " 
 		+ ChatColor.WHITE + player.getName());
 		else if (player.hasPermission("murder.vip"))
 			player.setDisplayName(ChatColor.AQUA + "[VIP] " 

@@ -209,7 +209,7 @@ public class MPlayer {
 						+ coins * multiplier
 						+ ChatContext.COLOR_LOWLIGHT
 						+ ((coins * multiplier) != 1 ? " coins" : " coin") + "! "
-						+ ((multiplier > 1) ? ChatContext.COLOR_INNOCENT + "(" + coins + " x " + multiplier + ")" : ""));
+						+ ((multiplier > 1) ? ChatContext.COLOR_INNOCENT + "(" + coins + " x" + multiplier + ")" : ""));
 			} else {
 				mPlayer.getPlayer().sendMessage(
 						ChatContext.COLOR_LOWLIGHT
