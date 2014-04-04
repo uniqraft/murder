@@ -9,10 +9,10 @@ instructions: >
   2. I don't know if \n works in this. If it does, this rule will look weird. Probably doesn't though... argh
 coins:
   innocent:
-    kill: 8
+    kill: 15
     survive: 30
   murderer:
-    kill: 2
+    kill: 4
     win: 30
 server:
   max-players: 40

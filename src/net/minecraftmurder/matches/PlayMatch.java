@@ -267,11 +267,11 @@ public class PlayMatch extends Match {
 
 		// Increase chance for ticket users
 		for (MPlayer ticketUser : murdererTicketUsers) {
-			for (int i = 0; i < Math.max(1, getMPlayers().size()); i++)
+			for (int i = 0; i < getMPlayers().size() + 1; i++)
 				murdererEntires.add(ticketUser);
 		}
 		for (MPlayer ticketUser : gunnerTicketUsers) {
-			for (int i = 0; i < Math.max(1, getMPlayers().size()); i++)
+			for (int i = 0; i < getMPlayers().size() + 1; i++)
 				gunnerEntires.add(ticketUser);
 		}
 

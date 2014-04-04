@@ -93,6 +93,7 @@ public class InventoryListener implements Listener {
 										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
 										"Bought ticket! Increased chance of becoming the murderer.");
 								((PlayMatch) mPlayer.getMatch()).addMurdererTicketUser(mPlayer);
+								event.getCurrentItem().setType(Material.AIR); // Remove from inventory
 							} else {
 								player.sendMessage(ChatContext.COLOR_WARNING + "You can't afford this item!");
 								player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
@@ -104,6 +105,7 @@ public class InventoryListener implements Listener {
 										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
 										"Bought ticket! Increased chance of becoming the gunner.");
 								((PlayMatch) mPlayer.getMatch()).addGunnerTicketUser(mPlayer);
+								event.getCurrentItem().setType(Material.AIR); // Remove from inventory
 							} else {
 								player.sendMessage(ChatContext.COLOR_WARNING + "You can't afford this item!");
 								player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
