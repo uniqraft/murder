@@ -37,7 +37,7 @@ public class MSignMatch extends MSign {
 			PlayMatch match = MatchManager.getPlayMatch(index);
 			sign.setLine(0, ChatColor.BLACK + "Match " + ChatColor.DARK_RED + "#" + index);
 			sign.setLine(1, ChatColor.DARK_PURPLE + "" + match.getMPlayers().size() + "/" + PlayMatch.MAX_PLAYERS + " players");
-			sign.setLine(2, (match.isPlaying() == true ? ChatColor.RED + "IN PROGRESS" : ChatColor.AQUA + "IN LOBBY"));
+			sign.setLine(2, (match.isPlaying() == true ? ChatColor.RED + "" + match.getAliveMPlayers().size() + " alive" : ChatColor.AQUA + "IN LOBBY"));
 			sign.setLine(3, ChatColor.DARK_GREEN + "Click to join.");
 			sign.update();
 		} else {

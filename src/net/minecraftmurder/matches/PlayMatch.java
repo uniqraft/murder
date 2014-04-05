@@ -121,6 +121,16 @@ public class PlayMatch extends Match {
 	public boolean isRanked() {
 		return isRanked;
 	}
+	
+	public List<MPlayer> getAliveMPlayers() {
+		List<MPlayer> alive = new ArrayList<MPlayer>();
+		for (MPlayer mPlayer : getMPlayers()) {
+			MPlayerClass c = mPlayer.getPlayerClass();
+			if (c != MPlayerClass.SPECTATOR)
+				alive.add(mPlayer);
+		}
+		return alive;
+	}
 
 	@Override
 	public void update() {
