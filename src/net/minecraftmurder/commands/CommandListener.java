@@ -1,7 +1,6 @@
 package net.minecraftmurder.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -24,6 +23,7 @@ public class CommandListener implements CommandExecutor {
 		mCommands.add(new CoinCommand("coins"));
 		mCommands.add(new MurderCommand("murder"));
 		mCommands.add(new WarnCommand("warn"));
+		mCommands.add(new SpawnCommand("spawn"));
 	}
 	
 	@Override

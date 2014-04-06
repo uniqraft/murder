@@ -75,11 +75,11 @@ public class ArenaCommand extends MCommand {
 				return new MCommandResult(this, Result.FAIL_NOTPLAYER);
 			Player player = (Player) sender;
 			// Arguments
-			if (args.length != 2)
+			if (args.length != 1)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
 			
 			// Create arena
-			Arena arena = ArenaManager.createArena(args[1]); 
+			Arena arena = ArenaManager.createArena(args[0]); 
 			// If couldn't create
 			if (arena == null)
 				return new MCommandResult(this, Result.FAIL_CUSTOM,
@@ -93,7 +93,7 @@ public class ArenaCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return ArenaCommand.this.getUsage() +  " " + getLabel() + " <name>";
+			return ArenaCommand.this.getLabel() +  " " + getLabel() + " <name>";
 		}
 		@Override
 		public String getHelp() {
@@ -133,11 +133,11 @@ public class ArenaCommand extends MCommand {
 				}
 			}
 			return new MCommandResult(this, Result.SUCCESS,
-					args[1] + "'s " + args[2] + " was set to " + args[3] + ".");
+					args[0] + "'s " + args[1] + " was set to " + args[2] + ".");
 		}
 		@Override
 		public String getUsage() {
-			return ArenaCommand.this.getUsage() +  " " + getLabel() + " <name> <type> <info>";
+			return ArenaCommand.this.getLabel() +  " " + getLabel() + " <name> <type> <info>";
 		}
 		@Override
 		public String getHelp() {
@@ -172,7 +172,7 @@ public class ArenaCommand extends MCommand {
 		}
 		@Override
 		public String getUsage() {
-			return ArenaCommand.this.getUsage() +  " " + getLabel() + " <name> <type>";
+			return ArenaCommand.this.getLabel() +  " " + getLabel() + " <name> <type>";
 		}
 		@Override
 		public String getHelp() {

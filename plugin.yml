@@ -14,7 +14,7 @@ commands:
       usage: /<command> <action>
    spawn:
       description: Commands controlling spawns.
-      usage: /<command> <action> <name> [info] [radius]
+      usage: /<command> <action>
    coins:
       description: Commands controlling spawns.
       usage: /<command> <action> <player> <count>

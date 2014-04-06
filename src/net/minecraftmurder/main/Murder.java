@@ -16,6 +16,7 @@ import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.TeleportFix;
 
+import org.bukkit.GameMode;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
@@ -117,6 +118,10 @@ public class Murder extends JavaPlugin {
 		if (devMode) return;
 		devMode = true;
 		MLogger.log(Level.INFO, "Murder is now in dev mode.");
+		for (MPlayer mPlayer : PlayerManager.getMPlayers()) {
+			mPlayer.switchPlayerClass(MPlayerClass.INNOCENT);
+			mPlayer.getPlayer().setGameMode(GameMode.CREATIVE);
+		}
 	}
 	public boolean isStarted () {
 		return started;

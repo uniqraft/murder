@@ -2,8 +2,6 @@ package net.minecraftmurder.tools;
 
 import java.util.logging.Level;
 
-import net.minecraftmurder.main.Murder;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -20,7 +18,7 @@ public final class MLogger {
 	public static void log (Level level, String message) {
 		Bukkit.getLogger().log(level, message);
 		// Send to all relevant players
-		if ((level.intValue() > Level.INFO.intValue()) || (Murder.getInstance().isDevMode() && level.intValue() >= Level.INFO.intValue())) {
+		if ((level.intValue() > Level.INFO.intValue())) {
 			for (Player player: Bukkit.getOnlinePlayers()) {
 				if (player.hasPermission("murder.mod")) {
 					String prefix = "";

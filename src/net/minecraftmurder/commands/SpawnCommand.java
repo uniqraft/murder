@@ -19,19 +19,26 @@ private final List<MCommand> mCommands;
 		super(label);
 		mCommands = new ArrayList<MCommand>();
 		// Register commands
+		mCommands.add(new AddCommand("add"));
+		mCommands.add(new NearestCommand("near"));
+		mCommands.add(new RemoveCommand("remove"));
+		mCommands.add(new DensityCommand("density"));
 	}
 	
 	@Override
-	public MCommandResult exectute(CommandSender sender, String[] args) {
+public MCommandResult exectute(CommandSender sender, String[] args) {
 		// Player
-		if (!(sender instanceof Player))
+		if (!(sender instanceof Player)) {
 			return new MCommandResult(this, Result.FAIL_NOTPLAYER, null);
+		}
 		// Permission
-		if (!sender.hasPermission("murder.admin"))
+		else if (!sender.hasPermission("murder.admin")) {
 			return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
+		}
 		// Arguments
-		if (args.length < 1)
+		else if (args.length < 1) {
 			return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
+		}
 		// Execute
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
@@ -61,29 +68,35 @@ private final List<MCommand> mCommands;
 		@Override
 		public MCommandResult exectute(CommandSender sender, String[] args) {
 			Player pPlayer = (Player) sender;
+			Arena arena;
 			// Check arguments
-			if (args.length != 2)
+			if (args.length != 2) {
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			}
 			// Does arena exist?
-			Arena arena = ArenaManager.getArenaByPathname(args[0]);
-			if (arena == null)
+			else if ((arena = ArenaManager.getArenaByPathname(args[0])) == null) {
 				return new MCommandResult(this, Result.FAIL_CUSTOM,
 						"The arena " + args[0] + " could not be found.");
+			}
 			// Valid spawn type?
-			if (!Spawn.TYPES.contains(args[1].toLowerCase()))
+			else if (!Spawn.TYPES.contains(args[1].toLowerCase())) {
 				return new MCommandResult(this, Result.FAIL_CUSTOM,
 						args[1] + " is not a valid spawn type.");
+			}
 			// Try to add spawn
-			if (arena.addSpawn(new Spawn(pPlayer.getLocation(), args[1]), true))
+			else if (arena.addSpawn(new Spawn(pPlayer.getLocation(), args[1]), true)) {
 				return new MCommandResult(this, Result.SUCCESS,
 						"Spawn added.");
-			else
+			} 
+			// Couldn't add spawn
+			else {
 				return new MCommandResult(this, Result.FAIL_CUSTOM,
 						"Could not add spawn.");
+			}
 		}
 		@Override
 		public String getUsage() {
-			return SpawnCommand.this.getUsage() +  " " + getLabel() + " <arena> <type>";
+			return SpawnCommand.this.getLabel() +  " " + getLabel() + " <arena> <type>";
 		}
 		@Override
 		public String getHelp() {
@@ -120,7 +133,7 @@ private final List<MCommand> mCommands;
 		}
 		@Override
 		public String getUsage() {
-			return SpawnCommand.this.getUsage() +  " " + getLabel() + " <arena> <type>";
+			return SpawnCommand.this.getLabel() +  " " + getLabel() + " <arena> <type>";
 		}
 		@Override
 		public String getHelp() {
@@ -162,7 +175,7 @@ private final List<MCommand> mCommands;
 		}
 		@Override
 		public String getUsage() {
-			return SpawnCommand.this.getUsage() +  " " + getLabel() + " <arena> <type>";
+			return SpawnCommand.this.getLabel() +  " " + getLabel() + " <arena> <type>";
 		}
 		@Override
 		public String getHelp() {
@@ -198,11 +211,11 @@ private final List<MCommand> mCommands;
 						args[2] + " is not a valid number");
 			}
 			return new MCommandResult(this, Result.SUCCESS,
-					arena.getSpawnDensity(pPlayer.getLocation(), args[1], radius) + "spawns/1000m³");
+					Math.round(arena.getSpawnDensity(pPlayer.getLocation(), args[1], radius)/100.0)*100000.0 + " spawns/dm³");
 		}
 		@Override
 		public String getUsage() {
-			return SpawnCommand.this.getUsage() +  " " + getLabel() + " <arena> <type> <radius>";
+			return SpawnCommand.this.getLabel() +  " " + getLabel() + " <arena> <type> <radius>";
 		}
 		@Override
 		public String getHelp() {

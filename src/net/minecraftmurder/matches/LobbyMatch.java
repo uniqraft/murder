@@ -7,6 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
+import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.PlayerManager;
 
@@ -32,7 +33,7 @@ public class LobbyMatch extends Match {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 72000, 1), true);
 		}
 		
-		if (arena == null) return;
+		if (Murder.getInstance().isDevMode() || arena == null) return;
 		Spawn spawn = arena.getRandomSpawn("player");
 		if (spawn == null) return;
 		player.teleport(spawn.getLocation());
