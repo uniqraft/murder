@@ -112,7 +112,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 		public MCommandResult exectute(CommandSender sender, String[] args) {
 			Player pPlayer = (Player) sender;
 			// Check arguments
-			if (args.length != 3)
+			if (args.length != 2)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
 			// Does arena exist?
 			Arena arena = ArenaManager.getArenaByPathname(args[0]);
@@ -211,7 +211,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 						args[2] + " is not a valid number");
 			}
 			return new MCommandResult(this, Result.SUCCESS,
-					Math.round(arena.getSpawnDensity(pPlayer.getLocation(), args[1], radius)/100.0)*100000.0 + " spawns/dm³");
+					Math.round(arena.getSpawnDensity(pPlayer.getLocation(), args[1], radius)*10000.0)/10.0 + " spawns/dm³");
 		}
 		@Override
 		public String getUsage() {
