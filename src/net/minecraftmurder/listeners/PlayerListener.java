@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -37,6 +38,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
 	@EventHandler
@@ -52,6 +54,21 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onServerListPing(ServerListPingEvent event) {
 		event.setMaxPlayers(Murder.MAX_PLAYERS);
+	}
+	
+	@EventHandler
+	public void onEntityCombust (EntityCombustEvent event) {
+		final Entity entity = event.getEntity();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (entity.getFireTicks() != 0) {
+					entity.setFireTicks(0);
+				} else {
+					this.cancel();
+				}
+			}
+		}.runTaskTimer(Murder.getInstance(), 1L, 10L);
 	}
 
 	@EventHandler

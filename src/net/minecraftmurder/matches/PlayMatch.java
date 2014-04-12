@@ -481,6 +481,7 @@ public class PlayMatch extends Match {
 			throw new NullPointerException("No Spawn Location");
 		}
 		pPlayer.teleport(spawnLocation);
+		pPlayer.setFireTicks(0);
 	}
 
 	@Override

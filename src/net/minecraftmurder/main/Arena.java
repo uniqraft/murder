@@ -15,8 +15,10 @@ import net.minecraftmurder.tools.Tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Arena {
@@ -70,7 +72,7 @@ public class Arena {
 		
 		MLogger.log(Level.INFO, "Found " + spawns.size() + " spawns.");
 	}
-	public boolean save () {
+	public boolean save() {
 		YamlConfiguration config = new YamlConfiguration();
 		// Save information
 		for (String type: INFO_TYPES) {
@@ -90,7 +92,7 @@ public class Arena {
 		return SimpleFile.saveConfig(config, path);
 	}
 	
-	public boolean addSpawn (Spawn spawn, boolean save) {
+	public boolean addSpawn(Spawn spawn, boolean save) {
 		// Add spawn to list
 		spawns.add(spawn);
 		// Save
@@ -98,7 +100,39 @@ public class Arena {
 			return save();
 		return true;
 	}
-	public boolean removeSpawn (Spawn spawn, boolean save) {
+	public boolean autoAddSpawns(int range) {
+		String worldName = getInfo("world");
+		World world = Bukkit.getWorld(worldName);
+		// Confirm world
+		if (world == null) {
+			MLogger.log(Level.WARNING, "The world " + worldName + " isn't loaded or doesn't exist.");
+			return false;
+		}
+		MLogger.log(Level.INFO, "Starting auto add process.");
+		for (int x = -range; x < range; x++) {
+			for (int y = 0; y < world.getMaxHeight() - 1; y++) {
+				for (int z = -range; z < range; z++) {
+					// Is this block hard clay?
+					Block buttomBlock = world.getBlockAt(x, y, z);
+					if (buttomBlock.getType().equals(Material.HARD_CLAY)) {
+						// Is above block quartz ore?
+						Block topBlock = world.getBlockAt(x, y + 1, z);
+						if (topBlock.getType().equals(Material.QUARTZ_ORE)) {
+							// Found a spawn location!
+							// Add spawns, but do not save
+							addSpawn(new Spawn(new Location(world, x, y, z), "player"), false);
+							addSpawn(new Spawn(new Location(world, x, y, z), "scrap"), false);
+							// Remove blocks
+							buttomBlock.setType(Material.AIR);
+							topBlock.setType(Material.AIR);
+						}
+					}
+				}
+			}
+		}
+		return save();
+	}
+	public boolean removeSpawn(Spawn spawn, boolean save) {
 		if (spawns.contains(spawn))
 			spawns.remove(spawn);
 		else
@@ -109,10 +143,10 @@ public class Arena {
 			return save();
 		return true;
 	}
-	public int getMinY () {
+	public int getMinY() {
 		return minY;
 	}
-	public boolean setMinY (int y, boolean save) {
+	public boolean setMinY(int y, boolean save) {
 		minY = y;
 		if (save)
 			return save();

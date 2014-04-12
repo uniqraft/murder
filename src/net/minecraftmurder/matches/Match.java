@@ -20,6 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
+
 public abstract class Match {
 	protected Arena arena;
 	
@@ -99,12 +101,26 @@ public abstract class Match {
 			mPlayer.getMInventory().openInventorySelectionScreen();
 		}
 		// Jump boost
-		else if (itemStack.getType().equals(MPlayerClass.MATERIAL_SPEEDBOOST)) {
+		else if (itemStack.getType().equals(MPlayerClass.MATERIAL_JUMPBOOST)) {
+			// Add velocity
 			Vector velocity = pPlayer.getLocation().getDirection();
-			velocity.setY(0.1);
+			velocity.setY(0.15);
 			velocity.normalize().multiply(3);
 			pPlayer.setVelocity(velocity);
 			pPlayer.setItemInHand(null);
+			
+			// Make sure NCP doesn't catch this player
+			NCPExemptionManager.exemptPermanently(pPlayer);
+			final String pName = pPlayer.getName();
+			
+			// After 5 seconds, make NCP able to catch this player again
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					NCPExemptionManager.unexempt(pName);
+				}
+			}, 20 * 5);
+			
 			return true;
 		}
 		// Ticket

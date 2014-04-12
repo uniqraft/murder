@@ -1,4 +1,4 @@
-depends: [Votifier]
+depends: [Votifier, NoCheatPlus]
 
 name: Murder
 main: net.minecraftmurder.main.Murder
@@ -75,7 +75,7 @@ permissions:
         description: Ultra Rank
         default: op
         children:
-            murder.vip
+            murder.vip: true
     murder.vip:
         description: VIP Rank
         default: op

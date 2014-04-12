@@ -23,7 +23,7 @@ public enum MPlayerClass {
 	public static final Material MATERIAL_GUN = Material.BOW;
 	public static final Material MATERIAL_GUNPART = Material.IRON_INGOT;
 	public static final Material MATERIAL_INVENTORY = Material.NETHER_STAR;
-	public static final Material MATERIAL_SPEEDBOOST = Material.SUGAR;
+	public static final Material MATERIAL_JUMPBOOST = Material.SUGAR;
 	public static final Material MATERIAL_TICKET = Material.PAPER;
 	public static final Material MATERIAl_LEAVE = Material.SLIME_BALL;
 	public static final MItem[] ITEM_KNIVES = { MItem.WOOD_SWORD,
@@ -160,7 +160,7 @@ public enum MPlayerClass {
 	}
 
 	public static void giveSpeedboost(Inventory inventory) {
-		ItemStack item = new ItemStack(MATERIAL_SPEEDBOOST);
+		ItemStack item = new ItemStack(MATERIAL_JUMPBOOST);
 		Tools.setItemStackName(item, "Speed Boost",
 				Arrays.asList("Gives you a boost!", "Right-Click to use."));
 		inventory.setItem(4, item);

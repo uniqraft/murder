@@ -23,6 +23,7 @@ private final List<MCommand> mCommands;
 		mCommands.add(new NearestCommand("near"));
 		mCommands.add(new RemoveCommand("remove"));
 		mCommands.add(new DensityCommand("density"));
+		mCommands.add(new AutoAddCommand("autoadd"));
 	}
 	
 	@Override
@@ -220,6 +221,51 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 		@Override
 		public String getHelp() {
 			return "Calculates the density of spawns.";
+		}
+	}
+	
+	class AutoAddCommand extends MCommand { 
+		public AutoAddCommand(String label) {
+			super(label);
+		}
+		@Override
+		public MCommandResult exectute(CommandSender sender, String[] args) {
+			Player pPlayer = (Player) sender;
+			Arena arena;
+			// Check arguments
+			if (args.length != 2) {
+				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
+			}
+			// Does arena exist?
+			if ((arena = ArenaManager.getArenaByPathname(args[0])) == null) {
+				return new MCommandResult(this, Result.FAIL_CUSTOM,
+						"The arena " + args[0] + " could not be found.");
+			}
+			// Try to convert to integer
+			int range;
+			try {
+				range = Integer.parseInt(args[1]);
+			} catch (Exception e) {
+				return new MCommandResult(this, Result.FAIL_CUSTOM,
+						args[1] + " is not a valid number");
+			}
+			// Try to add spawns
+			if (arena.autoAddSpawns(range)) {
+				return new MCommandResult(this, Result.SUCCESS,
+						"Spawns added.");
+			} 
+			else {
+				return new MCommandResult(this, Result.FAIL_CUSTOM,
+						"Could not add spawns.");
+			}
+		}
+		@Override
+		public String getUsage() {
+			return SpawnCommand.this.getLabel() +  " " + getLabel() + " <arena> <range>";
+		}
+		@Override
+		public String getHelp() {
+			return "Adds a spawn to an arena.";
 		}
 	}
 
