@@ -31,6 +31,8 @@ import org.bukkit.potion.PotionEffectType;
 public class MPlayer {
 	public final static int RELOAD_TIME = 40;
 
+	public boolean usedRetrieval = false;
+	
 	private String name;
 	private Match match;
 

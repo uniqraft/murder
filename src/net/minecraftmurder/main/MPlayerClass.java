@@ -29,6 +29,7 @@ public enum MPlayerClass {
 	public static final MItem[] ITEM_KNIVES = { MItem.WOOD_SWORD,
 			MItem.STONE_SWORD, MItem.IRON_SWORD, MItem.GOLD_SWORD,
 			MItem.DIAMOND_SWORD };
+	public static final Material MATERIAL_KNIFE_RETRIEVAL = Material.EYE_OF_ENDER;
 	public static final Material MATERIAL_DETECTOR = Material.COMPASS;
 	public static final Material MATERIAL_TELEPORTER = Material.ENDER_PEARL;
 
@@ -141,6 +142,17 @@ public enum MPlayerClass {
 				"Right-Click to throw."));
 		if (mPlayer.getMInventory().getShinyKnife())
 			item.addEnchantment(Murder.emptyEnchantment, 1);
+		inventory.setItem(1, item);
+	}
+	
+	public static void giveKnifeRetrieval(Inventory inventory) {
+		ItemStack item = new ItemStack(MATERIAL_KNIFE_RETRIEVAL, 1);
+		Tools.setItemStackName(item, 
+				"Knife Retrieval", Arrays.asList(
+						"Useful if you've lost your knife.",
+						"When used, punishes you with temporary debuffs",
+						"but gives you back your knife.",
+						"Right-Click to use."));
 		inventory.setItem(1, item);
 	}
 

@@ -94,7 +94,7 @@ public final class ArenaManager {
 	public static List<Arena> getAvaiableArenas () {
 		List<Arena> available = new ArrayList<Arena>();
 		for (Arena arena: playArenas) {
-			if (!arena.isActive())
+			if (arena.isAvailable())
 				available.add(arena);
 		}
 		return available;

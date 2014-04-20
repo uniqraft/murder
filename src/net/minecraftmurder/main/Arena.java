@@ -30,6 +30,7 @@ public class Arena {
 	HashMap<String, String> info;
 	private List<Spawn> spawns = new ArrayList<Spawn>();
 
+	private boolean reservedForVoting = false;
 	private boolean active = false;
 
 	public Arena(String path) {
@@ -162,7 +163,7 @@ public class Arena {
 		Tools.sendMessageAll(ChatContext.PREFIX_WARNING + type + " is not a valid info type for arena.");
 		return false;
 	}
-	public String getInfo (String type) {
+	public String getInfo(String type) {
 		return getInfo(type, false);
 	}
 	public String getInfo (String type, boolean forceLoad) {
@@ -174,19 +175,29 @@ public class Arena {
 		Tools.sendMessageAll(ChatContext.PREFIX_WARNING + type + " is not a valid info type for arena.");
 		return null;
 	}
-	public String getPath () {
+	public String getPath() {
 		return path;
 	}
 
-	public void setActive (boolean active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
-
-	public boolean isActive () {
+	public boolean isActive() {
 		return active;
 	}
+	
+	public void setReservedForVoting(boolean reservedForVoting) {
+		this.reservedForVoting = reservedForVoting;
+	}
+	public boolean isReservedForVoting() {
+		return reservedForVoting;
+	}
+	
+	public boolean isAvailable() {
+		return (!active && !reservedForVoting);
+	}
 
-	public Spawn getNearestSpawn (Location location, String type) {
+	public Spawn getNearestSpawn(Location location, String type) {
 		Spawn nearest = null;
 		double nearestDistance = Double.MAX_VALUE;
 		for (Spawn spawn: spawns) {

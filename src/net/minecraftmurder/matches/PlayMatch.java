@@ -39,7 +39,8 @@ import net.minecraftmurder.tools.MLogger;
 public class PlayMatch extends Match {
 	public static final int MATCH_TIME = 60 * 5;
 	public static final int COUNTDOWN_TIME = 20;
-	public static final int MATCHEND_TIME = 10;
+	public static final int MATCHEND_PREVOTE_TIME = 5;
+	public static final int MATCHEND_TIME = 8;
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 10;
 	public static final int MIN_PLAYERS_RANKED = 4;
@@ -48,6 +49,7 @@ public class PlayMatch extends Match {
 	private boolean isRanked;
 	/** If this is true, join/quit messages will be hidden */
 	private boolean isReloading = false;
+
 	public boolean isReloading() {
 		return isReloading;
 	}
@@ -55,6 +57,7 @@ public class PlayMatch extends Match {
 	public void setReloading(boolean isReloading) {
 		this.isReloading = isReloading;
 	}
+
 	private int countdown;
 
 	private String murderer;
@@ -62,6 +65,9 @@ public class PlayMatch extends Match {
 
 	private List<MPlayer> murdererTicketUsers;
 	private List<MPlayer> gunnerTicketUsers;
+
+	private Arena[] voteArenas;
+	private int[] voteCounts;
 
 	public PlayMatch() {
 		murdererTicketUsers = new ArrayList<MPlayer>();
@@ -75,7 +81,7 @@ public class PlayMatch extends Match {
 	}
 
 	public void switchArena() {
-		// Set current arena to null
+		// Mark current arena as inactive
 		if (arena != null)
 			arena.setActive(false);
 
@@ -86,7 +92,7 @@ public class PlayMatch extends Match {
 			return;
 		}
 
-		// Set new arena to active
+		// Mark the new arena as active
 		arena = newArena;
 		arena.setActive(true);
 	}
@@ -121,7 +127,7 @@ public class PlayMatch extends Match {
 	public boolean isRanked() {
 		return isRanked;
 	}
-	
+
 	public List<MPlayer> getAliveMPlayers() {
 		List<MPlayer> alive = new ArrayList<MPlayer>();
 		for (MPlayer mPlayer : getMPlayers()) {
@@ -135,11 +141,12 @@ public class PlayMatch extends Match {
 	@Override
 	public void update() {
 		if (arena != null && getMPlayers().size() == 0) {
-			MLogger.log(Level.INFO, "PlayMatch " + hashCode() + " unloaded arena, as match is empty.");
+			MLogger.log(Level.INFO, "PlayMatch " + hashCode()
+					+ " unloaded arena, as match is empty.");
 			arena.setActive(false);
 			arena = null;
 		}
-		
+
 		countdown--;
 		if (isPlaying) {
 			MPlayer mMurderer = null;
@@ -158,22 +165,19 @@ public class PlayMatch extends Match {
 				}
 			}
 			if (countdown <= 0) {
-				sendMessage(
-						ChatContext.COLOR_MURDERER + "The Murderer, "
+				sendMessage(ChatContext.COLOR_MURDERER + "The Murderer, "
 						+ ChatContext.COLOR_HIGHLIGHT + mMurderer.getName()
 						+ ChatContext.COLOR_LOWLIGHT + ", ran out of time.");
 				mMurderer.onDeath();
 			}
 			if (countdown % 8 == 0) {
-				Location location = arena.getRandomSpawn("scrap").getLocation();
-				location.getWorld().dropItem(location,
-						new ItemStack(MPlayerClass.MATERIAL_GUNPART));
+				spawnScrap();
 			}
 			if (countdown % 60 == 0) {
-				sendMessage(
-						ChatContext.COLOR_HIGHLIGHT + (int) (countdown / 60)
-						+ ChatContext.COLOR_LOWLIGHT
-						+ " minute" + (countdown != 60 ? "s " : " ") +  "left of the match.");
+				sendMessage(ChatContext.COLOR_HIGHLIGHT
+						+ (int) (countdown / 60) + ChatContext.COLOR_LOWLIGHT
+						+ " minute" + (countdown != 60 ? "s " : " ")
+						+ "left of the match.");
 			}
 			World world = arena.getWorld();
 			if (world != null) {
@@ -231,14 +235,19 @@ public class PlayMatch extends Match {
 							+ this.hashCode() + ".");
 					start();
 				}
-			} else if (countdown % 10 == 0
-					|| (countdown == 3)) {
+			} else if (countdown % 10 == 0 || (countdown == 3)) {
 				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in "
 						+ ChatContext.COLOR_HIGHLIGHT + countdown + " second"
 						+ (countdown != 1 ? "s" : "")
 						+ ChatContext.COLOR_LOWLIGHT + "!");
 			}
 		}
+	}
+
+	private void spawnScrap() {
+		Location location = arena.getRandomSpawn("scrap").getLocation();
+		location.getWorld().dropItem(location,
+				new ItemStack(MPlayerClass.MATERIAL_GUNPART));
 	}
 
 	private void start() {
@@ -286,12 +295,18 @@ public class PlayMatch extends Match {
 		}
 
 		SecureRandom random = new SecureRandom();
-		
+
 		// Select murderer
-		MPlayer mMurderer = murdererEntires.get(random.nextInt(murdererEntires.size()));
-		gunnerEntires.removeAll(Collections.singleton(mMurderer)); // This player can't become gunner
+		MPlayer mMurderer = murdererEntires.get(random.nextInt(murdererEntires
+				.size()));
+		gunnerEntires.removeAll(Collections.singleton(mMurderer)); // This
+																	// player
+																	// can't
+																	// become
+																	// gunner
 		// Select gunner
-		MPlayer mGunner = gunnerEntires.get(random.nextInt(gunnerEntires.size()));
+		MPlayer mGunner = gunnerEntires
+				.get(random.nextInt(gunnerEntires.size()));
 
 		// Clear list of players who've used a ticket
 		murdererTicketUsers.clear();
@@ -300,12 +315,14 @@ public class PlayMatch extends Match {
 		// Switch their classes
 		mMurderer.switchPlayerClass(MPlayerClass.MURDERER);
 		mGunner.switchPlayerClass(MPlayerClass.GUNNER);
-		
+
 		murderer = mMurderer.getName();
 
 		// Log
-		MLogger.log(Level.INFO, mMurderer.getName()	+ " is the murderer in " + toString() + ".");
-		MLogger.log(Level.INFO, mGunner.getName() + " is the original gunner in " + toString() + ".");
+		MLogger.log(Level.INFO, mMurderer.getName() + " is the murderer in "
+				+ toString() + ".");
+		MLogger.log(Level.INFO, mGunner.getName()
+				+ " is the original gunner in " + toString() + ".");
 
 		// Tell all players what role they play
 		mMurderer.getPlayer().sendMessage(ChatContext.MESSAGE_CHOSEN_MURDERER);
@@ -313,13 +330,13 @@ public class PlayMatch extends Match {
 		for (MPlayer mPlayer : mPlayers) {
 			mPlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
 			if (mPlayer != mMurderer && mPlayer != mGunner) {
-				mPlayer.getPlayer().sendMessage(ChatContext.MESSAGE_CHOSEN_INNOCENT);
+				mPlayer.getPlayer().sendMessage(
+						ChatContext.MESSAGE_CHOSEN_INNOCENT);
 				mPlayer.switchPlayerClass(MPlayerClass.INNOCENT);
 			}
 		}
 		MLogger.log(Level.INFO, toString() + " started.");
-		sendMessage(
-				ChatContext.COLOR_HIGHLIGHT + getMPlayers().size()
+		sendMessage(ChatContext.COLOR_HIGHLIGHT + getMPlayers().size()
 				+ ChatContext.COLOR_LOWLIGHT + " out of "
 				+ ChatContext.COLOR_HIGHLIGHT + MAX_PLAYERS
 				+ ChatContext.COLOR_LOWLIGHT + " players are playing.");
@@ -340,10 +357,19 @@ public class PlayMatch extends Match {
 							@Override
 							public void run() {
 								Random r = new Random();
-								
+
 								// Spawn the Firework, get the FireworkMeta.
 								double range = 8d;
-								Location spawn = a.getRandomSpawn("scrap").getLocation().clone().add(-range + 2 * range * r.nextDouble(), -range + 2 * range * r.nextDouble(), -range + 2 * range * r.nextDouble());
+								Location spawn = a
+										.getRandomSpawn("scrap")
+										.getLocation()
+										.clone()
+										.add(-range + 2 * range
+												* r.nextDouble(),
+												-range + 2 * range
+														* r.nextDouble(),
+												-range + 2 * range
+														* r.nextDouble());
 								Firework fw = (Firework) spawn
 										.getWorld()
 										.spawnEntity(spawn, EntityType.FIREWORK);
@@ -384,7 +410,7 @@ public class PlayMatch extends Match {
 								// Then apply this to our rocket
 								fw.setFireworkMeta(fwm);
 							}
-						}, 0L, 10L);
+						}, 0L, 8L);
 
 		final PlayMatch playMatch = this;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Murder.getInstance(),
@@ -440,21 +466,26 @@ public class PlayMatch extends Match {
 				// Give surviving innocent money.
 				if ((p.getPlayerClass() == MPlayerClass.INNOCENT || p
 						.getPlayerClass() == MPlayerClass.GUNNER) && isRanked) {
-					MPlayer.addCoins(p.getName(), Murder.COINS_INNOCENT_SURVIVE, true);
+					int scrapCount = MPlayerClass.getGunPartCount(p.getPlayer()
+							.getInventory());
+					if (scrapCount > 0)
+						MPlayer.addCoins(p.getName(), scrapCount * 5, true);
+					MPlayer.addCoins(p.getName(),
+							Murder.COINS_INNOCENT_SURVIVE, true);
 				}
 			}
 			end(false);
 			return;
 		}
 		if (innocentCount <= 0) {
-			sendMessage(ChatContext.COLOR_MURDERER
-					+ "The Murderer" + ChatContext.COLOR_LOWLIGHT + ", "
+			sendMessage(ChatContext.COLOR_MURDERER + "The Murderer"
+					+ ChatContext.COLOR_LOWLIGHT + ", "
 					+ ChatContext.COLOR_HIGHLIGHT + murderer
 					+ ChatContext.COLOR_LOWLIGHT + ", won the match!");
 			// Reward the murderer for winning
 			if (isRanked)
 				MPlayer.addCoins(murderer, Murder.COINS_MURDERER_WIN, true);
-			
+
 			end(true);
 			return;
 		}
@@ -463,15 +494,19 @@ public class PlayMatch extends Match {
 	@Override
 	public void onPlayerJoin(MPlayer mPlayer) {
 		if (!isReloading)
-			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE + " joined your match.", mPlayer.getPlayer());
-		
+			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE
+					+ " joined your match.", mPlayer.getPlayer());
+
 		Player pPlayer = mPlayer.getPlayer();
-		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR : MPlayerClass.PREGAMEMAN);
+		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR
+				: MPlayerClass.PREGAMEMAN);
+
+		mPlayer.usedRetrieval = false;
 
 		if (arena == null) {
 			switchArena();
 		}
-		
+
 		Spawn spawn = arena.getRandomSpawn("player");
 		if (spawn == null) {
 			throw new NullPointerException("No Spawn");
@@ -482,6 +517,10 @@ public class PlayMatch extends Match {
 		}
 		pPlayer.teleport(spawnLocation);
 		pPlayer.setFireTicks(0);
+		// Give player slowness, to prevent falling out of the
+		// world, etc, after teleporting
+		pPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 10),
+				true);
 	}
 
 	@Override
@@ -490,16 +529,16 @@ public class PlayMatch extends Match {
 		murdererTicketUsers.removeAll(Collections.singleton(mPlayer));
 		gunnerTicketUsers.removeAll(Collections.singleton(mPlayer));
 		if (isPlaying && mPlayer.getName().equals(murderer)) {
-			sendMessage(
-					ChatContext.COLOR_MURDERER + "The Murderer" +
-					ChatContext.COLOR_LOWLIGHT + ", " +
-					ChatContext.COLOR_HIGHLIGHT + murderer +
-					ChatContext.COLOR_LOWLIGHT + ", left the game.");
+			sendMessage(ChatContext.COLOR_MURDERER + "The Murderer"
+					+ ChatContext.COLOR_LOWLIGHT + ", "
+					+ ChatContext.COLOR_HIGHLIGHT + murderer
+					+ ChatContext.COLOR_LOWLIGHT + ", left the game.");
 			end(false);
 			return;
 		}
 		if (!isReloading)
-			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE + " left your match.", mPlayer.getPlayer());
+			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE
+					+ " left your match.", mPlayer.getPlayer());
 		checkForEnd();
 	}
 
@@ -508,11 +547,11 @@ public class PlayMatch extends Match {
 		// Handle default actions
 		return super.onPlayerInteractItem(itemStack, mPlayer);
 	}
-	
+
 	@Override
 	public void onPlayerDeath(MPlayer mKilled) {
 		Player pKilled = mKilled.getPlayer();
-		
+
 		pKilled.playSound(pKilled.getLocation(), Sound.HURT_FLESH, 1.5f, 1);
 		pKilled.setVelocity(new Vector(0, 2, 0));
 
@@ -532,22 +571,31 @@ public class PlayMatch extends Match {
 				// If there was a killer, reward him
 				if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
 					MPlayer.addCoins(killer, Murder.COINS_INNOCENT_KILL, true);
-			// If an innocent died
-			} else if (mKilled.getPlayerClass() == MPlayerClass.INNOCENT || mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
+				// If an innocent died
+			} else if (mKilled.getPlayerClass() == MPlayerClass.INNOCENT
+					|| mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
+				int scrapCount = MPlayerClass.getGunPartCount(mKilled
+						.getPlayer().getInventory());
+				for (int i = 0; i < scrapCount; i++) {
+					spawnScrap();
+				}
+				if (scrapCount > 0)
+					MPlayer.addCoins(mKilled.getName(), scrapCount * 5, true);
 				MPlayer.addCoins(murderer, Murder.COINS_MURDERER_KILL, true);
 			}
 		}
-		
+
 		// Change class into a spectator and check if the match is over
 		mKilled.switchPlayerClass(MPlayerClass.SPECTATOR);
-		pKilled.addPotionEffect(new PotionEffect(
-				PotionEffectType.BLINDNESS, 40, 1), true);
+		pKilled.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
+				40, 1), true);
 		checkForEnd();
 	}
 
 	public void addMurdererTicketUser(MPlayer mPlayer) {
 		murdererTicketUsers.add(mPlayer);
 	}
+
 	public void addGunnerTicketUser(MPlayer mPlayer) {
 		gunnerTicketUsers.add(mPlayer);
 	}
