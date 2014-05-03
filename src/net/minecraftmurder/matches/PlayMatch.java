@@ -33,6 +33,7 @@ import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
+import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
@@ -236,7 +237,7 @@ public class PlayMatch extends Match {
 					start();
 				}
 			} else if (countdown % 10 == 0 || (countdown == 3)) {
-				sendMessage(ChatContext.PREFIX_PLUGIN + "Match starts in "
+				sendMessage("Match starts in "
 						+ ChatContext.COLOR_HIGHLIGHT + countdown + " second"
 						+ (countdown != 1 ? "s" : "")
 						+ ChatContext.COLOR_LOWLIGHT + "!");
@@ -449,13 +450,12 @@ public class PlayMatch extends Match {
 			}
 		}
 		if (mMurderer == null) {
-			sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_INNOCENT
+			sendMessage(ChatContext.COLOR_INNOCENT
 					+ "The Innocent" + ChatContext.COLOR_HIGHLIGHT
 					+ " wins the match!");
 			// If someone killed the murderer
 			if (murdererKiller != null && !"".equalsIgnoreCase(murdererKiller)) {
-				sendMessage(ChatContext.PREFIX_PLUGIN
-						+ ChatContext.COLOR_MURDERER + "The Murderer"
+				sendMessage(ChatContext.COLOR_MURDERER + "The Murderer"
 						+ ChatContext.COLOR_LOWLIGHT + ", "
 						+ ChatContext.COLOR_HIGHLIGHT + murderer
 						+ ChatContext.COLOR_LOWLIGHT + ", was killed by "
@@ -567,11 +567,11 @@ public class PlayMatch extends Match {
 		if (isRanked()) {
 			// If the murderer was killed
 			if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
-				murdererKiller = killer;
 				// If there was a killer, reward him
-				if (killer != null && !"".equalsIgnoreCase(killer) && isRanked)
+				if (killer != null && !"".equalsIgnoreCase(killer) && isRanked) {
 					MPlayer.addCoins(killer, Murder.COINS_INNOCENT_KILL, true);
-				// If an innocent died
+				}
+			// If an innocent died
 			} else if (mKilled.getPlayerClass() == MPlayerClass.INNOCENT
 					|| mKilled.getPlayerClass() == MPlayerClass.GUNNER) {
 				int scrapCount = MPlayerClass.getGunPartCount(mKilled
@@ -579,9 +579,14 @@ public class PlayMatch extends Match {
 				for (int i = 0; i < scrapCount; i++) {
 					spawnScrap();
 				}
-				if (scrapCount > 0)
+				if (scrapCount > 0) {
 					MPlayer.addCoins(mKilled.getName(), scrapCount * 5, true);
-				MPlayer.addCoins(murderer, Murder.COINS_MURDERER_KILL, true);
+				}
+				// Award the murderer coins for kills, + those by deception,
+				// but only if they're not dead.
+				if (PlayerManager.getMPlayer(murderer).getPlayerClass() != MPlayerClass.SPECTATOR) {
+					MPlayer.addCoins(murderer, Murder.COINS_MURDERER_KILL, true);
+				}
 			}
 		}
 

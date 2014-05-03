@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.tools.ChatContext;
-import net.minecraftmurder.tools.MLogger;
 import net.minecraftmurder.tools.Paths;
 import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.Tools;
@@ -132,7 +130,7 @@ public class MInventory {
 	}
 	public void openInventorySelectionScreen () {
 		Inventory inventory = Bukkit.createInventory(null, 9*6, "Equipment Selection");
-		// == Knifes ==
+		// Knives
 		for (int i = 0; i < MPlayerClass.ITEM_KNIVES.length; i++) {
 			MItem mItem = MPlayerClass.ITEM_KNIVES[i];
 			ItemStack item = new ItemStack(mItem.getMaterial(), 1);
@@ -147,7 +145,7 @@ public class MInventory {
 			}
 			inventory.setItem(2 + i, item);
 		}
-		// == Toggle Shiny ==
+		// Toggle shiny
 		MItem mItemShiny = MItem.SHINY_SWORD_EFFECT;
 		ItemStack itemShiny = new ItemStack(mItemShiny.getMaterial(), 1);
 		if (shinyKnife)
@@ -200,18 +198,18 @@ public class MInventory {
 		Player player = mPlayer.getPlayer();
 		
 		if (ownsMItem(mItem)) {
-			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + "You already own this item!");
+			player.sendMessage(ChatContext.COLOR_WARNING + "You already own this item!");
 			return false;
 		}
 		int coins = MPlayer.getCoins(mPlayer.getName()); 
 		if (coins < mItem.getCost()) {
-			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING + "You can't afford this item!");
-			player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+			player.sendMessage(ChatContext.COLOR_WARNING + "You can't afford this item!");
+			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
 			return false;
 		}
 		MPlayer.addCoins(mPlayer.getName(), -mItem.getCost(), true);
 		setOwnedMItem(mItem, true, true);
-		player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + "You bought the " + ChatContext.COLOR_HIGHLIGHT + mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
+		player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You bought the " + ChatContext.COLOR_HIGHLIGHT + mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 		return true;
 	}
 	

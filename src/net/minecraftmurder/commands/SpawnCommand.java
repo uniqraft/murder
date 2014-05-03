@@ -8,6 +8,7 @@ import net.minecraftmurder.commands.MCommandResult.Result;
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.Spawn;
 import net.minecraftmurder.managers.ArenaManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -230,7 +231,6 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 		}
 		@Override
 		public MCommandResult exectute(CommandSender sender, String[] args) {
-			Player pPlayer = (Player) sender;
 			Arena arena;
 			// Check arguments
 			if (args.length != 2) {
@@ -268,38 +268,4 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 			return "Adds a spawn to an arena.";
 		}
 	}
-
-	/*@Override
-	public boolean onCommand(CommandSender sender, Command command, String label,
-			String[] args) {
-		if (args[0].equalsIgnoreCase("types")) {
-			sender.sendMessage(ChatContext.PREFIX_PLUGIN + Spawn.TYPES.toString());
-			return true;
-		} else if (args[0].equalsIgnoreCase("count")) {
-			// Remove nearest spawn
-			if (args.length != 4) {
-				sender.sendMessage(ChatContext.ERROR_ARGUMENTS);
-				sender.sendMessage(ChatContext.PREFIX_PLUGIN + "/spawn count <arena> <type>");
-				return true;
-			}
-			// Does arena exist?
-			Arena arena = ArenaManager.getArenaByPathname(args[1]);
-			if (arena == null) {
-				sender.sendMessage(ChatContext.PREFIX_WARNING + "Couldn't find arena " + args[1] + "!");
-				return true;
-			}
-			// Is it a valid spawn type?
-			if (!Spawn.TYPES.contains(args[2].toLowerCase())) {
-				sender.sendMessage(ChatContext.PREFIX_WARNING + args[2] + " is not a valid spawn type!");
-				return true;
-			}
-			sender.sendMessage(ChatContext.PREFIX_PLUGIN + arena.getSpawns(args[2]).size());
-			return true;
-		} else {
-			sender.sendMessage(ChatContext.PREFIX_WARNING + "Not a valid action. Valid actions are:");
-			sender.sendMessage(ChatContext.PREFIX_WARNING + "add/remove/nearest/density/count");
-			return true;
-		}
-		return false;
-	}*/
 }

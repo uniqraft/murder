@@ -53,8 +53,8 @@ public class MSignMatch extends MSign {
 			Player player = mPlayer.getPlayer();
 			// If not VIP
 			if (!player.hasPermission("murder.joinfull")) {
-				player.sendMessage(ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_WARNING +
-						"Match full. Only VIPs can join full matches.");
+				player.sendMessage(ChatContext.COLOR_WARNING +
+						"This match is full. Only VIP and Ultra players can join full matches.");
 				return;
 			}
 		}

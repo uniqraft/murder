@@ -233,7 +233,7 @@ public class MPlayer {
 		if (mPlayer != null) {
 			if (tell)
 				mPlayer.getPlayer().sendMessage(
-						ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT
+								ChatContext.COLOR_LOWLIGHT
 								+ "You now have " + ChatContext.COLOR_HIGHLIGHT
 								+ Math.abs(count) + ChatContext.COLOR_LOWLIGHT
 								+ (count != 1 ? " coins" : " coin") + "!");

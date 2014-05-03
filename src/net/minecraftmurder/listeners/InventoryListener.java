@@ -48,7 +48,7 @@ public class InventoryListener implements Listener {
 							mPlayer.getMInventory().setSelectedKnife(mItem);
 							if (!bought)
 								player.sendMessage(
-										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
+										ChatContext.COLOR_LOWLIGHT + 
 										"You equipped the " + ChatContext.COLOR_HIGHLIGHT +
 										mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 						}
@@ -59,8 +59,8 @@ public class InventoryListener implements Listener {
 							mPlayer.getMInventory().setShinyKnife(!shiny);
 							if (!bought)
 								player.sendMessage(
-										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
-										"Your knife is " + (!shiny?"now shiny!":"no longer shiny!"));
+										ChatContext.COLOR_LOWLIGHT +
+										"Your knife is " + (!shiny ? "now shiny!" : "no longer shiny!"));
 						}
 					} else if (Tools.array2DContains(MItem.ARMOR, mItem)) {
 						// If the player owns this item
@@ -68,14 +68,14 @@ public class InventoryListener implements Listener {
 						if (mPlayer.getMInventory().isEquiped(mItem)) {
 							mPlayer.getMInventory().setSelectedArmor(mItem.getArmorType(), null);
 							player.sendMessage(
-									ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
+									ChatContext.COLOR_LOWLIGHT + 
 									"You unequipped the " + ChatContext.COLOR_HIGHLIGHT +
 									mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 						} else if (mPlayer.getMInventory().ownsMItem(mItem) || (bought = mPlayer.getMInventory().buyMItem(mItem))) {
 							mPlayer.getMInventory().setSelectedArmor(mItem.getArmorType(), mItem);
 							if (!bought)
 								player.sendMessage(
-										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT + 
+										ChatContext.COLOR_LOWLIGHT + 
 										"You equipped the " + ChatContext.COLOR_HIGHLIGHT +
 										mItem.getReadableName() + ChatContext.COLOR_LOWLIGHT + "!");
 						}
@@ -90,21 +90,21 @@ public class InventoryListener implements Listener {
 							if (coins >= MPlayerClass.TICKET_MURDERER_COST) {
 								MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_MURDERER_COST, true);
 								player.sendMessage(
-										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
-										"Bought ticket! Increased chance of becoming the murderer.");
+										ChatContext.COLOR_LOWLIGHT +
+										"You bought a ticket! Increased chance of becoming the murderer.");
 								((PlayMatch) mPlayer.getMatch()).addMurdererTicketUser(mPlayer);
 								player.getInventory().remove(item); // Remove from inventory
 								player.updateInventory();
 							} else {
 								player.sendMessage(ChatContext.COLOR_WARNING + "You can't afford this item!");
-								player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
+								player.sendMessage(ChatContext.COLOR_LOWLIGHT + "You only have " + ChatContext.COLOR_HIGHLIGHT + coins + ChatContext.COLOR_LOWLIGHT + " coins!");
 							}
 						} else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equalsIgnoreCase("gunner ticket")) {
 							if (coins >= MPlayerClass.TICKET_GUNNER_COST) {
 								MPlayer.addCoins(player.getName(), -MPlayerClass.TICKET_GUNNER_COST, true);
 								player.sendMessage(
-										ChatContext.PREFIX_PLUGIN + ChatContext.COLOR_LOWLIGHT +
-										"Bought ticket! Increased chance of becoming the gunner.");
+										ChatContext.COLOR_LOWLIGHT +
+										"You bought a ticket! Increased chance of becoming the gunner.");
 								((PlayMatch) mPlayer.getMatch()).addGunnerTicketUser(mPlayer);
 								player.getInventory().remove(item); // Remove from inventory
 								player.updateInventory();

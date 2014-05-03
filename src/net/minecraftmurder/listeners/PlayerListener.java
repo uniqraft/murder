@@ -256,8 +256,7 @@ public class PlayerListener implements Listener {
 				if (count == 5) {
 					mPlayer.switchPlayerClass(MPlayerClass.GUNNER);
 				} else {
-					String message = ChatContext.PREFIX_PLUGIN
-							+ "You picked up scrap. ";
+					String message = "You picked up scrap. ";
 					MPlayerClass.giveGunPart(player.getInventory());
 					message += ChatContext.COLOR_HIGHLIGHT + "(" + count + "/"
 							+ Murder.CRAFTGUNPARTS_COUNT + ")";

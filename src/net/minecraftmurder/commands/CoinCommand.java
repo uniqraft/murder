@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import net.minecraftmurder.commands.MCommandResult.Result;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.tools.ChatContext;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CoinCommand extends MCommand {
 private final List<MCommand> mCommands;
