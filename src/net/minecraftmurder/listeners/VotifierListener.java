@@ -25,6 +25,6 @@ public class VotifierListener implements Listener {
 			player.sendMessage(ChatContext.COLOR_HIGHLIGHT + "Thank you for voting! <3");
 			MLogger.log(Level.INFO, "Online player " + vote.getUsername() + " casted a vote.");
 		}
-		MPlayer.addCoins(vote.getUsername(), 20, true);
+		MPlayer.addCoins(vote.getUsername(), 40, true);
 	}
 }
