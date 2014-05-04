@@ -42,9 +42,9 @@ public final class PlayerManager {
 		PacketPlayOutChat packet = new PacketPlayOutChat(comp, true);
 		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 		
-		IChatBaseComponent comp = ChatSerializer
+		IChatBaseComponent comp2 = ChatSerializer
 				.a("{\"text\":\"§2[MURDER] \", \"extra\":[{\"text\":\"§Click here to read the rules!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cRead the rules.\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://minecraft-murder.net/forum/m/19667588/viewthread/10930065-server-rules/post/60742825#p60742825\"}}]}");
-		PacketPlayOutChat packet = new PacketPlayOutChat(comp, true);
+		PacketPlayOutChat packet2 = new PacketPlayOutChat(comp, true);
 		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 		
 		// Add player
