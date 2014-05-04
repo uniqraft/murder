@@ -452,7 +452,7 @@ public class PlayMatch extends Match {
 		if (mMurderer == null) {
 			sendMessage(ChatContext.COLOR_INNOCENT
 					+ "The Innocent" + ChatContext.COLOR_HIGHLIGHT
-					+ " wins the match!");
+					+ " win the match!");
 			// If someone killed the murderer
 			if (murdererKiller != null && !"".equalsIgnoreCase(murdererKiller)) {
 				sendMessage(ChatContext.COLOR_MURDERER + "The Murderer"
@@ -567,6 +567,7 @@ public class PlayMatch extends Match {
 		if (isRanked()) {
 			// If the murderer was killed
 			if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
+				murdererKiller = killer;
 				// If there was a killer, reward him
 				if (killer != null && !"".equalsIgnoreCase(killer) && isRanked) {
 					MPlayer.addCoins(killer, Murder.COINS_INNOCENT_KILL, true);
