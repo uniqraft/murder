@@ -38,12 +38,12 @@ public final class PlayerManager {
 		Tools.sendMessageAll(ChatColor.GRAY + player.getName() + " joined the server.", player);
 		// Send a clickable link to the player
 		IChatBaseComponent comp = ChatSerializer
-				.a("{\"text\":\"§2[MURDER] \", \"extra\":[{\"text\":\"§bClick to visit our website!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cwww.minecraft-murder.net\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://www.minecraft-murder.net/\"}}]}");
+				.a("{\"text\":\"§6READ> \", \"extra\":[{\"text\":\"§bClick to visit our website!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cwww.minecraft-murder.net\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://www.minecraft-murder.net/\"}}]}");
 		PacketPlayOutChat packet = new PacketPlayOutChat(comp, true);
 		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 		
 		IChatBaseComponent comp2 = ChatSerializer
-				.a("{\"text\":\"§2[MURDER] \", \"extra\":[{\"text\":\"§Click here to read the rules!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cRead the rules.\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://minecraft-murder.net/forum/m/19667588/viewthread/10930065-server-rules/post/60742825#p60742825\"}}]}");
+				.a("{\"text\":\"§6READ> \", \"extra\":[{\"text\":\"§dClick here to read the rules!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cRead the rules.\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://minecraft-murder.net/forum/m/19667588/viewthread/10930065-server-rules/post/60742825#p60742825\"}}]}");
 		PacketPlayOutChat packet2 = new PacketPlayOutChat(comp2, true);
 		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet2);
 		
