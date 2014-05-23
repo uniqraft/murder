@@ -214,7 +214,7 @@ public class MPlayer {
 						+ ((multiplier > 1) ? ChatContext.COLOR_INNOCENT + "(" + coins + " x" + multiplier + ")" : ""));
 			} else {
 				mPlayer.getPlayer().sendMessage(
-						ChatContext.COLOR_LOWLIGHT
+						ChatContext.COLOR_ERROR // Red is a better colour for this
 						+ "You lost " + ChatContext.COLOR_HIGHLIGHT
 						+ Math.abs(coins) + ChatContext.COLOR_LOWLIGHT
 						+ (coins != 1 ? " coins" : " coin") + "!");

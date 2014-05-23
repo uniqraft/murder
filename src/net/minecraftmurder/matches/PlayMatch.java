@@ -568,7 +568,7 @@ public class PlayMatch extends Match {
 			// If the murderer was killed
 			if (mKilled.getPlayerClass() == MPlayerClass.MURDERER) {
 				murdererKiller = killer;
-				// If there was a killer, reward him
+				// If there was a killer, reward them
 				if (killer != null && !"".equalsIgnoreCase(killer) && isRanked) {
 					MPlayer.addCoins(killer, Murder.COINS_INNOCENT_KILL, true);
 				}
@@ -580,6 +580,7 @@ public class PlayMatch extends Match {
 				for (int i = 0; i < scrapCount; i++) {
 					spawnScrap();
 				}
+				MPlayer.addCoins(killer, -5, true);
 				// Award the murderer coins for kills, + those by deception,
 				// but only if they're not dead.
 				if (PlayerManager.getMPlayer(murderer).getPlayerClass() != MPlayerClass.SPECTATOR) {
