@@ -253,6 +253,7 @@ public class PlayerListener implements Listener {
 		} else if (material.equals(MPlayerClass.MATERIAL_GUNPART)) {
 			if (mPlayer.getPlayerClass() == MPlayerClass.INNOCENT) {
 				int count = MPlayerClass.getGunPartCount(player.getInventory()) + 1;
+				MPlayer.addCoins(mPlayer.getName(), 4, true);
 				if (count == 5) {
 					mPlayer.switchPlayerClass(MPlayerClass.GUNNER);
 				} else {
