@@ -144,9 +144,6 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		MPlayer mPlayer = PlayerManager.getMPlayer(event.getPlayer());
-		event.setQuitMessage(
-				ChatColor.GRAY + ChatColor.stripColor(event.getPlayer().getName())
-				+ " left the server.");
 		PlayMatch pm = null;
 		if (mPlayer.getMatch() instanceof PlayMatch)
 			pm = (PlayMatch) mPlayer.getMatch();

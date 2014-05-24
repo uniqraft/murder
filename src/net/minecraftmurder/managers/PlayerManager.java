@@ -35,7 +35,6 @@ public final class PlayerManager {
 		} else {
 			player.sendMessage(ChatContext.COLOR_LOWLIGHT + "Welcome to Murder!");
 		}
-		Tools.sendMessageAll(ChatColor.GRAY + player.getName() + " joined the server.", player);
 		// Send a clickable link to the player
 		IChatBaseComponent comp = ChatSerializer
 				.a("{\"text\":\"§6READ> \", \"extra\":[{\"text\":\"§bClick to visit our website!\", \"hoverEvent\":{\"action\":\"show_text\", \"value\":\"§cwww.minecraft-murder.net\"}, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"http://www.minecraft-murder.net/\"}}]}");

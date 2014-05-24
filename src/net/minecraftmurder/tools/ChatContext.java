@@ -44,7 +44,7 @@ public class ChatContext {
 	
 	public static final String MESSAGE_CHOSEN_MURDERER =
 			COLOR_LOWLIGHT + "You are " +
-			COLOR_MURDERER + "The Murderer" +
+			COLOR_MURDERER + "the Murderer" +
 			COLOR_LOWLIGHT + "!";
 	public static final String MESSAGE_CHOSEN_GUNNER =
 			COLOR_LOWLIGHT + "You are " +

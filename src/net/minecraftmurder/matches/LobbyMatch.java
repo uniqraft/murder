@@ -1,15 +1,14 @@
 package net.minecraftmurder.matches;
 
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
 import net.minecraftmurder.main.Arena;
 import net.minecraftmurder.main.MPlayer;
 import net.minecraftmurder.main.MPlayerClass;
 import net.minecraftmurder.main.Murder;
 import net.minecraftmurder.main.Spawn;
-import net.minecraftmurder.managers.PlayerManager;
+
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class LobbyMatch extends Match {
 	public LobbyMatch (Arena arena) {

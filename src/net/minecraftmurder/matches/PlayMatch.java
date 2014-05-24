@@ -580,7 +580,6 @@ public class PlayMatch extends Match {
 				for (int i = 0; i < scrapCount; i++) {
 					spawnScrap();
 				}
-				MPlayer.addCoins(killer, -5, true);
 				// Award the murderer coins for kills, + those by deception,
 				// but only if they're not dead.
 				if (PlayerManager.getMPlayer(murderer).getPlayerClass() != MPlayerClass.SPECTATOR) {
