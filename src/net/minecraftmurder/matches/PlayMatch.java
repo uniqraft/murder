@@ -7,6 +7,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
+import net.minecraftmurder.main.Arena;
+import net.minecraftmurder.main.MPlayer;
+import net.minecraftmurder.main.MPlayerClass;
+import net.minecraftmurder.main.Murder;
+import net.minecraftmurder.main.Spawn;
+import net.minecraftmurder.managers.ArenaManager;
+import net.minecraftmurder.managers.PlayerManager;
+import net.minecraftmurder.tools.ChatContext;
+import net.minecraftmurder.tools.MLogger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -26,16 +36,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-
-import net.minecraftmurder.main.Arena;
-import net.minecraftmurder.main.MPlayer;
-import net.minecraftmurder.main.MPlayerClass;
-import net.minecraftmurder.main.Murder;
-import net.minecraftmurder.main.Spawn;
-import net.minecraftmurder.managers.ArenaManager;
-import net.minecraftmurder.managers.PlayerManager;
-import net.minecraftmurder.tools.ChatContext;
-import net.minecraftmurder.tools.MLogger;
 
 public class PlayMatch extends Match {
 	public static final int MATCH_TIME = 60 * 5;
@@ -237,7 +237,7 @@ public class PlayMatch extends Match {
 					start();
 				}
 			} else if (countdown % 10 == 0 || (countdown == 3)) {
-				sendMessage("Match starts in "
+				sendMessage(ChatContext.COLOR_LOWLIGHT + "Match starts in "
 						+ ChatContext.COLOR_HIGHLIGHT + countdown + " second"
 						+ (countdown != 1 ? "s" : "")
 						+ ChatContext.COLOR_LOWLIGHT + "!");
@@ -468,10 +468,15 @@ public class PlayMatch extends Match {
 						.getPlayerClass() == MPlayerClass.GUNNER) && isRanked) {
 					int scrapCount = MPlayerClass.getGunPartCount(p.getPlayer()
 							.getInventory());
-					if (scrapCount > 0)
-						MPlayer.addCoins(p.getName(), scrapCount * 5, true);
+					if (scrapCount > 0) {
+						MPlayer.addCoins(p.getName(), scrapCount * 3, true);
+					}
+					
 					MPlayer.addCoins(p.getName(),
 							Murder.COINS_INNOCENT_SURVIVE, true);
+					if (p.getPlayerClass() == MPlayerClass.GUNNER) {
+						MPlayer.addCoins(p.getName(), 3*5, true);
+					}
 				}
 			}
 			end(false);
