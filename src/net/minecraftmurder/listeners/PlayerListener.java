@@ -13,6 +13,7 @@ import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -169,6 +170,12 @@ public class PlayerListener implements Listener {
 		if (!Murder.getInstance().isStarted())
 			return;
 
+		String message = event.getMessage();
+		for (String swear : Murder.swears) {
+			// Replace swear with asterisks regardless of capitalisation
+			message = message.replaceAll("(?i)"+swear, StringUtils.repeat("*",swear.length()));
+		}
+		
 		event.setCancelled(true);
 
 		Player player = event.getPlayer();
@@ -187,7 +194,7 @@ public class PlayerListener implements Listener {
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			String grayMessage = ChatColor.GRAY
 					+ ChatColor.stripColor(player.getName() + ": "
-							+ event.getMessage());
+							+ message);
 			for (MPlayer other : match.getMPlayers()) {
 				if (other.getPlayerClass() == MPlayerClass.SPECTATOR) {
 					other.getPlayer().sendMessage(grayMessage);
@@ -197,7 +204,7 @@ public class PlayerListener implements Listener {
 					+ player.getName() + ": " + event.getMessage());
 		} else {
 			match.sendMessage(player.getDisplayName() + ": "
-					+ event.getMessage());
+					+ message);
 			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") "
 					+ player.getName() + ": " + event.getMessage());
 		}

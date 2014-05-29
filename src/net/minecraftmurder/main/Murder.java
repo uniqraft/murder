@@ -1,6 +1,8 @@
 package net.minecraftmurder.main;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import net.minecraftmurder.commands.CommandListener;
@@ -14,9 +16,11 @@ import net.minecraftmurder.managers.MatchManager;
 import net.minecraftmurder.managers.PlayerManager;
 import net.minecraftmurder.managers.SignManager;
 import net.minecraftmurder.tools.MLogger;
+import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.TeleportFix;
 
 import org.bukkit.GameMode;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
@@ -28,6 +32,7 @@ public class Murder extends JavaPlugin {
 	public static final int CRAFTGUNPARTS_COUNT = 5;
 	public static final float ARROW_SPEED = 4;
 	public static EmptyEnchantment emptyEnchantment;
+	public static List<String> swears = new ArrayList<String>();
 	
 	public static int VIP_SLOTS, MAX_PLAYERS;
 	public static int COINS_INNOCENT_KILL, COINS_INNOCENT_SURVIVE, COINS_MURDERER_KILL, COINS_MURDERER_WIN;
@@ -95,6 +100,9 @@ public class Murder extends JavaPlugin {
 		for (Player player: getServer().getOnlinePlayers()) {
 			PlayerManager.onPlayerJoin(player);
 		}
+		
+		// Load list of swears
+		swears = SimpleFile.loadConfig("wordlist.yml").getStringList("word");
 	}
 	
 	public void start () {
