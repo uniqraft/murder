@@ -12,6 +12,7 @@ import net.minecraftmurder.matches.Match;
 import net.minecraftmurder.matches.PlayMatch;
 import net.minecraftmurder.tools.ChatContext;
 import net.minecraftmurder.tools.MLogger;
+import net.minecraftmurder.tools.StringTools;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -171,9 +172,12 @@ public class PlayerListener implements Listener {
 			return;
 
 		String message = event.getMessage();
+		
+		System.out.println("Swears: " + Murder.swears.toString());
 		for (String swear : Murder.swears) {
+			System.out.println("Replacing: " + swear);
 			// Replace swear with asterisks regardless of capitalisation
-			message = message.replaceAll("(?i)"+swear, StringUtils.repeat("*",swear.length()));
+			message = StringTools.replaceAll(message, swear, StringUtils.repeat("*", swear.length()));
 		}
 		
 		event.setCancelled(true);

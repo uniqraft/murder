@@ -20,7 +20,6 @@ import net.minecraftmurder.tools.SimpleFile;
 import net.minecraftmurder.tools.TeleportFix;
 
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
