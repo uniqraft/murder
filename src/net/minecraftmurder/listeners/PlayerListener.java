@@ -57,9 +57,9 @@ public class PlayerListener implements Listener {
 	public void onServerListPing(ServerListPingEvent event) {
 		event.setMaxPlayers(Murder.MAX_PLAYERS);
 	}
-	
+
 	@EventHandler
-	public void onEntityCombust (EntityCombustEvent event) {
+	public void onEntityCombust(EntityCombustEvent event) {
 		final Entity entity = event.getEntity();
 		new BukkitRunnable() {
 			@Override
@@ -124,21 +124,21 @@ public class PlayerListener implements Listener {
 		event.setJoinMessage(null);
 
 		Player player = event.getPlayer();
-		if (player.hasPermission("murder.owner")) 
-			player.setDisplayName(ChatColor.RED + "[Owner] " 
-		+ ChatColor.WHITE + player.getName());
-		else if (player.hasPermission("murder.admin")) 
-			player.setDisplayName(ChatColor.RED + "[Admin] " 
-		+ ChatColor.WHITE + player.getName());
-		else if (player.hasPermission("murder.mod")) 
-			player.setDisplayName(ChatColor.BLUE + "[Mod] " 
-		+ ChatColor.WHITE + player.getName());
+		if (player.hasPermission("murder.owner"))
+			player.setDisplayName(ChatColor.RED + "[Owner] " + ChatColor.WHITE
+					+ player.getName());
+		else if (player.hasPermission("murder.admin"))
+			player.setDisplayName(ChatColor.RED + "[Admin] " + ChatColor.WHITE
+					+ player.getName());
+		else if (player.hasPermission("murder.mod"))
+			player.setDisplayName(ChatColor.BLUE + "[Mod] " + ChatColor.WHITE
+					+ player.getName());
 		else if (player.hasPermission("murder.ultra"))
-			player.setDisplayName(ChatColor.DARK_PURPLE + "[Ultra] " 
-		+ ChatColor.WHITE + player.getName());
+			player.setDisplayName(ChatColor.DARK_PURPLE + "[Ultra] "
+					+ ChatColor.WHITE + player.getName());
 		else if (player.hasPermission("murder.vip"))
-			player.setDisplayName(ChatColor.AQUA + "[VIP] " 
-		+ ChatColor.WHITE + player.getName());
+			player.setDisplayName(ChatColor.AQUA + "[VIP] " + ChatColor.WHITE
+					+ player.getName());
 
 		PlayerManager.onPlayerJoin(player);
 	}
@@ -171,14 +171,18 @@ public class PlayerListener implements Listener {
 		if (!Murder.getInstance().isStarted())
 			return;
 
-		String message = event.getMessage();
-		
+		String message = "";
+		String[] words = event.getMessage().split(" ");
 		for (String swear : Murder.swears) {
-			System.out.println("Replacing: " + swear);
-			// Replace swear with asterisks regardless of capitalisation
-			message = StringTools.replaceAll(message, swear, StringUtils.repeat("*", swear.length()));
+			for (int i = 0; i <= words.length; i++) {
+				if (swear.equalsIgnoreCase(words[i])) {
+					// Regex is cool sometimes
+					words[i].replaceAll(".", "*");
+				}
+				message += words[i] + " ";
+			}
 		}
-		
+
 		event.setCancelled(true);
 
 		Player player = event.getPlayer();
@@ -196,8 +200,7 @@ public class PlayerListener implements Listener {
 
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			String grayMessage = ChatColor.GRAY
-					+ ChatColor.stripColor(player.getName() + ": "
-							+ message);
+					+ ChatColor.stripColor(player.getName() + ": " + message);
 			for (MPlayer other : match.getMPlayers()) {
 				if (other.getPlayerClass() == MPlayerClass.SPECTATOR) {
 					other.getPlayer().sendMessage(grayMessage);
@@ -206,8 +209,7 @@ public class PlayerListener implements Listener {
 			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") *DEAD* "
 					+ player.getName() + ": " + event.getMessage());
 		} else {
-			match.sendMessage(player.getDisplayName() + ": "
-					+ message);
+			match.sendMessage(player.getDisplayName() + ": " + message);
 			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") "
 					+ player.getName() + ": " + event.getMessage());
 		}
@@ -308,13 +310,14 @@ public class PlayerListener implements Listener {
 		MPlayer mPlayer = PlayerManager.getMPlayer(player);
 		ItemStack itemInHand = player.getItemInHand();
 
-		boolean rightClicked = 
-				(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK);
-		
+		boolean rightClicked = (event.getAction() == Action.RIGHT_CLICK_AIR || event
+				.getAction() == Action.RIGHT_CLICK_BLOCK);
+
 		// Spectators can't interact...
 		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
 			// ... unless they're spectating another player.
-			if (itemInHand.getType() == MPlayerClass.MATERIAL_DETECTOR && rightClicked) {
+			if (itemInHand.getType() == MPlayerClass.MATERIAL_DETECTOR
+					&& rightClicked) {
 				mPlayer.getMInventory().openSpectatorMenu();
 			}
 			event.setCancelled(true);
@@ -325,7 +328,8 @@ public class PlayerListener implements Listener {
 			event.setCancelled(true);
 
 		// If clicked a block
-		if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK
+				|| event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (event.getClickedBlock().getState() instanceof Sign) {
 				Sign sign = (Sign) event.getClickedBlock().getState();
 				if (SignManager.existsSigns(sign.getLocation())) {
@@ -334,8 +338,9 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
-		
-		if (rightClicked && mPlayer.getMatch().onPlayerInteractItem(itemInHand, mPlayer))
+
+		if (rightClicked
+				&& mPlayer.getMatch().onPlayerInteractItem(itemInHand, mPlayer))
 			event.setCancelled(true);
 	}
 }
