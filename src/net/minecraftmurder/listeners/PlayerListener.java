@@ -173,7 +173,6 @@ public class PlayerListener implements Listener {
 
 		String message = event.getMessage();
 		
-		System.out.println("Swears: " + Murder.swears.toString());
 		for (String swear : Murder.swears) {
 			System.out.println("Replacing: " + swear);
 			// Replace swear with asterisks regardless of capitalisation
