@@ -174,7 +174,7 @@ public class PlayerListener implements Listener {
 		String message = "";
 		String[] words = event.getMessage().split(" ");
 		for (String swear : Murder.swears) {
-			for (int i = 0; i <= words.length; i++) {
+			for (int i = 0; i < words.length; i++) {
 				if (swear.equalsIgnoreCase(words[i])) {
 					// Regex is cool sometimes
 					words[i].replaceAll(".", "*");
