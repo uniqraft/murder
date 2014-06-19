@@ -48,7 +48,7 @@ public class CommandListener implements CommandExecutor {
 	private void executeCommand (MCommand originalMCommand, CommandSender sender, String[] args) {
 		String returnedMessage = null;
 		// Execute command
-		MCommandResult commandResult = originalMCommand.exectute(sender, args);
+		MCommandResult commandResult = originalMCommand.execute(sender, args);
 		MCommand executedMCommand = commandResult.getExecutedMCommand();
 		// Handle result
 		returnedMessage = commandResult.getMessage();

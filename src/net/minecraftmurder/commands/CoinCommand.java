@@ -24,7 +24,7 @@ private final List<MCommand> mCommands;
 	}
 	
 	@Override
-	public MCommandResult exectute(CommandSender sender, String[] args) {
+	public MCommandResult execute(CommandSender sender, String[] args) {
 		// If no arguments were used
 		if (args.length < 1) {
 			if (!(sender instanceof Player))
@@ -47,7 +47,7 @@ private final List<MCommand> mCommands;
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
 				String[] newArgs = Arrays.copyOfRange(args, 1, args.length);
-				return mCommand.exectute(sender, newArgs);
+				return mCommand.execute(sender, newArgs);
 			}
 		}
 		return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
@@ -67,7 +67,7 @@ private final List<MCommand> mCommands;
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 1)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
@@ -93,7 +93,7 @@ private final List<MCommand> mCommands;
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 2)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
@@ -126,7 +126,7 @@ private final List<MCommand> mCommands;
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 2)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);

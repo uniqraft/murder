@@ -15,7 +15,7 @@ public class WarnCommand extends MCommand {
 	}
 	
 	@Override
-	public MCommandResult exectute(CommandSender sender, String[] args) {
+	public MCommandResult execute(CommandSender sender, String[] args) {
 		// Permission
 		if (!sender.hasPermission("murder.mod"))
 			return new MCommandResult(this, Result.FAIL_PERMISSIONS);

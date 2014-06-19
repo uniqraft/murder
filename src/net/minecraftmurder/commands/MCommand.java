@@ -9,7 +9,7 @@ public abstract class MCommand {
 		this.label = label;
 	}
 	
-	public abstract MCommandResult exectute(CommandSender sender, String[] args);
+	public abstract MCommandResult execute(CommandSender sender, String[] args);
 	public abstract String getUsage();
 	public abstract String getHelp();
 	

@@ -198,7 +198,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 
-		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR) {
+		if (mPlayer.getPlayerClass() == MPlayerClass.SPECTATOR && !mPlayer.modMode) {
 			String grayMessage = ChatColor.GRAY
 					+ ChatColor.stripColor(player.getName() + ": " + message);
 			for (MPlayer other : match.getMPlayers()) {
@@ -209,9 +209,9 @@ public class PlayerListener implements Listener {
 			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") *DEAD* "
 					+ player.getName() + ": " + event.getMessage());
 		} else {
-			match.sendMessage(player.getDisplayName() + ": " + message);
+			match.sendMessage(player.getDisplayName() + ": " + (mPlayer.modMode ? ChatColor.BOLD : "") + message);
 			MLogger.log(Level.INFO, "(Match " + match.hashCode() + ") "
-					+ player.getName() + ": " + event.getMessage());
+					+ player.getName() + ": " + event.getMessage() + (mPlayer.modMode ? " (IN MOD MODE)" : ""));
 		}
 	}
 

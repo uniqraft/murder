@@ -83,6 +83,7 @@ public class Murder extends JavaPlugin {
 		getCommand("spawn").setExecutor(listener);
 		getCommand("coins").setExecutor(listener);
 		getCommand("warn").setExecutor(listener);
+		getCommand("mod").setExecutor(listener);
 		
 		// Setup config
 		saveDefaultConfig();

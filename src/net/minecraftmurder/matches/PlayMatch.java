@@ -300,11 +300,8 @@ public class PlayMatch extends Match {
 		// Select murderer
 		MPlayer mMurderer = murdererEntires.get(random.nextInt(murdererEntires
 				.size()));
-		gunnerEntires.removeAll(Collections.singleton(mMurderer)); // This
-																	// player
-																	// can't
-																	// become
-																	// gunner
+		// This player can't become gunner
+		gunnerEntires.removeAll(Collections.singleton(mMurderer)); 
 		// Select gunner
 		MPlayer mGunner = gunnerEntires
 				.get(random.nextInt(gunnerEntires.size()));
@@ -498,12 +495,12 @@ public class PlayMatch extends Match {
 
 	@Override
 	public void onPlayerJoin(MPlayer mPlayer) {
-		if (!isReloading)
+		if (!isReloading && !mPlayer.modMode)
 			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE
 					+ " joined your match.", mPlayer.getPlayer());
 
-		Player pPlayer = mPlayer.getPlayer();
-		mPlayer.switchPlayerClass(isPlaying ? MPlayerClass.SPECTATOR
+		// If match is playing or the player is in mod mode
+		mPlayer.switchPlayerClass(isPlaying || mPlayer.modMode ? MPlayerClass.SPECTATOR
 				: MPlayerClass.PREGAMEMAN);
 
 		mPlayer.usedRetrieval = false;
@@ -520,6 +517,8 @@ public class PlayMatch extends Match {
 		if (spawnLocation == null) {
 			throw new NullPointerException("No Spawn Location");
 		}
+		
+		Player pPlayer = mPlayer.getPlayer();
 		pPlayer.teleport(spawnLocation);
 		pPlayer.setFireTicks(0);
 		// Give player slowness, to prevent falling out of the
@@ -541,7 +540,7 @@ public class PlayMatch extends Match {
 			end(false);
 			return;
 		}
-		if (!isReloading)
+		if (!isReloading & !mPlayer.modMode)
 			sendMessage(mPlayer.getPlayer().getDisplayName() + ChatColor.WHITE
 					+ " left your match.", mPlayer.getPlayer());
 		checkForEnd();

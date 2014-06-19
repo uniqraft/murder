@@ -32,6 +32,7 @@ public class MPlayer {
 	public final static int RELOAD_TIME = 40;
 
 	public boolean usedRetrieval = false;
+	public boolean modMode = false;
 	
 	private String name;
 	private Match match;

@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SpawnCommand extends MCommand {
-private final List<MCommand> mCommands;
+	private final List<MCommand> mCommands;
 	
 	public SpawnCommand(String label) {
 		super(label);
@@ -28,7 +28,7 @@ private final List<MCommand> mCommands;
 	}
 	
 	@Override
-public MCommandResult exectute(CommandSender sender, String[] args) {
+	public MCommandResult execute(CommandSender sender, String[] args) {
 		// Player
 		if (!(sender instanceof Player)) {
 			return new MCommandResult(this, Result.FAIL_NOTPLAYER, null);
@@ -45,7 +45,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
 				String[] newArgs = Arrays.copyOfRange(args, 1, args.length);
-				return mCommand.exectute(sender, newArgs);
+				return mCommand.execute(sender, newArgs);
 			}
 		}
 		return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
@@ -68,7 +68,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			Player pPlayer = (Player) sender;
 			Arena arena;
 			// Check arguments
@@ -111,7 +111,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			Player pPlayer = (Player) sender;
 			// Check arguments
 			if (args.length != 2)
@@ -148,7 +148,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			Player pPlayer = (Player) sender;
 			// Check arguments
 			if (args.length != 2)
@@ -190,7 +190,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			Player pPlayer = (Player) sender;
 			// Check arguments
 			if (args.length != 3)
@@ -230,7 +230,7 @@ public MCommandResult exectute(CommandSender sender, String[] args) {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			Arena arena;
 			// Check arguments
 			if (args.length != 2) {

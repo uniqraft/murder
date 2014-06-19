@@ -31,7 +31,7 @@ public class MurderCommand extends MCommand {
 	}
 	
 	@Override
-	public MCommandResult exectute(CommandSender sender, String[] args) {
+	public MCommandResult execute(CommandSender sender, String[] args) {
 		// Permission
 		if (!sender.hasPermission("murder.admin"))
 			return new MCommandResult(this, Result.FAIL_PERMISSIONS, null);
@@ -42,7 +42,7 @@ public class MurderCommand extends MCommand {
 		for (MCommand mCommand : mCommands) {
 			if (mCommand.getLabel().equalsIgnoreCase(args[0])) {
 				String[] newArgs = Arrays.copyOfRange(args, 1, args.length);
-				return mCommand.exectute(sender, newArgs);
+				return mCommand.execute(sender, newArgs);
 			}
 		}
 		return new MCommandResult(this, Result.FAIL_ARGUMENTS, null);
@@ -65,7 +65,7 @@ public class MurderCommand extends MCommand {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
@@ -93,7 +93,7 @@ public class MurderCommand extends MCommand {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
@@ -120,7 +120,7 @@ public class MurderCommand extends MCommand {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 0)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
@@ -148,7 +148,7 @@ public class MurderCommand extends MCommand {
 			super(label);
 		}
 		@Override
-		public MCommandResult exectute(CommandSender sender, String[] args) {
+		public MCommandResult execute(CommandSender sender, String[] args) {
 			// Arguments
 			if (args.length != 1)
 				return new MCommandResult(this, Result.FAIL_ARGUMENTS);
