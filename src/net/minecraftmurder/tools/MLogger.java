@@ -3,6 +3,7 @@ package net.minecraftmurder.tools;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class MLogger {
@@ -24,9 +25,11 @@ public final class MLogger {
 					String prefix = "";
 					if (level.intValue()>=Level.SEVERE.intValue())
 						prefix = ChatContext.PREFIX_CRITICAL;
-					else if (level.intValue()>=Level.WARNING.intValue())
+					// I'm sorry
+					else if (level.intValue()>=Level.WARNING.intValue() && !message.startsWith(ChatColor.BOLD + ChatContext.COLOR_LOWLIGHT + "[REPORT] "))
 						prefix = ChatContext.PREFIX_WARNING;
-					else
+					// so sorry
+					else if (!message.startsWith(ChatColor.BOLD + ChatContext.COLOR_LOWLIGHT + "[REPORT] "))
 						prefix = ChatContext.PREFIX_DEBUG;
 					player.sendMessage(prefix + message);
 				}

@@ -56,7 +56,7 @@ public final class MatchManager {
 		if (playMatchIndex.containsKey(index)) {
 			return false;
 		} else {
-			PlayMatch playMatch = new PlayMatch();
+			PlayMatch playMatch = new PlayMatch(index);
 			playMatches.add(playMatch);
 			playMatchIndex.put(index, playMatch);
 			return true;

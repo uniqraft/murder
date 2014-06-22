@@ -45,12 +45,14 @@ public class PlayMatch extends Match {
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 10;
 	public static final int MIN_PLAYERS_RANKED = 4;
-
+	
+	private int index;
+	
 	private boolean isPlaying;
 	private boolean isRanked;
 	/** If this is true, join/quit messages will be hidden */
 	private boolean isReloading = false;
-
+	
 	public boolean isReloading() {
 		return isReloading;
 	}
@@ -70,15 +72,24 @@ public class PlayMatch extends Match {
 	private Arena[] voteArenas;
 	private int[] voteCounts;
 
-	public PlayMatch() {
+	public PlayMatch(int index) {
+		this.index = index;
+		
 		murdererTicketUsers = new ArrayList<MPlayer>();
 		gunnerTicketUsers = new ArrayList<MPlayer>();
 
 		isPlaying = false;
 		isRanked = false;
 		countdown = COUNTDOWN_TIME;
-
+		
 		switchArena();
+	}
+	
+	/**
+	 * I think this works? Hopefully?
+	 */
+	public int getIndex() {
+		return index;
 	}
 
 	public void switchArena() {
